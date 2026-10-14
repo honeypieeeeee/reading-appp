@@ -14484,5 +14484,152 @@ button.pp-bk{cursor:pointer;font:inherit}
     })();
 })();
 </script>
+<style id="tbr-toolbar-css">
+/* ======================================================================
+   TBR toolbar redesign: hero, pill search, segmented filter, plant card,
+   filter panel and Scroll Sorcery in the same pink look as the rest.
+   ====================================================================== */
+@keyframes tbshine{0%{transform:translateX(-120%) skewX(-20deg)}60%,100%{transform:translateX(320%) skewX(-20deg)}}
+@keyframes tbbob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-3px) rotate(4deg)}}
+@keyframes tbtw{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:.85;transform:scale(1.15)}}
+
+/* ---- hero ---- */
+.tbr-hero{position:relative;overflow:hidden;display:flex;flex:none;align-items:center;gap:14px;padding:12px 16px;margin:2px 0 12px;border-radius:22px;background:linear-gradient(135deg,rgb(var(--c-fde3e9)),rgb(var(--c-f7ecdc)) 55%,rgb(var(--c-dfe9c6)));border:2px solid rgb(var(--c-f4c9d2));box-shadow:0 10px 24px -16px rgb(var(--c-a8506a)/.5),0 0 0 5px rgb(var(--c-f4c9d2)/.2)}
+.tbr-badge{flex:none;width:48px;height:48px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 0 2px rgb(var(--c-f0c9d4)),0 5px 12px -4px rgb(var(--c-a8506a)/.45)}
+.tbr-badge>span{display:inline-block;animation:tbbob 2.6s ease-in-out infinite}
+.tbr-tx{flex:1;min-width:0}
+.tbr-tx>b{display:block;font:800 19px/1.1 'Playfair Display',serif;color:rgb(var(--c-a8506a))}
+.tbr-hero p.tbr-line{margin:3px 0 0!important;padding:0!important;font:italic 600 11.5px/1.45 'Playfair Display',serif!important;color:rgb(var(--c-6b705c))!important}
+.tbr-hero p.tbr-line #tab-count-backlog{font-style:normal;font-weight:800;color:rgb(var(--c-a8506a))}
+.tbr-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}
+.tbr-chip{padding:3px 11px;border-radius:99px;background:#fff;border:1.5px solid rgb(var(--c-f0d0d8));font:800 10px Montserrat,sans-serif;color:rgb(var(--c-a8506a));white-space:nowrap}
+.tbr-chip.g{border-color:rgb(var(--c-cfdbb0));color:rgb(var(--c-4f5d2c))}
+.tbr-chip.y{border-color:rgb(var(--c-f0d9a0));color:rgb(var(--c-8a5a12));background:rgb(var(--c-fff8e1))}
+.tbr-hero .bl-exp{margin:0 0 0 auto;flex:none;align-self:flex-start;font:800 10px Montserrat,sans-serif;padding:5px 12px;border-radius:99px;background:#fff;border:1.5px solid rgb(var(--c-f0d0d8));color:rgb(var(--c-a8506a));transition:transform .15s,box-shadow .15s}
+.tbr-hero .bl-exp:hover{transform:translateY(-1px);box-shadow:0 6px 12px -6px rgb(var(--c-a8506a)/.5)}
+.tbr-sp{position:absolute;font-size:12px;opacity:.6;pointer-events:none;animation:tbtw 2.8s ease-in-out infinite}
+
+/* ---- search + All / Unread / Completed ---- */
+.tbr-bar{align-items:center;gap:8px!important}
+#search-input{height:38px;padding:0 16px 0 38px!important;border:2px solid rgb(var(--c-f0d0d8))!important;border-radius:99px!important;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23d98aa0' stroke-width='2.6' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 14px 50%!important;font:600 13px Montserrat,sans-serif;color:rgb(var(--c-3e4a3d));transition:border-color .15s,box-shadow .15s}
+#search-input::placeholder{color:rgb(var(--c-a88a96));font-style:italic;font-weight:500}
+#search-input:focus{border-color:rgb(var(--c-e8a0b4))!important;box-shadow:0 0 0 4px rgb(var(--c-f4c9d2)/.35)}
+.tbr-acts{align-items:center;gap:8px!important;flex-wrap:wrap}
+.tbr-seg{display:inline-flex;gap:2px;padding:3px;border-radius:99px;background:#fff;border:2px solid rgb(var(--c-f0d0d8))}
+.tbr-seg>button{padding:6px 14px!important;border:0!important;border-radius:99px!important;background:transparent!important;color:rgb(var(--c-6b705c))!important;font:800 11.5px Montserrat,sans-serif!important;transition:background .15s,color .15s,transform .15s}
+.tbr-seg>button:hover{background:#fdeef0!important;color:rgb(var(--c-a8506a))!important}
+.tbr-seg>button.text-white{background:linear-gradient(135deg,rgb(var(--c-e8a0b4)),rgb(var(--c-d98aa0)))!important;color:#fff!important;text-shadow:0 1px 1px rgb(var(--c-a8506a)/.45);box-shadow:0 4px 10px -5px rgb(var(--c-a8506a)/.55)}
+#qe-open,#add-finished-backlog{position:relative;overflow:hidden;height:38px;padding:0 16px!important;border-radius:99px!important;font:800 11.5px Montserrat,sans-serif!important;white-space:nowrap;transition:transform .15s,box-shadow .15s}
+#qe-open{background:linear-gradient(135deg,rgb(var(--c-e8a0b4)),rgb(var(--c-d98aa0)))!important;color:#fff!important;border:0!important;text-shadow:0 1px 1px rgb(var(--c-a8506a)/.45);box-shadow:0 8px 16px -8px rgb(var(--c-a8506a)/.6)}
+#qe-open::after{content:'';position:absolute;top:0;bottom:0;left:0;width:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:tbshine 3.4s ease-in-out infinite}
+#add-finished-backlog{background:#fff!important;border:2px solid rgb(var(--c-f0d0d8))!important;color:rgb(var(--c-a8506a))!important}
+#add-finished-backlog.hidden{display:none!important}
+#qe-open:hover,#add-finished-backlog:hover{transform:translateY(-1px);box-shadow:0 10px 18px -8px rgb(var(--c-a8506a)/.6)}
+
+/* ---- plant card ---- */
+.tbr-plant{position:relative;gap:8px!important;padding:10px 12px!important;border-radius:22px!important;border:2px dashed rgb(var(--c-e8b4c2))!important;background-color:#fffafa!important;background-image:radial-gradient(rgb(var(--c-f6dfe4)) 1px,transparent 1.4px),linear-gradient(135deg,#fff4f6,#fffaf0 55%,rgb(var(--c-eef4dd)))!important;background-size:14px 14px,auto!important}
+.tbr-tools{gap:6px!important}
+#bl-ftoggle,#ss-toggle{display:inline-flex;align-items:center;gap:5px;height:36px;padding:0 14px!important;border-radius:99px!important;background:#fff!important;border:2px solid rgb(var(--c-f0d0d8))!important;color:rgb(var(--c-a8506a))!important;font:800 11px Montserrat,sans-serif!important;transition:transform .15s,box-shadow .15s,border-color .15s}
+#bl-ftoggle:hover,#ss-toggle:hover{transform:translateY(-1px);border-color:rgb(var(--c-e8a0b4))!important;box-shadow:0 6px 12px -6px rgb(var(--c-a8506a)/.5)}
+#bl-ftoggle[aria-expanded="true"],#ss-toggle[aria-expanded="true"],#ss-toggle.open{background:linear-gradient(135deg,#fdeef0,rgb(var(--c-eef2e2)))!important;border-color:rgb(var(--c-e8a0b4))!important}
+#bl-farrow,#ss-arrow{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#fdeef0;font-size:8px;line-height:1}
+#bl-fcount:not(:empty){padding:2px 8px;border-radius:99px;background:linear-gradient(90deg,rgb(var(--c-f7b6cc)),rgb(var(--c-e8a0b4)));color:#fff!important;font:800 9.5px Montserrat,sans-serif!important}
+.tbr-plant>input,.tbr-plant>div>input{height:36px;padding:0 14px!important;border:2px solid rgb(var(--c-f0d0d8))!important;border-radius:99px!important;background:#fff!important;font:600 12px Montserrat,sans-serif!important;color:rgb(var(--c-3e4a3d));-moz-appearance:textfield;transition:border-color .15s,box-shadow .15s}
+.tbr-plant input::placeholder{color:rgb(var(--c-a88a96));font-style:italic;font-weight:500}
+.tbr-plant input:focus{border-color:rgb(var(--c-e8a0b4))!important;box-shadow:0 0 0 4px rgb(var(--c-f4c9d2)/.35)}
+.tbr-plant input[type=number]::-webkit-inner-spin-button,.tbr-plant input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.tbr-plant>div.w-32{width:9.5rem!important;gap:5px!important}
+.tbr-plant>div.w-32>input{padding:0 8px!important;text-align:center}
+.tbr-plant>input#new-title{padding-left:36px!important;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a3b18a' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 21V11'/%3E%3Cpath d='M12 11C12 7 9 5 5 5c0 4 3 6 7 6z'/%3E%3Cpath d='M12 13c0-3.5 2.5-5.5 7-5.5 0 3.5-2.5 5.5-7 5.5z'/%3E%3C/svg%3E") no-repeat 13px 50%!important}
+.tbr-go{position:relative;overflow:hidden;height:36px;padding:0 18px!important;border-radius:99px!important;background:linear-gradient(90deg,rgb(var(--c-b5c78a)),rgb(var(--c-8a9a5b)))!important;color:#fff!important;font:800 12px Montserrat,sans-serif!important;text-shadow:0 1px 0 rgba(0,0,0,.1);box-shadow:0 8px 16px -8px rgb(var(--c-5f6e3a)/.6)!important;transition:transform .15s,box-shadow .15s}
+.tbr-go:hover{transform:translateY(-1px) scale(1.02)}
+.tbr-go::after{content:'';position:absolute;top:0;bottom:0;left:0;width:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:tbshine 3.6s ease-in-out infinite}
+
+/* ---- Scroll Sorcery row + bulk add ---- */
+#ss-row{padding:10px 12px!important;margin:-2px 0 12px!important;border-radius:20px!important;border:2px dashed rgb(var(--c-e8b4c2))!important;background:linear-gradient(135deg,#fff4f6,rgb(var(--c-eef4dd)))!important}
+#ss-row>b{font:800 13px 'Playfair Display',serif!important}
+#ss-row>button,#bulk-panel button:not(.cz-btn){height:34px;padding:0 14px!important;border-radius:99px!important;border:2px solid rgb(var(--c-f0d0d8))!important;background:#fff!important;color:rgb(var(--c-a8506a))!important;font:800 11px Montserrat,sans-serif!important;transition:transform .15s,box-shadow .15s}
+#ss-row>button:hover,#bulk-panel button:not(.cz-btn):hover{transform:translateY(-1px);box-shadow:0 6px 12px -6px rgb(var(--c-a8506a)/.5)}
+#bulk-panel{padding:12px 14px!important;border-radius:22px!important;border:2px dashed rgb(var(--c-e8b4c2))!important;background-color:#fffafa!important;background-image:radial-gradient(rgb(var(--c-f6dfe4)) 1px,transparent 1.4px)!important;background-size:14px 14px!important}
+#bulk-panel textarea{border:2px solid rgb(var(--c-f0d0d8))!important;border-radius:16px!important;padding:10px 12px!important;font-size:12px!important}
+#bulk-panel textarea:focus{border-color:rgb(var(--c-e8a0b4))!important;box-shadow:0 0 0 4px rgb(var(--c-f4c9d2)/.35)}
+#bulk-panel input[type=number]{height:32px;border:2px solid rgb(var(--c-f0d0d8))!important;border-radius:99px!important;text-align:center}
+#bulk-panel .cz-btn{border:2px solid rgb(var(--c-f0d0d8))!important;border-radius:99px!important;padding:5px 12px!important}
+#bulk-panel button[onclick^="bulkAdd"]{background:linear-gradient(90deg,rgb(var(--c-b5c78a)),rgb(var(--c-8a9a5b)))!important;border-color:transparent!important;color:#fff!important}
+
+/* ---- filter panel ---- */
+#bl-filters{padding:12px 12px 2px;margin:0 0 12px;border-radius:22px;background:#fffdfb;border:2px solid rgb(var(--c-f0dcdc));box-shadow:0 8px 18px -16px rgb(var(--c-a8506a)/.6)}
+#bl-filters .cz-btn{height:34px;padding:0 14px!important;border:2px solid rgb(var(--c-f0d0d8))!important;border-radius:99px!important;background:#fff!important;font:700 11.5px Montserrat,sans-serif!important;color:rgb(var(--c-3e4a3d));transition:border-color .15s,box-shadow .15s}
+#bl-filters .cz-btn:hover,#bl-filters .cz-btn[aria-expanded="true"]{border-color:rgb(var(--c-e8a0b4))!important;box-shadow:0 0 0 4px rgb(var(--c-f4c9d2)/.3)}
+#bl-filters .cz-btn .cz-chev{color:rgb(var(--c-d98aa0))}
+#bl-filters label{gap:7px!important;height:34px;padding:0 14px 0 10px;border-radius:99px;background:#fff;border:2px solid rgb(var(--c-f0d0d8));color:rgb(var(--c-a8506a))!important;font:800 11px Montserrat,sans-serif!important}
+#bl-filters label:has(input:checked){background:linear-gradient(135deg,#fdeef0,rgb(var(--c-eef2e2)));border-color:rgb(var(--c-e8a0b4))}
+#bl-filters label input{accent-color:rgb(var(--c-d98aa0))}
+#fandom-open{height:34px;padding:0 12px;border-radius:99px;border:2px solid rgb(var(--c-f0d0d8));background:#fff;color:rgb(var(--c-a8506a));font:800 11px Montserrat,sans-serif}
+
+/* ---- view + pager row ---- */
+#tab-content-backlog .vw-seg{border-width:2px;border-color:rgb(var(--c-f0d0d8));padding:3px}
+#tab-content-backlog .vw-seg button{padding:4px 11px;font-size:10.5px}
+#prev-backlog-btn,#next-backlog-btn{padding:4px 12px!important;border-radius:99px!important;background:#fff!important;border:2px solid rgb(var(--c-f0d0d8))!important;color:rgb(var(--c-a8506a))!important;font:800 10px Montserrat,sans-serif!important}
+#prev-backlog-btn:not(:disabled):hover,#next-backlog-btn:not(:disabled):hover{background:#fdeef0!important}
+
+@media(max-width:640px){.tbr-hero{padding:10px 12px}.tbr-hero .bl-exp{position:absolute;top:8px;right:8px}.tbr-tx>b{font-size:17px}.tbr-acts{width:100%}.tbr-seg{flex:1 1 100%}.tbr-seg>button{flex:1}#qe-open{flex:1}
+#search-input{flex:none!important;min-height:38px}
+.tbr-tools{width:100%;flex-wrap:wrap}.tbr-tools>#bl-ftoggle,.tbr-tools>#ss-toggle{flex:1;justify-content:center}
+#bl-filters div:has(>label){flex-wrap:wrap}#bl-filters div:has(>label)>.cz-btn:first-of-type{flex:1 1 55%}#bl-filters div:has(>label)>label{flex:1 1 100%;justify-content:center}
+#prev-backlog-btn,#next-backlog-btn{padding:4px 9px!important;white-space:nowrap}#prev-backlog-btn+div{flex-wrap:wrap;justify-content:center;min-width:0;row-gap:4px}}
+@media (prefers-reduced-motion:reduce){.tbr-badge>span,.tbr-sp{animation:none}#qe-open::after,.tbr-go::after{display:none}}
+</style>
+<script type="text/plain" data-app id="tbr-toolbar-js">
+(function () {
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const tab = $('tab-content-backlog'), search = $('search-input'), all = $('filter-all');
+    if (!tab || !search || !all) return;
+
+    // search row + segmented All / Unread / Completed
+    const bar = search.parentNode, acts = all.parentNode;
+    bar.classList.add('tbr-bar'); acts.classList.add('tbr-acts');
+    const seg = document.createElement('div'); seg.className = 'tbr-seg'; seg.setAttribute('role', 'group'); seg.setAttribute('aria-label', 'Show');
+    acts.insertBefore(seg, all);
+    ['filter-all', 'filter-unread', 'filter-completed'].forEach(id => { const b = $(id); if (b) seg.appendChild(b); });
+
+    // plant card
+    const plant = $('new-title') && $('new-title').parentNode;
+    if (plant) {
+        plant.classList.add('tbr-plant');
+        const tools = plant.querySelector(':scope > div.shrink-0'); if (tools) tools.classList.add('tbr-tools');
+        const go = plant.querySelector('button[onclick^="addNewBook"]'); if (go) { go.classList.add('tbr-go'); go.textContent = '🌱 Plant'; }
+    }
+
+    // hero with the count line inside it
+    const cnt = $('tab-count-backlog'), line = cnt && cnt.closest('p');
+    const hero = document.createElement('div'); hero.className = 'tbr-hero'; hero.id = 'tbr-hero';
+    hero.innerHTML = '<span class="tbr-sp" style="top:8px;right:120px">✨</span><span class="tbr-sp" style="bottom:8px;right:40%;animation-delay:1.2s;font-size:10px">✦</span><div class="tbr-badge"><span>📜</span></div><div class="tbr-tx"><b>Your TBR</b><div class="tbr-chips" id="tbr-chips"></div></div>';
+    tab.insertBefore(hero, bar);
+    if (line) {
+        line.className = 'tbr-line'; const exp = $('bl-exp');
+        const first = line.firstChild; if (first && first.nodeType === 3) first.textContent = first.textContent.replace(/^\s*📜\s*/, '');
+        hero.querySelector('.tbr-tx b').after(line);
+        if (exp) hero.appendChild(exp);
+    }
+    function chips() {
+        const box = $('tbr-chips'); if (!box) return;
+        const un = books.filter(b => !b.read && b.status !== 'abandoned');
+        let mins = 0; try { mins = un.reduce((t, b) => t + (remainingMinutes(b) || 0), 0); } catch (e) {}
+        // same rule as the Reading Now tab: the current pick plus planned books already started
+        let now = 0; try { const cur = books.find(inNow); now = books.filter(b => b === cur || (inNow(b) && (b.minutesRead > 0 || (b.pagesRead || 0) > 0 || b.status === 'rereading'))).length; } catch (e) {}
+        const hold = un.filter(b => b.status === 'onhold').length;
+        const h = [];
+        if (mins) h.push(`<span class="tbr-chip">⏳ about ${formatTime(mins)} to read</span>`);
+        if (now) h.push(`<span class="tbr-chip g">📖 ${now} reading now</span>`);
+        if (hold) h.push(`<span class="tbr-chip y">⏸️ ${hold} on hold</span>`);
+        box.innerHTML = h.join(''); box.hidden = !h.length;
+    }
+    chips();
+    try { ['books:saved', 'books:rendered', 'progress:saved'].forEach(n => AppEvents.on(n, chips)); } catch (e) {}
+})();
+</script>
+
 </body>
 </html>
