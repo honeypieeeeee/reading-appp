@@ -403,6 +403,53 @@ html[data-theme=autumn]{--c-0f082d:0 16 43;--c-1b103a:0 23 64;--c-1f4463:3 74 85
         .roulette-land { animation: roulette-pop .5s ease; border-style: solid !important; border-color: var(--accent-green) !important; }
         #spin-btn:disabled { opacity: .6; cursor: wait; }
 
+        /* ===== Book Soundtrack: pastel mixtape crates ===== */
+        #sound-count { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px !important; }
+        #sound-count span { font: 700 10.5px Montserrat, sans-serif; color: rgb(var(--c-6b705c)); background: #fff; border: 1.5px solid rgb(var(--c-f0dede)); border-radius: 99px; padding: 3px 11px; }
+        #sound-count b { color: rgb(var(--c-a8506a)); }
+        #tab-content-soundtrack #sx-btn { font: 800 11px Montserrat, sans-serif !important; color: #fff; background: linear-gradient(135deg, rgb(var(--c-f4b6c2)), rgb(var(--c-e8a0b4))); border: 0; border-radius: 99px; padding: 6px 14px !important; margin: 0 0 14px !important; box-shadow: 0 3px 0 rgb(var(--c-d98aa0)), 0 6px 14px rgb(var(--c-e8a0b4)/0.4); }
+        .stk-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; margin-bottom: 18px; padding: 6px 2px 0; }
+        .stk-crate { position: relative; flex: var(--n, 1) 1 auto; min-width: 250px; padding: 14px 20px 18px; border-radius: 22px; background: radial-gradient(circle, color-mix(in srgb, var(--ac) 45%, transparent) 1.4px, transparent 2px) 0 0 / 18px 18px, var(--pp); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--ac), 0 10px 22px -12px color-mix(in srgb, var(--fg) 70%, transparent); outline: 2px dashed color-mix(in srgb, var(--ac) 90%, #fff); outline-offset: -9px; }
+        .stk-last .stk-crate { flex-grow: 0; }
+        .stk-crate::before { content: ''; position: absolute; top: -9px; left: 26px; width: 64px; height: 18px; transform: rotate(var(--tilt)); background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--ac) 90%, transparent) 0 6px, color-mix(in srgb, var(--ac) 55%, transparent) 6px 12px); border-left: 2px dotted rgba(255,255,255,.7); border-right: 2px dotted rgba(255,255,255,.7); opacity: .95; }
+        .stk-hd { position: relative; display: flex; align-items: center; gap: 11px; margin-bottom: 14px; padding-bottom: 11px; border-bottom: 2px dotted color-mix(in srgb, var(--ac) 85%, transparent); }
+        .stk-bk { flex: none; width: 34px; height: 50px; border: 0; padding: 0; border-radius: 3px 6px 6px 3px; background-size: cover; background-position: center; background-color: var(--ac); box-shadow: inset 3px 0 3px -1px rgba(0,0,0,.2), 0 3px 8px rgba(0,0,0,.2); cursor: pointer; transition: transform .25s cubic-bezier(.3,1.5,.5,1); }
+        #soundtrack-content button.stk-bk:hover { transform: translateY(-3px) rotate(-4deg); filter: none; box-shadow: inset 3px 0 3px -1px rgba(0,0,0,.2), 0 6px 12px rgba(0,0,0,.25); }
+        .stk-ht { min-width: 0; flex: 1; line-height: 1.2; }
+        .stk-ht small { display: block; font: italic 600 10px 'Playfair Display', serif; color: var(--fg); opacity: .8; }
+        .stk-ht b { display: block; font: 800 14px 'Playfair Display', serif; color: rgb(var(--c-3e4a3d)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+        .stk-ht b:hover { text-decoration: underline; text-decoration-style: dotted; }
+        .stk-ht i { display: block; font: 600 10.5px Montserrat, sans-serif; font-style: normal; color: rgb(var(--c-6b705c)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .stk-n { flex: none; font: 800 10px Montserrat, sans-serif; color: var(--fg); background: #fff; border: 1.5px solid var(--ac); border-radius: 99px; padding: 3px 10px; }
+        .stk-songs { display: flex; flex-wrap: wrap; gap: 14px 18px; }
+        .stk-song { width: 138px; flex: none; }
+        .stk-sleeve { position: relative; width: 112px; height: 112px; }
+        .stk-art { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; width: 112px; height: 112px; object-fit: cover; border-radius: 10px; background: #fff; box-shadow: 0 6px 14px -6px rgba(0,0,0,.35), 0 0 0 3px #fff; text-decoration: none; transition: transform .3s cubic-bezier(.3,1.4,.5,1); }
+        .stk-art-empty { font-size: 40px; color: #fff; background: linear-gradient(135deg, var(--ac), color-mix(in srgb, var(--fg) 55%, #fff)); }
+        .stk-disc { position: absolute; z-index: 0; top: 8px; left: 30px; width: 96px; height: 96px; border-radius: 50%; background: conic-gradient(rgba(255,255,255,0) 0deg, rgba(255,255,255,.28) 40deg, rgba(255,255,255,0) 90deg, rgba(255,255,255,0) 180deg, rgba(255,255,255,.28) 220deg, rgba(255,255,255,0) 270deg), repeating-radial-gradient(circle, #1a1718 0 2px, #2e2a2c 2px 3px); box-shadow: 0 4px 10px rgba(0,0,0,.3); transition: transform .45s cubic-bezier(.3,1.3,.5,1); animation: vinyl-spin 9s linear infinite; }
+        .stk-disc img, .stk-disc i { position: absolute; left: 33%; top: 33%; width: 34%; height: 34%; border-radius: 50%; object-fit: cover; border: 2px solid #111; background: var(--ac); }
+        .stk-disc::after { content: ''; position: absolute; left: 50%; top: 50%; width: 5px; height: 5px; margin: -2.5px; border-radius: 50%; background: #f4f1ea; z-index: 1; }
+        .stk-song:hover .stk-disc { transform: translateX(20px); }
+        .stk-song:hover .stk-art { transform: rotate(-3deg); }
+        .stk-song.playing .stk-disc { transform: translateX(26px); animation-duration: 2s; }
+        .stk-song.playing .stk-art { transform: rotate(-4deg) translateY(-2px); }
+        .stk-play { z-index: 2; left: 8px !important; bottom: 8px !important; background: #fff !important; color: var(--fg) !important; }
+        .stk-meta { margin-top: 11px; min-width: 0; line-height: 1.25; }
+        .stk-no { display: flex; align-items: center; justify-content: space-between; height: 14px; font: 800 9px Montserrat, sans-serif; letter-spacing: .12em; text-transform: uppercase; color: var(--fg); }
+        .stk-no .eq-bars { height: 12px; }
+        .stk-no .eq-bars span { background: var(--fg); }
+        .stk-meta b { display: block; margin-top: 2px; font: 800 12.5px 'Playfair Display', serif; color: rgb(var(--c-3e4a3d)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .stk-meta i { display: block; font: 600 10.5px Montserrat, sans-serif; font-style: normal; color: rgb(var(--c-6b705c)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 13px; }
+        .stk-open { display: inline-block; margin-top: 6px; font: 800 9.5px Montserrat, sans-serif; color: var(--fg); background: #fff; border: 1.5px solid var(--ac); border-radius: 99px; padding: 2px 9px; text-decoration: none; transition: transform .2s; }
+        .stk-open:hover { transform: translateY(-1px); background: var(--pp); }
+        .stk-empty { text-align: center; margin: 30px auto; max-width: 320px; padding: 24px 20px; border: 2px dashed rgb(var(--c-f0d0d8)); border-radius: 24px; background: #fffafb; }
+        .stk-empty-rec { width: 70px; height: 70px; margin: 0 auto 10px; border-radius: 50%; background: radial-gradient(circle, #f4b6c2 0 18%, #111 19% 21%, transparent 22%), repeating-radial-gradient(circle, #1a1718 0 2px, #2e2a2c 2px 3px); animation: vinyl-spin 6s linear infinite; }
+        .stk-empty b { display: block; font: 800 14px 'Playfair Display', serif; color: rgb(var(--c-3e4a3d)); }
+        .stk-empty p { margin: 4px 0 0; font-size: 11.5px; color: rgb(var(--c-6b705c)); }
+        @media (max-width: 520px) { .stk-crate { min-width: 0; flex-basis: 100%; padding: 14px 14px 16px; } .stk-songs { gap: 14px 12px; justify-content: center; }
+            .stk-song { width: 108px; } .stk-sleeve, .stk-art { width: 86px; height: 86px; } .stk-disc { width: 74px; height: 74px; left: 22px; top: 6px; } .stk-song:hover .stk-disc { transform: translateX(14px); } .stk-song.playing .stk-disc { transform: translateX(18px); } }
+        @media (prefers-reduced-motion: reduce) { .stk-disc, .stk-empty-rec { animation: none !important; } }
+
         /* Song cards with spinning vinyl */
         @keyframes vinyl-spin { to { transform: rotate(360deg); } }
         .song-card { width: 152px; flex-shrink: 0; background: rgba(255,255,255,.75); border: 1px solid rgb(var(--c-e8c4c4)); border-radius: 16px; padding: 8px; box-shadow: 0 4px 14px rgb(var(--c-8a9a5b)/0.12); transition: transform .2s, box-shadow .2s; }
@@ -6044,7 +6091,35 @@ body{padding-left:62px}
 #tab-content-book .bpx-pr{background:rgb(var(--c-fde0e6));color:rgb(var(--c-a8506a));border:2px solid rgb(var(--c-f5bccb))}
 #tab-content-book .bpx-fd:hover,#tab-content-book .bpx-pr:hover{transform:translateY(-3px) rotate(-1.5deg)}
 #tab-content-book .bpx-series{font-size:12px}
-#tab-content-book .bpx-serrow{display:flex;min-width:0;margin-top:-3px}
+#tab-content-book .bpx-serrow{display:flex;flex-direction:column;align-items:flex-start;min-width:0;margin-top:-3px}
+#tab-content-book button.bpx-ser{cursor:pointer;text-align:left}
+#tab-content-book .bpx-ser[aria-expanded="true"]{background:#fde7b8;border-color:#e9c27a;box-shadow:0 3px 10px rgba(169,116,47,.25)}
+#tab-content-book .bpx-ser-cv{flex:none;width:0;height:0;margin-left:-2px;border-left:4.5px solid transparent;border-right:4.5px solid transparent;border-top:5.5px solid #c99a55;transition:transform .25s}
+#tab-content-book .bpx-ser[aria-expanded="true"] .bpx-ser-cv{transform:rotate(180deg)}
+#tab-content-book .bpx-serpop{display:grid;grid-template-rows:0fr;width:100%;transition:grid-template-rows .35s cubic-bezier(.3,1,.4,1)}
+#tab-content-book .bpx-serpop>div{min-height:0;overflow:hidden}
+#tab-content-book .bpx-serpop.open{grid-template-rows:1fr}
+#tab-content-book .bpx-serlist{position:relative;display:flex;gap:12px;overflow-x:auto;margin-top:12px;padding:16px 14px 12px;border-radius:18px;background:radial-gradient(circle,#f3d9a4 1.3px,transparent 1.9px) 0 0/16px 16px,#fff9ea;border:2px solid #f3d9a4;scrollbar-width:thin;scrollbar-color:#f3d9a4 transparent;opacity:0;transform:translateY(-6px);transition:opacity .3s,transform .35s cubic-bezier(.3,1.4,.5,1)}
+#tab-content-book .bpx-serpop.open .bpx-serlist{opacity:1;transform:none}
+#tab-content-book .bpx-serlist::before{content:'';position:absolute;top:-8px;left:28px;width:12px;height:12px;background:#fff9ea;border-left:2px solid #f3d9a4;border-top:2px solid #f3d9a4;transform:rotate(45deg);border-radius:3px 0 0 0}
+#tab-content-book .bpx-sv{position:relative;flex:none;width:76px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:0;border:0;background:none;text-align:center;cursor:pointer;font:inherit}
+#tab-content-book .bpx-sv-cv{position:relative;display:flex;align-items:center;justify-content:center;width:64px;height:96px;border-radius:3px 7px 7px 3px;background-size:cover;background-position:center;background-color:#e8c4c4;box-shadow:inset 4px 0 4px -2px rgba(0,0,0,.2),0 5px 10px -3px rgba(0,0,0,.3);transition:transform .3s cubic-bezier(.3,1.5,.5,1),box-shadow .3s;overflow:hidden}
+#tab-content-book .bpx-sv-cv em{font:800 9px/1.2 'Playfair Display',serif;font-style:normal;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.3);padding:0 6px 0 8px;overflow-wrap:anywhere}
+#tab-content-book .bpx-sv:hover .bpx-sv-cv{transform:translateY(-4px);box-shadow:inset 4px 0 4px -2px rgba(0,0,0,.2),0 10px 16px -4px rgba(0,0,0,.35)}
+#tab-content-book .bpx-sv.cur .bpx-sv-cv{box-shadow:0 0 0 3px #fff,0 0 0 5px #e9c27a,0 6px 12px -3px rgba(0,0,0,.3)}
+#tab-content-book .bpx-sv small{margin-top:5px;font:800 9px Montserrat,sans-serif;color:#b8894a;letter-spacing:.06em}
+#tab-content-book .bpx-sv b{width:100%;font:800 10.5px/1.2 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#tab-content-book .bpx-sv-st{margin-top:2px;font:700 9px Montserrat,sans-serif;color:rgb(var(--c-6b705c));white-space:nowrap}
+#tab-content-book .bpx-sv-st.rd{color:rgb(var(--c-5f7a3a))}
+#tab-content-book .bpx-sv-st.nx{color:#fff;background:linear-gradient(135deg,rgb(var(--c-f4b6c2)),rgb(var(--c-e8a0b4)));border-radius:99px;padding:2px 8px;box-shadow:0 2px 6px rgb(var(--c-e8a0b4)/0.45);animation:bpx-fl 3s ease-in-out infinite}
+#tab-content-book .bpx-sv-here{position:absolute;top:-10px;left:50%;transform:translateX(-50%);z-index:1;font:800 8.5px Montserrat,sans-serif;color:#a9742f;background:#fff;border:1.5px solid #e9c27a;border-radius:99px;padding:1px 7px;white-space:nowrap}
+#tab-content-book button.bpx-sv:hover,#tab-content-book button.bpx-sv:focus{transform:none;filter:none;box-shadow:none;background:none}
+#tab-content-book button.bpx-ser:hover{transform:translateY(-2px);filter:none;box-shadow:0 4px 10px rgba(169,116,47,.25)}
+#tab-content-book .bpx-sv.miss{cursor:default}
+#tab-content-book .bpx-sv.miss .bpx-sv-cv{background:repeating-linear-gradient(135deg,#fffdf6 0 6px,#fbf1da 6px 12px);border:2px dashed #e9c27a;box-shadow:none}
+#tab-content-book .bpx-sv.miss .bpx-sv-cv em{color:#c79a55;text-shadow:none;font-size:15px}
+#tab-content-book .bpx-sv.miss b{color:#b8894a}
+@media (prefers-reduced-motion:reduce){#tab-content-book .bpx-serpop,#tab-content-book .bpx-serlist{transition:none}#tab-content-book .bpx-sv-st.nx{animation:none}}
 #tab-content-book .bpx-ser{display:inline-flex;align-items:center;gap:7px;max-width:100%;min-width:0;white-space:nowrap;font:800 12px 'Playfair Display',serif;color:#a9742f;background:#fdf0d5;border:2px solid #f3d9a4;border-radius:99px;padding:4px 13px 4px 10px;box-shadow:0 2px 0 rgba(0,0,0,.06);transition:transform .18s}
 #tab-content-book .bpx-ser:hover{transform:translateY(-3px) rotate(-1.5deg)}
 #tab-content-book .bpx-ser i{font-style:normal;flex:none}
@@ -6146,7 +6221,7 @@ body{padding-left:62px}
     const $ = id => document.getElementById(id);
     const E = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     const TABS = [['details', '\u{1F338} Details'], ['review', '\u270D\uFE0F Review & Notes'], ['stats', '\u{1F4CA} Stats']];   // notes live inside the review tab
-    let bpId = null, bpTab = 'details', bpPrev = 'reviews';
+    let bpId = null, bpTab = 'details', bpPrev = 'reviews', serOpen = false;
     const fn = (name, ...a) => { try { return typeof window[name] === 'function' ? window[name](...a) : ''; } catch (e) { return ''; } };
     const rt1 = r => (Math.round(r * 10) / 10).toFixed(1);
     const fmtT = m => { m = Math.round(m); return m >= 60 ? Math.floor(m / 60) + 'h ' + (m % 60) + 'm' : m + 'm'; };
@@ -6175,7 +6250,20 @@ body{padding-left:62px}
             const total = Math.max(g.length, ...g.map(x => x.partsTotal || 0), b.part || 0), readN = g.filter(x => x.read).length;
             const next = b.part ? g.filter(x => x.part > b.part).sort((x, y) => x.part - y.part)[0] : null;
             const nm = b.seriesName || 'Series', meta = [b.part ? `part ${b.part} of ${total}` : '', total > 1 ? `${readN}/${total} read` : ''].filter(Boolean).join(' \u00b7 ');
-            series = `<span class="bpx-ser" title="${E(nm)}${meta ? ' \u00b7 ' + E(meta) : ''}${next ? ' \u00b7 next: ' + E(next.title) : ''}"><i>\u{1F4DA}</i><b>${E(nm)}</b>${meta ? `<small>${E(meta)}</small>` : ''}</span>`;
+            // tap the chip: a little shelf of every book in the series slides open under it
+            const ord = g.slice().sort((x, y) => (x.part || 999) - (y.part || 999) || String(x.title).localeCompare(String(y.title)));
+            const nextUp = ord.find(x => !x.read && x.status !== 'abandoned');
+            const allNum = ord.every(x => x.part), slots = [];
+            if (allNum && total <= 30) { for (let n = 1; n <= total; n++) slots.push(ord.find(x => x.part === n) || { _miss: n }); ord.filter(x => !slots.includes(x)).forEach(x => slots.push(x)); }
+            else slots.push(...ord);
+            const cvS = x => { try { return String(coverStyle(x)).replace(/background-color:\s*undefined;?/g, ''); } catch (e) { return ''; } };
+            const tileS = x => {
+                if (x._miss) return `<div class="bpx-sv miss"><span class="bpx-sv-cv"><em>#${x._miss}</em></span><b>Part ${x._miss}</b><span class="bpx-sv-st">not in your library</span></div>`;
+                const st = x === nextUp ? '<span class="bpx-sv-st nx">next up \u2728</span>' : x.read ? '<span class="bpx-sv-st rd">\u2713 read</span>' : x.status === 'abandoned' ? '<span class="bpx-sv-st">\u{1FAA6} set aside</span>' : '<span class="bpx-sv-st">to read</span>';
+                return `<button type="button" class="bpx-sv${x === b ? ' cur' : ''}${x === nextUp ? ' nx' : ''}" onclick="openBookPage(${bookRef(x)})" title="${E(x.title)}">${x === b ? '<span class="bpx-sv-here">this one</span>' : ''}<span class="bpx-sv-cv${x.cover ? '' : ' plain'}" style="${cvS(x)}">${x.cover ? '' : `<em>${E(String(x.title).slice(0, 40))}</em>`}</span>${x.part ? `<small>#${E(x.part)}</small>` : ''}<b>${E(x.title)}</b>${st}</button>`;
+            };
+            series = `<button type="button" class="bpx-ser" aria-expanded="${serOpen ? 'true' : 'false'}" title="${E(nm)}${meta ? ' \u00b7 ' + E(meta) : ''}${next ? ' \u00b7 next: ' + E(next.title) : ''}"><i>\u{1F4DA}</i><b>${E(nm)}</b>${meta ? `<small>${E(meta)}</small>` : ''}<u class="bpx-ser-cv" aria-hidden="true"></u></button>`
+                + `<div class="bpx-serpop${serOpen ? ' open' : ''}"><div><div class="bpx-serlist">${slots.map(tileS).join('')}</div></div></div>`;
         }
 
         const fdChips = fds.map(t => `<span class="bpx-fd fd-link" data-fd="${E(t)}" title="Open fandom page">\u{1F380} ${E(t)}</span>`).join('');
@@ -6326,6 +6414,8 @@ body{padding-left:62px}
         root.innerHTML = `<div><button type="button" class="bp-back" onclick="closeBookPage()">\u2190 Back to ${bpPrev === 'reviews' ? 'Finished' : 'where you were'}</button></div>
             ${tabs}${top}
             <div class="bp-panel" id="bp-panel">${BODY[bpTab](b)}</div>`;
+        const sc = root.querySelector('.bpx-ser'), sp = root.querySelector('.bpx-serpop');
+        if (sc && sp) sc.addEventListener('click', () => { serOpen = !serOpen; sp.classList.toggle('open', serOpen); sc.setAttribute('aria-expanded', serOpen ? 'true' : 'false'); });
         root.querySelectorAll('.bp-tab').forEach(btn => btn.addEventListener('click', () => {
             if (btn.dataset.t === bpTab) return;
             const from = coverRect(root);
@@ -6357,6 +6447,7 @@ body{padding-left:62px}
     window.openBookPage = function (i, tab) {
         const b = books[i]; if (!b) return;
         if (tab === 'notes') tab = 'review';   // notes are part of the review tab now
+        if (bpId !== b.id) serOpen = false;
         bpId = b.id; bpTab = TABS.some(t => t[0] === tab) ? tab : 'details';
         if (currentTab !== 'book') bpPrev = currentTab;
         switchTab('book'); render();
@@ -6485,25 +6576,42 @@ function sprintFinish(auto) {
 
 // ===== Soundtrack shelf, author pages, resurrection, backups =====
 function renderSoundtrack() {
+    // one pastel "mixtape crate" per book (the grouping stays), each song a record sleeve with its vinyl peeking out
     const groups = books.map(b => ({ b, songs: b.songs || (b.song ? [b.song] : []) })).filter(g => g.songs.length);
-    const total = groups.reduce((t, g) => t + g.songs.length, 0);
-    $v('sound-count').innerText = `${total} song${total === 1 ? '' : 's'} across ${groups.length} book${groups.length === 1 ? '' : 's'}`;
-    // Pack books onto each shelf by the width actually available (not a fixed count of 4).
-    // Books flow left to right in order; when the next one doesn't fit, a later one that does
-    // (e.g. a 1-song book beside a 3-song book) fills the gap so every row looks full.
-    const host = $v('soundtrack-content'), CARD = 152, SGAP = 12, BGAP = 14, LOOK = 8;
-    const avail = Math.max(300, (host.clientWidth || 640) - 8 - 12);
-    const wOf = g => g.songs.length * CARD + (g.songs.length - 1) * SGAP + 22;
+    const total = groups.reduce((t, g) => t + g.songs.length, 0), playable = groups.reduce((t, g) => t + g.songs.filter(x => x.preview).length, 0);
+    $v('sound-count').innerHTML = total ? `<span>🎵 <b>${total}</b> song${total === 1 ? '' : 's'}</span><span>📚 <b>${groups.length}</b> book${groups.length === 1 ? '' : 's'}</span>${playable ? `<span>▶ <b>${playable}</b> with a preview</span>` : ''}` : '';
+    const host = $v('soundtrack-content'), TILE = 138, SGAP = 18, BGAP = 16, PAD = 40, LOOK = 8;
+    const avail = Math.max(300, (host.clientWidth || 640) - 8 - 6);
+    const wOf = g => Math.max(250, g.songs.length * TILE + (g.songs.length - 1) * SGAP + PAD);
     const rows = [], rest = groups.slice();
-    while (rest.length) {
+    while (rest.length) {   // pack crates by the width actually available; a later small one may fill a gap
         const first = rest.shift(), row = [first]; let used = wOf(first);
         for (let i = 0; i < Math.min(rest.length, LOOK); ) {
             if (used + BGAP + wOf(rest[i]) <= avail) { used += BGAP + wOf(rest[i]); row.push(rest.splice(i, 1)[0]); i = 0; } else i++;
         }
         rows.push(row);
     }
-    const box = g => `<div class="sg-box" style="--n:${g.songs.length}"><div class="sg-songs">${g.songs.map(sg => songCardHTML(sg)).join('')}</div><div class="sg-cap"><b>${esc(g.b.title)}</b>${authorsOf(g.b).length ? `<i>by ${authorLinks(g.b)}</i>` : ''}</div></div>`;
-    host.innerHTML = rows.map((r, ri) => `<div class="mb-6"><div class="sg-row${ri === rows.length - 1 ? ' sg-last' : ''}">${r.map(box).join('')}</div><div class="shelf-plank"></div></div>`).join('') || '<p class="text-center text-sm text-[rgb(var(--c-6b705c))] mt-10">No songs yet. Add an Apple Music link in a book\'s details (✎) and it lands on your shelf. 🎵</p>';
+    const PAL = [['#fff1f4', '#f4b6c2', '#a8506a'], ['#f3f7e9', '#c9d9a8', '#5f7a3a'], ['#f5f0fc', '#d6c8f2', '#6a4fa3'], ['#fff8e6', '#f3d9a4', '#a9742f'], ['#eef7f8', '#bfe0e6', '#3f7f8c'], ['#fdf1ea', '#f3cdb8', '#a5583a']];
+    const cv = b => { try { return String(coverStyle(b)).replace(/background-color:\s*undefined;?/g, ''); } catch (e) { return ''; } };
+    const tile = (sg, k) => {
+        const u = safeUrl(sg.url), art = sg.art ? esc(sg.art) : '', pv = sg.preview ? esc(sg.preview) : '', no = String(k + 1).padStart(2, '0');
+        const disc = `<span class="stk-disc" aria-hidden="true">${art ? `<img src="${art}" alt="" referrerpolicy="no-referrer">` : '<i></i>'}</span>`;
+        if (!sg.title) return `<div class="stk-song stk-link"><div class="stk-sleeve">${disc}<a class="stk-art stk-art-empty" href="${u}" target="_blank" rel="noopener noreferrer" title="Open the song">♪</a></div>
+            <div class="stk-meta"><span class="stk-no">track ${no}</span><b>A saved song</b><a class="stk-open" href="${u}" target="_blank" rel="noopener noreferrer">♫ Listen to it</a></div></div>`;
+        return `<div class="stk-song${pv ? ' song-play' : ''}"${pv ? ` data-src="${pv}"` : ''}><div class="stk-sleeve">${disc}
+            ${art ? `<img class="stk-art" src="${art}" alt="" referrerpolicy="no-referrer">` : '<div class="stk-art stk-art-empty">♪</div>'}
+            ${pv ? `<button type="button" onclick="toggleSongPreview(this)" class="song-btn-circle song-play-btn stk-play" title="Play preview" aria-label="Play or pause song preview"><svg class="ico-play" width="14" height="14" viewBox="0 0 24 24" style="margin-left:2px"><path d="M8 5v14l11-7z" fill="currentColor"/></svg><svg class="ico-pause" width="14" height="14" viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z" fill="currentColor"/></svg></button>` : ''}</div>
+            <div class="stk-meta"><span class="stk-no">track ${no}<span class="eq-bars"><span></span><span></span><span></span></span></span><b title="${esc(sg.title)}">${esc(sg.title)}</b><i title="${esc(sg.artist || '')}">${esc(sg.artist || '')}</i><a class="stk-open" href="${u}" target="_blank" rel="noopener noreferrer">♫ Apple Music</a></div></div>`;
+    };
+    let gi = 0;
+    const crate = g => { const p = PAL[gi++ % PAL.length], n = g.songs.length;
+        return `<section class="stk-crate" style="--n:${n};--pp:${p[0]};--ac:${p[1]};--fg:${p[2]};--tilt:${[-1.4, 1.1, -.8, 1.5, -1.1, .7][gi % 6]}deg">
+            <header class="stk-hd"><button type="button" class="stk-bk" style="${cv(g.b)}" onclick="openBookPage(${bookRef(g.b)})" title="Open the book"></button>
+                <div class="stk-ht"><small>soundtrack for</small><b onclick="openBookPage(${bookRef(g.b)})">${esc(g.b.title)}</b>${authorsOf(g.b).length ? `<i>by ${authorLinks(g.b)}</i>` : ''}</div>
+                <span class="stk-n">${n} track${n === 1 ? '' : 's'}</span></header>
+            <div class="stk-songs">${g.songs.map(tile).join('')}</div></section>`; };
+    host.innerHTML = groups.length ? rows.map((r, ri) => `<div class="stk-row${ri === rows.length - 1 ? ' stk-last' : ''}">${r.map(crate).join('')}</div>`).join('')
+        : '<div class="stk-empty"><div class="stk-empty-rec"></div><b>Your mixtape is still blank</b><p>Add an Apple Music link in a book’s details (✎) and it lands here 🎵</p></div>';
 }
 (function () { let t; window.addEventListener('resize', () => { clearTimeout(t); t = setTimeout(() => { const el = document.getElementById('tab-content-soundtrack'); if (el && !el.classList.contains('hidden')) renderSoundtrack(); }, 150); }); })();
 function authorGroups() {
