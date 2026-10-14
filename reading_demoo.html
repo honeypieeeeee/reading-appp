@@ -5957,13 +5957,16 @@ body{padding-left:62px}
 #tab-content-book .bpx-bc span{font:700 9.5px 'Playfair Display',serif;letter-spacing:.06em;text-transform:uppercase;color:rgb(var(--c-6b705c))}
 #tab-content-book .bpx-bc small{font:600 9.5px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
 /* Review tab: big-cover-left / details-right header */
-/* the big cover lives in the panel on this tab, so the small header cover steps aside */
+/* Details tab: the big cover lives in the panel, so the small header cover steps aside */
+#tab-content-book .bp-split{display:flex;align-items:center;gap:10px;margin:6px 0 -2px;font:800 12px 'Playfair Display',serif;letter-spacing:.08em;text-transform:uppercase;color:rgb(var(--c-7c8c4d))}
+#tab-content-book .bp-split::before,#tab-content-book .bp-split::after{content:'';flex:1;border-top:3px dotted rgb(var(--c-e0b8c0))}
+#tab-content-book .bp-split span{background:#fff;border:2px solid rgb(var(--c-e8c4c4));border-radius:99px;padding:4px 14px}
 #tab-content-book .bp-top.rv-nocv .bp-cover{display:none}
 #tab-content-book .rv-head{position:relative;overflow:hidden;display:grid;grid-template-columns:clamp(150px,38%,270px) minmax(0,1fr);gap:20px;align-items:start;border:2px solid rgb(var(--c-e8c4c4));border-radius:22px;padding:18px;background:radial-gradient(circle at 12% 8%,#fff 0,#fdf1f1 45%,#f3f0e2 100%);box-shadow:0 5px 14px rgb(var(--c-e8a4b5)/0.2),inset 0 0 0 4px rgba(255,255,255,.7);animation:bp-in .3s ease both}
-#tab-content-book .rv-cover{position:relative;width:100%;aspect-ratio:2/3;border-radius:6px 14px 14px 6px;background-size:cover;background-position:center;box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.22),inset -1px 0 0 rgba(255,255,255,.35),0 14px 28px -8px rgb(var(--c-3e4a3d)/0.45),0 3px 8px rgb(var(--c-3e4a3d)/0.18);transform:rotate(-1.2deg);transition:transform .35s cubic-bezier(.3,1.4,.5,1),box-shadow .3s;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#tab-content-book .rv-cover{position:relative;width:100%;aspect-ratio:2/3;border-radius:6px 14px 14px 6px;background-size:cover;background-position:center;box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.22),inset -1px 0 0 rgba(255,255,255,.35),0 14px 28px -8px rgb(var(--c-3e4a3d)/0.45),0 3px 8px rgb(var(--c-3e4a3d)/0.18);transition:transform .3s ease,box-shadow .3s;display:flex;align-items:center;justify-content:center;overflow:hidden}
 #tab-content-book .rv-cover-empty{background:linear-gradient(135deg,rgb(var(--c-e8a5b5)),rgb(var(--c-a3b18a)))}
 #tab-content-book .rv-cover::before{content:'';position:absolute;inset:0 auto 0 9px;width:2px;background:rgba(255,255,255,.28)}
-#tab-content-book .rv-cover:hover{transform:rotate(0) translateY(-4px) scale(1.02);box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.22),0 20px 34px -10px rgb(var(--c-3e4a3d)/0.5)}
+#tab-content-book .rv-cover:hover{transform:translateY(-3px);box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.22),0 20px 34px -10px rgb(var(--c-3e4a3d)/0.5)}
 #tab-content-book .rv-cvt{padding:0 18px 0 22px;text-align:center;font:800 clamp(14px,2.1vw,21px)/1.25 'Playfair Display',serif;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.25);word-break:break-word}
 #tab-content-book .rv-info{min-width:0;display:flex;flex-direction:column;gap:12px}
 #tab-content-book .rv-info>.bpx-src{align-self:flex-start}
@@ -6018,7 +6021,7 @@ body{padding-left:62px}
 (function () {
     const $ = id => document.getElementById(id);
     const E = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-    const TABS = [['details', '\u{1F338} Details'], ['review', '\u270D\uFE0F Review'], ['notes', '\u{1F5D2}\uFE0F Notes'], ['stats', '\u{1F4CA} Stats']];
+    const TABS = [['details', '\u{1F338} Details'], ['review', '\u270D\uFE0F Review & Notes'], ['stats', '\u{1F4CA} Stats']];   // notes live inside the review tab
     let bpId = null, bpTab = 'details', bpPrev = 'reviews';
     const fn = (name, ...a) => { try { return typeof window[name] === 'function' ? window[name](...a) : ''; } catch (e) { return ''; } };
     const rt1 = r => (Math.round(r * 10) / 10).toFixed(1);
@@ -6052,22 +6055,28 @@ body{padding-left:62px}
             <div class="bpx-path"><span></span>${dd ? `<em>${dd} day${dd > 1 ? 's' : ''}</em>` : '<em>\u2728</em>'}<span></span></div>
             <div class="bpx-stop"><i>${b.status === 'abandoned' ? '\u{1F940}' : '\u{1F389}'}</i><small>${endLabel}</small><b>${finished ? E(finished) : '\u2014'}</b></div></div>` : '';
         const heroTop = [pub ? `<span class="bpx-src">${E(pub)}</span>` : '', b.favorite ? '<span class="bpx-src fav">\u{1F496} Favorite</span>' : '', status].filter(Boolean).join('');
-        out.push(`<div class="bpx-hero"><i class="bpx-sp s1">\u2726</i><i class="bpx-sp s2">\u2727</i><i class="bpx-sp s3">\u2726</i>
-            ${heroTop ? `<div class="bpx-herotop">${heroTop}</div>` : ''}
-            ${(fdChips || prChips) ? `<div class="bpx-chiprow">${fdChips}${prChips}</div>` : ''}
-            ${series ? `<div class="bpx-series">${series}</div>` : ''}
-            ${journey}
-            ${u ? `<a class="bpx-link" href="${u}" target="_blank" rel="noopener noreferrer">\u{1F517} Open publishing link <span>\u2197</span></a>` : ''}</div>`);
-        // rereads card (added by the rereads feature) is kept as it was
-        try { const m = bookMeta(b), k = m.indexOf('<div class="rr-card">'); if (k > -1) out.push(m.slice(k)); } catch (e) {}
-
-        // the book: three big cards
+        // the book: pages, time read, series
         const cards = [];
         if (b.totalPages) cards.push(['\u{1F4D6}', b.totalPages, 'pages', '']);
         if (b.actualMinutes) cards.push(['\u23F1\uFE0F', fmtT(b.actualMinutes), 'read in', b.durationStr && b.durationStr !== '\u2014' ? 'listed ' + E(b.durationStr) : '']);
         else if (b.durationStr && b.durationStr !== '\u2014') cards.push(['\u23F1\uFE0F', E(b.durationStr), 'listed time', '']);
         if (b.seriesName) cards.push(['\u{1F4DA}', E(b.seriesName), b.part ? 'part ' + E(b.part) + (b.partsTotal ? ' of ' + E(b.partsTotal) : '') : 'series', '']);
-        if (cards.length) out.push(`<section class="bpx-sec bpx-book"><div class="bpx-h"><span class="bpx-hi">\u{1F4D6}</span><h5>The book</h5></div><div class="bpx-bookgrid">${cards.map((c, i) => `<div class="bpx-bc" style="--i:${i};--bg:${PAL[i % PAL.length][0]};--fg:${PAL[i % PAL.length][1]}"><i>${c[0]}</i><b>${c[1]}</b><span>${c[2]}</span>${c[3] ? `<small>${c[3]}</small>` : ''}</div>`).join('')}</div></section>`);
+
+        // big cover on the left, the first part of the details on the right
+        let cov = ''; try { cov = typeof coverStyle === 'function' ? coverStyle(b) : ''; } catch (e) {}
+        cov = String(cov).replace(/background-color:\s*undefined;?/g, '');
+        const cvTxt = b.cover ? '' : `<span class="rv-cvt">${E(String(b.title || '').slice(0, 60))}</span>`;
+        const right = [
+            heroTop ? `<div class="bpx-herotop">${heroTop}</div>` : '',
+            (fdChips || prChips) ? `<div class="bpx-chiprow">${fdChips}${prChips}</div>` : '',
+            series ? `<div class="bpx-series">${series}</div>` : '',
+            journey,
+            u ? `<a class="bpx-link" href="${u}" target="_blank" rel="noopener noreferrer">\u{1F517} Open publishing link <span>\u2197</span></a>` : '',
+            cards.length ? `<div class="bpx-bookgrid rv-cards">${cards.map((c, i) => `<div class="bpx-bc" style="--i:${i};--bg:${PAL[i % PAL.length][0]};--fg:${PAL[i % PAL.length][1]}"><i>${c[0]}</i><b>${c[1]}</b><span>${c[2]}</span>${c[3] ? `<small>${c[3]}</small>` : ''}</div>`).join('')}</div>` : ''
+        ].filter(Boolean).join('');
+        out.push(`<div class="rv-head"><i class="bpx-sp s1">\u2726</i><i class="bpx-sp s2">\u2727</i><i class="bpx-sp s3">\u2726</i><div class="rv-cover${!b.cover && !b.coverColor ? ' rv-cover-empty' : ''}" style="${cov}">${cvTxt}</div><div class="rv-info">${right || '<p class="bp-empty">No book details yet \u{1F331}</p>'}</div></div>`);
+        // rereads card (added by the rereads feature) is kept as it was
+        try { const m = bookMeta(b), k = m.indexOf('<div class="rr-card">'); if (k > -1) out.push(m.slice(k)); } catch (e) {}
 
         let PRE = { tags: '', warnings: '', vibes: '' }; try { PRE = TAXO.PRE; } catch (e) {}
         const vis = arr => { let v = arr || []; try { v = SAFE.vis(v); } catch (e) {} return v; };
@@ -6082,45 +6091,12 @@ body{padding-left:62px}
     }
     function reviewTab(b) {
         const out = [];
-
-        // --- big-cover-left / details-right header (mirrors the first part of detailsTab, defensively) ---
-        let cov = ''; try { cov = typeof coverStyle === 'function' ? coverStyle(b) : ''; } catch (e) { cov = ''; }
-        let fds = [], prs = []; try { fds = bookFandoms(b) || []; prs = bookPairings(b) || []; } catch (e) {}
-        let dd = null; try { dd = daysTook(b); } catch (e) {}
-        let fk = k => k; try { fk = fmtKey; } catch (e) {}
-        const u = (() => { try { return safeUrl(b.link); } catch (e) { return ''; } })();
-        let src = ''; if (u) { try { src = /archiveofourown|ao3/i.test(u) ? 'AO3' : /goodreads/i.test(u) ? 'Goodreads' : new URL(u).hostname.replace(/^www\./, ''); } catch (e) {} }
-        const pub = [src, b.publisher, b.year].filter(Boolean).filter((x, i, a) => a.findIndex(y => String(y).trim().toLowerCase() === String(x).trim().toLowerCase()) === i).join(' \u00b7 ');
-
-        const fdChips = fds.map(t => `<span class="bpx-fd fd-link" data-fd="${E(t)}" title="Open fandom page">\u{1F380} ${E(t)}</span>`).join('');
-        const prChips = prs.map(t => `<span class="bpx-pr">\u{1F495} ${E(t)}</span>`).join('');
-        const started = b.startedAt ? fk(b.startedAt) : '', finished = b.finishedAt ? fk(b.finishedAt) : '';
-        const endLabel = b.status === 'abandoned' ? 'Abandoned' : 'Finished';
-        const journey = (started || finished) ? `<div class="bpx-journey">
-            <div class="bpx-stop"><i>\u{1F331}</i><small>Started</small><b>${started ? E(started) : '\u2014'}</b></div>
-            <div class="bpx-path"><span></span>${dd ? `<em>${dd} day${dd > 1 ? 's' : ''}</em>` : '<em>\u2728</em>'}<span></span></div>
-            <div class="bpx-stop"><i>${b.status === 'abandoned' ? '\u{1F940}' : '\u{1F389}'}</i><small>${endLabel}</small><b>${finished ? E(finished) : '\u2014'}</b></div></div>` : '';
-
-        const rvCards = [];
-        if (b.totalPages) rvCards.push(['\u{1F4D6}', b.totalPages, 'pages', '']);
-        if (b.actualMinutes) rvCards.push(['\u23F1\uFE0F', fmtT(b.actualMinutes), 'read in', b.durationStr && b.durationStr !== '\u2014' ? 'listed ' + E(b.durationStr) : '']);
-        else if (b.durationStr && b.durationStr !== '\u2014') rvCards.push(['\u23F1\uFE0F', E(b.durationStr), 'listed time', '']);
-
-        const rvRight = [
-            pub ? `<span class="bpx-src">${E(pub)}</span>` : '',
-            (fdChips || prChips) ? `<div class="bpx-chiprow">${fdChips}${prChips}</div>` : '',
-            journey,
-            u ? `<a class="bpx-link" href="${u}" target="_blank" rel="noopener noreferrer">\u{1F517} Open publishing link <span>\u2197</span></a>` : '',
-            rvCards.length ? `<div class="bpx-bookgrid rv-cards">${rvCards.map((c, i) => `<div class="bpx-bc" style="--i:${i};--bg:${PAL[i % PAL.length][0]};--fg:${PAL[i % PAL.length][1]}"><i>${c[0]}</i><b>${c[1]}</b><span>${c[2]}</span>${c[3] ? `<small>${c[3]}</small>` : ''}</div>`).join('')}</div>` : ''
-        ].filter(Boolean).join('');
-
-        const cvTxt = b.cover ? '' : `<span class="rv-cvt">${E(String(b.title || '').slice(0, 60))}</span>`;
-        out.push(`<div class="rv-head"><i class="bpx-sp s1">\u2726</i><i class="bpx-sp s2">\u2727</i><div class="rv-cover${!b.cover && !b.coverColor ? ' rv-cover-empty' : ''}" style="${String(cov).replace(/background-color:\s*undefined;?/g, '')}">${cvTxt}</div><div class="rv-info">${rvRight || '<p class="bp-empty">No book details yet \u{1F331}</p>'}</div></div>`);
-
         out.push(`<div class="bp-box"><h5>Rating</h5><p style="font-weight:800;color:rgb(var(--c-d97706));font-size:14px">${b.rating ? '\u2605 ' + rt1(b.rating) + ' / 5' : '<span class="bp-empty">No rating given</span>'}${b.rr === 'y' ? ' &nbsp;\u{1F501} would reread' : ''}</p></div>`);
         const chips = (typeof ratingChips === 'function' ? ratingChips(b) : '') + (typeof feelHTML === 'function' ? feelHTML(b) : '');
         if (chips.trim()) out.push(`<div class="bp-box">${chips}</div>`);
         out.push(txt('\u{1F49A} What worked', b.best) + txt('\u{1F940} What didn\u2019t', b.weak) + txt('\u2702\uFE0F What I\u2019d change', b.chg));
+        // ...and the notes right underneath
+        out.push(`<div class="bp-split"><span>\u{1F5D2}\uFE0F Notes</span></div>`, notesTab(b));
         return out.join('');
     }
     function notesTab(b) {
@@ -6205,7 +6181,7 @@ body{padding-left:62px}
         if (!b) { root.innerHTML = '<p class="bp-empty">That book is gone \u{1F344}</p><button class="bp-act" onclick="closeBookPage()">\u2190 Back</button>'; return; }
         const i = books.indexOf(b), ref = bookRef(b);
         root.innerHTML = `<div><button type="button" class="bp-back" onclick="closeBookPage()">\u2190 Back to ${bpPrev === 'reviews' ? 'Finished' : 'where you were'}</button>
-            <div class="bp-top${bpTab === 'review' ? ' rv-nocv' : ''}"><div class="bp-cover" style="${typeof coverStyle === 'function' ? coverStyle(b) : ''}"></div>
+            <div class="bp-top${bpTab === 'details' ? ' rv-nocv' : ''}"><div class="bp-cover" style="${typeof coverStyle === 'function' ? coverStyle(b) : ''}"></div>
             <div style="min-width:0"><h3 class="bk-title font-serif font-bold text-[rgb(var(--c-3e4a3d))]" style="font-size:17px">${E(b.title)}</h3>
             ${authorsOf(b).length ? `<p class="text-[11px] text-[rgb(var(--c-6b705c))] italic">by ${authorLinks(b)}</p>` : ''}
             <div class="bp-acts"><button type="button" class="bp-act pri" onclick="openReviewModal(${ref})">\u270E Edit</button>
@@ -6213,12 +6189,32 @@ body{padding-left:62px}
             ${typeof downloadReviewCard === 'function' ? `<button type="button" class="bp-act" onclick="downloadReviewCard(${ref})">\u2B07\uFE0F Review card</button>` : ''}</div></div></div></div>
             <div class="bp-tabs">${TABS.map(t => `<button type="button" class="bp-tab${t[0] === bpTab ? ' on' : ''}" data-t="${t[0]}">${t[1]}</button>`).join('')}</div>
             <div class="bp-panel" id="bp-panel">${BODY[bpTab](b)}</div>`;
-        root.querySelectorAll('.bp-tab').forEach(btn => btn.addEventListener('click', () => { bpTab = btn.dataset.t; render(); root.scrollTop = 0; }));
+        root.querySelectorAll('.bp-tab').forEach(btn => btn.addEventListener('click', () => {
+            if (btn.dataset.t === bpTab) return;
+            const from = coverRect(root);
+            bpTab = btn.dataset.t; render(); root.scrollTop = 0;
+            growShrink(root, from);
+        }));
         requestAnimationFrame(() => requestAnimationFrame(() => root.querySelectorAll('.bp-bar u').forEach(x => { x.style.width = x.dataset.w + '%'; })));
+    }
+    // the cover is BIG on Details and small in the header elsewhere: slide + resize it between the two spots
+    const visCover = root => [root.querySelector('.rv-cover'), root.querySelector('.bp-top .bp-cover')].find(el => el && el.offsetParent !== null && el.offsetWidth);
+    const coverRect = root => { const el = visCover(root); return el ? el.getBoundingClientRect() : null; };
+    function growShrink(root, from) {
+        const el = visCover(root);
+        if (el) for (let n = el.parentElement; n && n !== root; n = n.parentElement) n.style.animation = 'none';   // measure the real spot, not mid-entrance
+        if (!from || !el || !el.animate || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) return;
+        const to = el.getBoundingClientRect(); if (!to.width || !to.height) return;
+        const dx = from.left - to.left, dy = from.top - to.top, sx = from.width / to.width, sy = from.height / to.height;
+        if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && Math.abs(sx - 1) < .01) return;
+        el.style.transformOrigin = 'top left'; el.style.zIndex = '5';
+        const an = el.animate([{ transform: `translate(${dx}px,${dy}px) scale(${sx},${sy})` }, { transform: 'none' }], { duration: 480, easing: 'cubic-bezier(.22,.9,.28,1)' });
+        an.onfinish = an.oncancel = () => { el.style.transformOrigin = ''; el.style.zIndex = ''; };
     }
     window.bpRender = render;
     window.openBookPage = function (i, tab) {
         const b = books[i]; if (!b) return;
+        if (tab === 'notes') tab = 'review';   // notes are part of the review tab now
         bpId = b.id; bpTab = TABS.some(t => t[0] === tab) ? tab : 'details';
         if (currentTab !== 'book') bpPrev = currentTab;
         switchTab('book'); render();
