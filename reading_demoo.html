@@ -6766,8 +6766,13 @@ renderBackupNudge(); renderRes();
 
 <style>
 /* themes */
-#theme-dock{position:fixed;left:8px;bottom:8px;z-index:45;display:flex;gap:6px;padding:5px 7px;background:rgba(255,255,255,.88);border:1px solid rgb(var(--c-e8c4c4));border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
-#theme-dock button{width:24px;height:24px;padding:0;border-radius:50%;border:2.5px solid #fff;background:linear-gradient(135deg,var(--a) 0 50%,var(--b) 50% 100%);box-shadow:0 0 0 1px rgb(0 0 0/0.12),0 2px 4px rgb(0 0 0/0.12);transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+#theme-dock{position:fixed;left:8px;bottom:8px;z-index:45;display:flex;align-items:center;gap:6px;padding:5px;background:rgba(255,255,255,.88);border:1px solid rgb(var(--c-e8c4c4));border-radius:999px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+#theme-dock .td-list{display:flex;gap:6px;max-width:0;opacity:0;overflow:hidden;padding:3px 0;margin:-3px 0;transition:max-width .35s cubic-bezier(.3,1.1,.4,1),opacity .2s,padding .3s}
+#theme-dock.open .td-list{max-width:220px;opacity:1;padding:3px 4px 3px 2px}
+#theme-dock:not(.open) .td-list button{visibility:hidden}
+#theme-dock .td-tog{position:relative;display:flex;align-items:center;justify-content:center}#theme-dock .td-tog b{font-size:11px;line-height:1;filter:drop-shadow(0 1px 1px rgb(0 0 0/0.3))}
+#theme-dock button{flex:none;width:24px;height:24px;padding:0;border-radius:50%;border:2.5px solid #fff;background:linear-gradient(135deg,var(--a) 0 50%,var(--b) 50% 100%);box-shadow:0 0 0 1px rgb(0 0 0/0.12),0 2px 4px rgb(0 0 0/0.12);transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+#theme-dock .td-tog{width:28px;height:28px}
 #theme-dock button:hover{transform:scale(1.18) rotate(-12deg)}#theme-dock button.on{transform:scale(1.12);box-shadow:0 0 0 2px var(--a),0 3px 8px rgb(0 0 0/0.2)}
 .card.sched-fit #tab-content-now,.card.sched-fit #now-content,.card.sched-fit #tab-content-quotes,.card.sched-fit #quotes-content{overflow:visible;flex:none}
 /* ===== Reading Now: cosy reading-nook cards (theme colours only, so every theme recolours them) ===== */
@@ -6790,11 +6795,21 @@ renderBackupNudge(); renderRes();
 .nw-title{margin:3px 0 0;font:700 18px/1.2 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .nw-cur .nw-title{font-size:22px}
 .nw-by{margin:2px 0 0;font:italic 500 12px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
-.nw-prog{display:flex;align-items:center;gap:14px;margin-top:12px}
-.nw-ringw{flex:none;position:relative;width:64px;height:64px;border-radius:50%;background:#fff;box-shadow:0 3px 10px -4px rgb(var(--c-a8506a)/0.45)}
-.nw-ring{position:absolute;inset:0;border-radius:50%;background:conic-gradient(rgb(var(--c-a3b18a)),rgb(var(--c-8a9a5b)) calc(var(--p)*.5%),rgb(var(--c-e8a0b4)) calc(var(--p)*1%),rgb(var(--c-f6dfe4)) 0);-webkit-mask:radial-gradient(circle,transparent 0 23px,#000 24px);mask:radial-gradient(circle,transparent 0 23px,#000 24px)}
-.nw-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:800 16px/1 'Playfair Display',serif;color:rgb(var(--c-3e4a3d))}
-.nw-pct small{font-size:10px;margin-left:1px}
+.nw-prog{display:flex;align-items:center;gap:16px;margin-top:12px}
+.nw-ringw{flex:none;position:relative;width:86px;height:86px;filter:drop-shadow(0 5px 7px rgb(var(--c-a8506a)/0.22))}
+.nw-ringw svg{display:block;width:100%;height:100%;overflow:visible}
+.nw-disc{fill:#fff;stroke:rgb(var(--c-f6dfe4));stroke-width:1.5}
+.nw-dots{fill:none;stroke:rgb(var(--c-f0d0d8));stroke-width:5.5;stroke-linecap:round;stroke-dasharray:0 10.05}
+.nw-stitch{fill:rgb(var(--c-fff8e6));stroke:rgb(var(--c-f0d9a0));stroke-width:1.4;stroke-dasharray:2.6 3.2}
+.nw-arc{fill:none;stroke-width:8.5;stroke-linecap:round;stroke-dasharray:var(--c);stroke-dashoffset:var(--o);transform:rotate(-90deg);transform-origin:50px 50px;animation:nw-fill .9s cubic-bezier(.3,1.1,.4,1) both}
+.nw-bead{fill:#fff;stroke:rgb(var(--c-e8a0b4));stroke-width:2.6;animation:nw-pop .5s .7s cubic-bezier(.3,1.8,.5,1) both;transform-box:fill-box;transform-origin:center}
+@keyframes nw-fill{from{stroke-dashoffset:var(--c)}}@keyframes nw-pop{from{transform:scale(0)}}
+.nw-mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;pointer-events:none}
+.nw-mid em{font-style:normal;font-size:15px;line-height:1;animation:nw-bob 3.2s ease-in-out infinite;transform-origin:bottom center}
+.nw-mid b{font:800 15px/1 'Playfair Display',serif;color:rgb(var(--c-3e4a3d))}.nw-mid small{font-size:9px;margin-left:1px}
+@keyframes nw-bob{50%{transform:translateY(-2px) rotate(-6deg)}}
+.nw-tw{position:absolute;width:12px;height:12px;background:rgb(var(--c-e8a0b4));clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);animation:qc-tw 3.2s ease-in-out infinite}
+.nw-tw.t1{top:-4px;right:0}.nw-tw.t2{bottom:3px;left:-5px;width:9px;height:9px;background:rgb(var(--c-a3b18a));animation-delay:1.3s}
 .nw-nums{min-width:0;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .nw-chip{display:inline-flex;align-items:center;gap:4px;font:600 11px Montserrat,sans-serif;color:rgb(var(--c-6b705c));background:#fff;border:1.5px solid rgb(var(--c-e8c4c4));border-radius:99px;padding:3px 10px;cursor:pointer;white-space:nowrap;transition:transform .2s cubic-bezier(.3,1.5,.5,1),border-color .2s}
 .nw-chip b{color:rgb(var(--c-3e4a3d))}.nw-chip u{text-decoration:none;opacity:.55;font-size:10px}
@@ -6814,7 +6829,9 @@ renderBackupNudge(); renderRes();
 .nw-f{flex:1 1 120px;min-width:0;display:flex;align-items:center;gap:6px;padding:0 12px;height:36px;background:#fff;border:1.5px solid rgb(var(--c-e8c4c4));border-radius:99px;transition:border-color .2s,box-shadow .2s}
 .nw-f:focus-within{border-color:rgb(var(--c-8a9a5b));box-shadow:0 0 0 3px rgb(var(--c-8a9a5b)/0.18)}
 .nw-f span{font-size:13px}.nw-f input{flex:1;min-width:0;border:0!important;outline:0;background:transparent;box-shadow:none!important;padding:0;font:600 12px Montserrat,sans-serif;color:rgb(var(--c-3e4a3d))}
-.nw-logb{flex:none;height:36px;padding:0 18px;border:0;border-radius:99px;font:800 12px Montserrat,sans-serif;color:#fff;background:linear-gradient(135deg,rgb(var(--c-a3b18a)),rgb(var(--c-8a9a5b)));box-shadow:0 3px 0 rgb(var(--c-75834d)),0 6px 14px -4px rgb(var(--c-8a9a5b)/0.6);cursor:pointer;transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+.nw-logb{flex:none;display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 18px 0 6px;border:0;border-radius:99px;font:800 12px Montserrat,sans-serif;color:#fff;background:linear-gradient(135deg,rgb(var(--c-a3b18a)),rgb(var(--c-8a9a5b)));box-shadow:0 3px 0 rgb(var(--c-75834d)),0 6px 14px -4px rgb(var(--c-8a9a5b)/0.6);cursor:pointer;transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+.nw-logb i{flex:none;display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:#fff;font-style:normal;font-size:14px;line-height:1;box-shadow:inset 0 0 0 1.5px rgb(var(--c-cfdbb0)),0 1px 3px rgb(0 0 0/0.18)}
+#now-content button.nw-logb:hover i{animation:nw-bob .6s ease-in-out}
 #now-content button.nw-logb:hover{transform:translateY(-2px);filter:none}#now-content button.nw-logb:active{transform:translateY(1px);box-shadow:0 1px 0 rgb(var(--c-75834d))}
 #now-content .nw-log .tl-open-now{flex:none;height:36px;padding:0 14px;border-radius:99px;border:1.5px solid rgb(var(--c-e8c4c4));background:#fff;font:700 11.5px Montserrat,sans-serif}
 #now-content .nw-log .tl-open-now:hover{background:rgb(var(--c-fde7ec))}
@@ -6828,7 +6845,7 @@ renderBackupNudge(); renderRes();
   .nw-top{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px}.nw-main{display:contents}
   .nw-hd{grid-column:2;align-self:center}.nw-prog,.nw-path{grid-column:1/-1}.nw-prog{margin-top:12px}.nw-path{margin-right:0}
   .nw-log .nw-f{flex-basis:calc(50% - 4px);padding:0 10px}.nw-f input{font-size:11.5px}.nw-logb{flex:1 1 auto}}
-@media (prefers-reduced-motion:reduce){.nw-empty span{animation:none}}
+@media (prefers-reduced-motion:reduce){.nw-empty span,.nw-arc,.nw-bead,.nw-mid em,.nw-tw{animation:none}}
 .nw-in{font-size:12px;padding:5px 8px;border:1px solid rgb(var(--c-e8c4c4));border-radius:8px;background:#fff;outline:0}
 .nw-btn{font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;background:rgb(var(--c-8a9a5b));color:#fff}
 .qt{position:relative;background:linear-gradient(135deg,#fffdfb,rgb(var(--c-fdeef0)/0.8));border:1px solid rgb(var(--c-f0dede));border-left:5px solid rgb(var(--c-e8a0b4));border-radius:16px;padding:14px 16px 13px 20px;margin-bottom:11px;cursor:pointer;box-shadow:0 3px 10px rgba(168,80,106,.07);transition:transform .25s cubic-bezier(.3,1.2,.5,1),box-shadow .25s,border-color .25s}
@@ -6891,10 +6908,14 @@ renderBackupNudge(); renderRes();
     // [key, emoji, name, main colour, accent colour]: every theme is a matched pair, and the whole palette follows it
     const TH = window.THEMES_LIST = [['sage', '🌿', 'Sage & rose', '#8a9a5b', '#e8a0b4'], ['blossom', '🌸', 'Pink & lavender', '#c6739a', '#bfabec'], ['lilac', '🪻', 'Lilac & mint', '#9983cb', '#82c9ab'], ['ocean', '🐚', 'Ocean & coral', '#4b9cc2', '#f0a092'], ['autumn', '🍂', 'Pumpkin & berry', '#cf7942', '#ec9faa'], ['cocoa', '🍓', 'Cocoa & strawberry', '#b38767', '#f09bb5']];
     const setTheme = t => { const th = TH.find(x => x[0] === t) || TH[0]; document.documentElement.dataset.theme = th[0]; try { localStorage.setItem('enchantedTheme', th[0]); } catch (e) {}
-        document.querySelectorAll('#theme-dock button').forEach(b => { const on = b.dataset.t === th[0]; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+        document.querySelectorAll('#theme-dock .td-list button').forEach(b => { const on = b.dataset.t === th[0]; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+        const tg = document.querySelector('#theme-dock .td-tog'); if (tg) { tg.style.setProperty('--a', th[3]); tg.style.setProperty('--b', th[4]); tg.title = '🎨 ' + th[2] + ' · change theme'; }
         const mc = document.querySelector('meta[name="theme-color"]'); if (mc) mc.content = th[3]; };
-    document.body.insertAdjacentHTML('beforeend', `<div id="theme-dock" role="group" aria-label="Colour themes">${TH.map(([k, e, n, a, b]) => `<button type="button" data-t="${k}" title="${e} ${n}" aria-label="${n} theme" style="--a:${a};--b:${b}"></button>`).join('')}</div>`);
-    $('theme-dock').onclick = e => { const b = e.target.closest('button'); if (b) setTheme(b.dataset.t); };
+    document.body.insertAdjacentHTML('beforeend', `<div id="theme-dock" role="group" aria-label="Colour themes"><button type="button" class="td-tog" aria-expanded="false" aria-controls="td-list" title="Colour themes" aria-label="Colour themes"><b aria-hidden="true">🎨</b></button><div id="td-list" class="td-list">${TH.map(([k, e, n, a, b]) => `<button type="button" data-t="${k}" title="${e} ${n}" aria-label="${n} theme" style="--a:${a};--b:${b}"></button>`).join('')}</div></div>`);
+    const tDock = $('theme-dock'), dockOpen = o => { tDock.classList.toggle('open', o); tDock.querySelector('.td-tog').setAttribute('aria-expanded', o); };
+    tDock.onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.classList.contains('td-tog')) return dockOpen(!tDock.classList.contains('open')); setTheme(b.dataset.t); dockOpen(false); };
+    document.addEventListener('click', e => { if (!tDock.contains(e.target)) dockOpen(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') dockOpen(false); });
     let saved = 'sage'; try { saved = localStorage.getItem('enchantedTheme') || 'sage'; } catch (e) {} setTheme(TH.some(x => x[0] === saved) ? saved : 'sage');
 
     // ===== New tabs: Reading Now + Quotes =====
@@ -6918,6 +6939,18 @@ renderBackupNudge(); renderRes();
     const ago = k => { const d = new Date(k + 'T00:00'), n = new Date(); n.setHours(0, 0, 0, 0); const x = Math.round((n - d) / 864e5); return x <= 0 ? 'today' : x === 1 ? 'yesterday' : x + ' days ago'; };
     // the current scroll (top of the backlog) always shows, plus every other book you have already started
     const readingList = () => { const cur = books.find(inNow); return books.map((b, i) => ({ b, i })).filter(x => x.b === cur || (inNow(x.b) && (x.b.minutesRead > 0 || (x.b.pagesRead || 0) > 0 || x.b.status === 'rereading'))); };
+    // cute progress ring: dotted track, a round-capped gradient arc with a little bead at its tip, and a plant that grows with the book
+    const RC = 2 * Math.PI * 40;
+    const ringHtml = (pct, id) => {
+        const gid = 'nwg' + String(id).replace(/\W/g, ''), f = Math.max(0, Math.min(100, pct)) / 100, ang = (f * 360 - 90) * Math.PI / 180;
+        const bx = (50 + 40 * Math.cos(ang)).toFixed(2), by = (50 + 40 * Math.sin(ang)).toFixed(2);
+        const stage = pct >= 100 ? '🌟' : pct >= 70 ? '🌸' : pct >= 35 ? '🌷' : pct > 0 ? '🌿' : '🌱';
+        return `<div class="nw-ringw" role="img" aria-label="${pct}% read" style="--c:${RC.toFixed(2)};--o:${(RC * (1 - f)).toFixed(2)}"><svg viewBox="0 0 100 100" aria-hidden="true">
+            <defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:rgb(var(--c-a3b18a))"/><stop offset=".55" style="stop-color:rgb(var(--c-e8a0b4))"/><stop offset="1" style="stop-color:rgb(var(--c-f4b6c2))"/></linearGradient></defs>
+            <circle class="nw-disc" cx="50" cy="50" r="47"/><circle class="nw-dots" cx="50" cy="50" r="40"/><circle class="nw-stitch" cx="50" cy="50" r="30"/>
+            ${f > 0 ? `<circle class="nw-arc" cx="50" cy="50" r="40" stroke="url(#${gid})"/><circle class="nw-bead" cx="${bx}" cy="${by}" r="5.2"/>` : ''}</svg>
+            <span class="nw-mid"><em>${stage}</em><b>${pct}<small>%</small></b></span><i class="nw-tw t1" aria-hidden="true"></i><i class="nw-tw t2" aria-hidden="true"></i></div>`;
+    };
     // one cosy "reading nook" card per book; ids now-m-/now-p- and the logCurrent button are what the add-ons hook into
     const nowCard = ({ b, i }, first) => {
         const tp = +b.totalPages || 0, pr = pagesReadOf(b) || 0, pct = Math.round(progPct(b)) || 0, mr = +b.minutesRead || 0, ref = bookRef(b), id = escHtml(b.id);
@@ -6939,7 +6972,7 @@ renderBackupNudge(); renderRes();
                     <h4 class="nw-title">${esc(b.title)}</h4>
                     ${au || tp ? `<p class="nw-by">${au ? 'by ' + esc(au) : ''}${au && tp ? ' · ' : ''}${tp ? tp + ' pages' : ''}</p>` : ''}</div>
                     <div class="nw-prog">
-                        <div class="nw-ringw" role="img" aria-label="${pct}% read"><i class="nw-ring"></i><span class="nw-pct">${pct}<small>%</small></span></div>
+                        ${ringHtml(pct, b.id)}
                         <div class="nw-nums">
                             <button type="button" class="nw-chip" onclick="editPagesRead(${ref})" title="Fix how many pages you have actually read">📄 <b>${pr}</b> / ${tp || '?'} pages <u>✎</u></button>
                             <button type="button" class="nw-chip" onclick="editMinutesRead(${ref})" title="Fix how much time you have actually read">⏱ <b>${formatTime(mr)}</b> / ${esc(b.durationStr || formatTime(+b.duration || 0))} <u>✎</u></button>
@@ -6953,7 +6986,7 @@ renderBackupNudge(); renderRes();
             <div class="nw-log">
                 <label class="nw-f"><span aria-hidden="true">⏱</span><input type="number" id="now-m-${id}" placeholder="Minutes" min="0" aria-label="Minutes read"></label>
                 <label class="nw-f"><span aria-hidden="true">📄</span><input type="number" id="now-p-${id}" placeholder="Pages read" min="0" aria-label="Pages read"></label>
-                <button type="button" class="nw-logb" onclick="logCurrent(${ref})">🌱 Log it</button>
+                <button type="button" class="nw-logb" onclick="logCurrent(${ref})"><i aria-hidden="true">🌱</i>Log it</button>
             </div>
         </div>`;
     };
@@ -11913,7 +11946,13 @@ div:has(>#tab-btn-backlog){flex-shrink:0}
 .st-sw i{position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
 .st-sw.on{background:rgb(var(--c-8a9a5b));border-color:rgb(var(--c-8a9a5b))}.st-sw.on i{transform:translateX(19px)}
 #tab-content-settings button:not(:disabled):active.st-sw{transform:none!important}
-.st-themes{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}
+.st-thtog{display:flex;align-items:center;gap:10px;width:100%;padding:6px 8px 6px 2px;border:0;background:none;text-align:left;cursor:pointer;border-radius:14px;font:inherit;color:inherit}
+.st-thtog .st-t{flex:1;min-width:0}.st-thtog em{font:700 12px Montserrat,sans-serif;font-style:normal;color:rgb(var(--c-3e4a3d));white-space:nowrap}
+.st-thtog u{flex:none;width:8px;height:8px;margin:0 6px 3px 2px;border:solid rgb(var(--c-a8506a));border-width:0 2.5px 2.5px 0;border-radius:1px;transform:rotate(45deg);transition:transform .3s cubic-bezier(.3,1.5,.5,1)}.st-thtog[aria-expanded=true] u{transform:rotate(225deg) translate(-2px,-2px)}
+.st-thtog:hover{background:rgb(var(--c-fde7ec)/0.6)}
+.st-themes{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s cubic-bezier(.3,1,.4,1)}.st-themes.open{grid-template-rows:1fr}
+.st-themes>div{min-height:0;overflow:hidden;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;padding:0 3px}.st-themes.open>div{padding:10px 3px 4px}
+.st-themes:not(.open) .st-th{visibility:hidden}
 .st-th{display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:14px;border:1.5px solid rgb(var(--c-e8c4c4));background:#fff;font:700 12px Montserrat,sans-serif;color:rgb(var(--c-3e4a3d));text-align:left;cursor:pointer;transition:background .15s,border-color .15s}
 .st-th.on{background:rgb(var(--c-eef2e2));border-color:rgb(var(--c-8a9a5b));box-shadow:0 0 0 2px rgb(var(--c-8a9a5b)/0.2)}
 .st-th span{font-size:15px;line-height:1}
@@ -11957,7 +11996,7 @@ div:has(>#tab-btn-backlog){flex-shrink:0}
 #settings-content #storage-box>div:first-of-type{font-size:11.5px}
 #tab-content-settings :is(button,select,input):focus-visible{outline:2px solid rgb(var(--c-8a9a5b));outline-offset:2px}
 #ui-gear.needs-backup::after{content:'';position:absolute;top:1px;right:1px;width:10px;height:10px;border-radius:50%;background:rgb(var(--c-d9776b));border:2px solid #fff}
-@media(prefers-reduced-motion:reduce){.st-sw,.st-sw i,.st-th,.st-btn{transition:none}}
+@media(prefers-reduced-motion:reduce){.st-themes,.st-thtog u,#theme-dock .td-list,.st-sw,.st-sw i,.st-th,.st-btn{transition:none}}
 </style>
 <script type="text/plain" data-app>
 // ===== Settings: fill gaps in existing books from a CSV (never overwrites, never adds books) =====
@@ -12182,17 +12221,18 @@ div:has(>#tab-btn-backlog){flex-shrink:0}
   }
   function dot() { var g = $('ui-gear'); if (g) g.classList.toggle('needs-backup', bkDays() > 14); var s = $('st-bk-status'); if (s) s.textContent = bkStatus(); }
 
+  var themeOpen = false;
   function render() {
     var ui = window.UISET ? UISET.get() : { dens: 'cozy', fz: 100 };
-    var th = document.documentElement.dataset.theme || 'sage';
+    var th = document.documentElement.dataset.theme || 'sage', cur = themes().filter(function (x) { return x[0] === th; })[0] || themes()[0];
     var safe = window.SAFE ? SAFE.on() : false, ao = get('enchantedAo3') !== 'no', lv = get('enchantedLevi') !== 'no', mn = get('enchantedMini') !== 'no';
     var cats = (typeof CATEGORIES !== 'undefined' ? CATEGORIES : []).map(function (c) { return '<span class="st-chip">' + E(c.label) + '</span>'; }).join('') || '<span class="st-t"><small>No categories yet.</small></span>';
     var top = box.scrollTop;
     box.innerHTML = '<div class="st-wrap">'
 
       + '<section class="st-sec" aria-label="Appearance"><h4 class="st-h">🎨 Appearance</h4>'
-      + '<div class="st-row stack"><div class="st-t"><b>Theme</b><small>Recolours the whole app.</small></div><div class="st-themes">'
-      + themes().map(function (t) { return '<button type="button" class="st-th' + (t[0] === th ? ' on' : '') + '" data-act="theme" data-v="' + E(t[0]) + '" aria-pressed="' + (t[0] === th) + '"><i class="st-sw2" style="--a:' + E(t[3]) + ';--b:' + E(t[4]) + '" aria-hidden="true"></i><span>' + E(t[1]) + '</span>' + E(t[2]) + '</button>'; }).join('') + '</div></div>'
+      + '<div class="st-row stack"><button type="button" class="st-thtog" data-act="themetog" aria-expanded="' + themeOpen + '" aria-controls="st-themes"><span class="st-t"><b>Theme</b><small>Recolours the whole app.</small></span><i class="st-sw2" id="st-thcur" style="--a:' + E(cur[3]) + ';--b:' + E(cur[4]) + '" aria-hidden="true"></i><em id="st-thname">' + E(cur[1] + ' ' + cur[2]) + '</em><u aria-hidden="true"></u></button><div class="st-themes' + (themeOpen ? ' open' : '') + '" id="st-themes"><div>'
+      + themes().map(function (t) { return '<button type="button" class="st-th' + (t[0] === th ? ' on' : '') + '" data-act="theme" data-v="' + E(t[0]) + '" aria-pressed="' + (t[0] === th) + '"><i class="st-sw2" style="--a:' + E(t[3]) + ';--b:' + E(t[4]) + '" aria-hidden="true"></i><span>' + E(t[1]) + '</span>' + E(t[2]) + '</button>'; }).join('') + '</div></div></div></div>'
       + row('Card density', 'Compact hides tags and extra details. Cards stay the same size.', seg('dens', ui.dens, [['cozy', '🛋️ Cozy', 'Full cards'], ['compact', '📦 Compact', 'Simple cards']]))
       + '<div class="st-row stack"><div class="st-size-top"><div class="st-t"><b>Text size</b></div><span class="st-t" style="flex:none;font-size:11px;color:rgb(var(--c-6b705c))">Size: <b id="st-fv" style="display:inline">' + ui.fz + '%</b> · <button type="button" class="st-link" data-act="dreset">Reset display</button></span></div>'
       + '<div class="st-size"><button type="button" class="st-a" data-act="fz" data-v="-5" aria-label="Smaller text">A</button><input type="range" id="st-fz" min="85" max="140" step="5" value="' + ui.fz + '" aria-label="Text size"><button type="button" class="st-a" data-act="fz" data-v="5" aria-label="Larger text">A</button></div></div>'
@@ -12260,7 +12300,9 @@ div:has(>#tab-btn-backlog){flex-shrink:0}
     var a = b.dataset.act, v = b.dataset.v;
     var flip = function () { var on = b.dataset.v === '1'; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); b.dataset.v = on ? '0' : '1'; };
     var pick = function (sel) { box.querySelectorAll(sel).forEach(function (x) { var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on); }); };
-    if (a === 'theme') { var t = document.querySelector('#theme-dock button[data-t="' + v + '"]'); if (t) t.click(); else { document.documentElement.dataset.theme = v; try { localStorage.setItem('enchantedTheme', v); } catch (x) {} } pick('.st-th'); }
+    if (a === 'themetog') { themeOpen = !themeOpen; b.setAttribute('aria-expanded', themeOpen); var g = $('st-themes'); if (g) g.classList.toggle('open', themeOpen); }
+    else if (a === 'theme') { var t = document.querySelector('#theme-dock .td-list button[data-t="' + v + '"]'); if (t) t.click(); else { document.documentElement.dataset.theme = v; try { localStorage.setItem('enchantedTheme', v); } catch (x) {} } pick('.st-th');
+      var ct = themes().filter(function (x) { return x[0] === v; })[0], sw = $('st-thcur'), nm = $('st-thname'); if (ct && sw && nm) { sw.style.setProperty('--a', ct[3]); sw.style.setProperty('--b', ct[4]); nm.textContent = ct[1] + ' ' + ct[2]; } }
     else if (a === 'safe') { if (window.SAFE) SAFE.set(v === '1'); flip(); }
     else if (a === 'ao3') { if (window.setAo3) setAo3(v === '1'); flip(); }
     else if (a === 'levi') { if (window.setLevi) setLevi(v === '1'); flip(); }
