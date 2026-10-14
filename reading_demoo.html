@@ -6017,6 +6017,12 @@ body{padding-left:62px}
 #tab-content-book .bpx-pr{background:rgb(var(--c-fde0e6));color:rgb(var(--c-a8506a));border:2px solid rgb(var(--c-f5bccb))}
 #tab-content-book .bpx-fd:hover,#tab-content-book .bpx-pr:hover{transform:translateY(-3px) rotate(-1.5deg)}
 #tab-content-book .bpx-series{font-size:12px}
+#tab-content-book .bpx-serrow{display:flex;min-width:0;margin-top:-3px}
+#tab-content-book .bpx-ser{display:inline-flex;align-items:center;gap:7px;max-width:100%;min-width:0;white-space:nowrap;font:800 12px 'Playfair Display',serif;color:#a9742f;background:#fdf0d5;border:2px solid #f3d9a4;border-radius:99px;padding:4px 13px 4px 10px;box-shadow:0 2px 0 rgba(0,0,0,.06);transition:transform .18s}
+#tab-content-book .bpx-ser:hover{transform:translateY(-3px) rotate(-1.5deg)}
+#tab-content-book .bpx-ser i{font-style:normal;flex:none}
+#tab-content-book .bpx-ser b{flex:0 1 auto;min-width:5.5em;overflow:hidden;text-overflow:ellipsis;font:800 12px 'Playfair Display',serif}
+#tab-content-book .bpx-ser small{flex:0 100 auto;min-width:3.2em;overflow:hidden;text-overflow:ellipsis;font:700 10px Montserrat,sans-serif;color:#b8894a;background:rgba(255,255,255,.7);border-radius:99px;padding:2px 8px}
 #tab-content-book .bpx-journey{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.75);border:2px solid rgb(var(--c-f1d6d6));border-radius:16px;padding:9px 12px}
 #tab-content-book .bpx-stop{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:76px}
 #tab-content-book .bpx-stop i{font-style:normal;font-size:20px;line-height:1.1}
@@ -6134,7 +6140,15 @@ body{padding-left:62px}
         let src = ''; if (u) { try { src = /archiveofourown|ao3/i.test(u) ? 'AO3' : /goodreads/i.test(u) ? 'Goodreads' : new URL(u).hostname.replace(/^www\./, ''); } catch (e) {} }
         const pub = [src, b.publisher, b.year].filter(Boolean).filter((x, i, a) => a.findIndex(y => String(y).trim().toLowerCase() === String(x).trim().toLowerCase()) === i).join(' \u00b7 ');
         let status = ''; try { status = statusBadge(b) || ''; } catch (e) {}
-        let series = ''; try { series = seriesLine(b) || ''; } catch (e) {}
+        // series: one cute yellow chip on its own line (name shortens with … so it never wraps)
+        let series = '';
+        if (b.seriesId || b.seriesName || b.part) {
+            let g = [b]; try { g = groupOf(b); } catch (e) {}
+            const total = Math.max(g.length, ...g.map(x => x.partsTotal || 0), b.part || 0), readN = g.filter(x => x.read).length;
+            const next = b.part ? g.filter(x => x.part > b.part).sort((x, y) => x.part - y.part)[0] : null;
+            const nm = b.seriesName || 'Series', meta = [b.part ? `part ${b.part} of ${total}` : '', total > 1 ? `${readN}/${total} read` : ''].filter(Boolean).join(' \u00b7 ');
+            series = `<span class="bpx-ser" title="${E(nm)}${meta ? ' \u00b7 ' + E(meta) : ''}${next ? ' \u00b7 next: ' + E(next.title) : ''}"><i>\u{1F4DA}</i><b>${E(nm)}</b>${meta ? `<small>${E(meta)}</small>` : ''}</span>`;
+        }
 
         const fdChips = fds.map(t => `<span class="bpx-fd fd-link" data-fd="${E(t)}" title="Open fandom page">\u{1F380} ${E(t)}</span>`).join('');
         const prChips = prs.map(t => `<span class="bpx-pr">\u{1F495} ${E(t)}</span>`).join('');
@@ -6150,7 +6164,6 @@ body{padding-left:62px}
         if (b.totalPages) cards.push(['\u{1F4D6}', b.totalPages, 'pages', '']);
         if (b.actualMinutes) cards.push(['\u23F1\uFE0F', fmtT(b.actualMinutes), 'read in', b.durationStr && b.durationStr !== '\u2014' ? 'listed ' + E(b.durationStr) : '']);
         else if (b.durationStr && b.durationStr !== '\u2014') cards.push(['\u23F1\uFE0F', E(b.durationStr), 'listed time', '']);
-        if (b.seriesName) cards.push(['\u{1F4DA}', E(b.seriesName), b.part ? 'part ' + E(b.part) + (b.partsTotal ? ' of ' + E(b.partsTotal) : '') : 'series', '']);
 
         // big cover on the left, the first part of the details on the right
         let cov = ''; try { cov = typeof coverStyle === 'function' ? coverStyle(b) : ''; } catch (e) {}
@@ -6159,7 +6172,7 @@ body{padding-left:62px}
         const right = [
             heroTop ? `<div class="bpx-herotop">${heroTop}</div>` : '',
             (fdChips || prChips) ? `<div class="bpx-chiprow">${fdChips}${prChips}</div>` : '',
-            series ? `<div class="bpx-series">${series}</div>` : '',
+            series ? `<div class="bpx-serrow">${series}</div>` : '',
             journey,
             u ? `<a class="bpx-link" href="${u}" target="_blank" rel="noopener noreferrer">\u{1F517} Open publishing link <span>\u2197</span></a>` : '',
             cards.length ? `<div class="bpx-bookgrid rv-cards">${cards.map((c, i) => `<div class="bpx-bc" style="--i:${i};--bg:${PAL[i % PAL.length][0]};--fg:${PAL[i % PAL.length][1]}"><i>${c[0]}</i><b>${c[1]}</b><span>${c[2]}</span>${c[3] ? `<small>${c[3]}</small>` : ''}</div>`).join('')}</div>` : ''
