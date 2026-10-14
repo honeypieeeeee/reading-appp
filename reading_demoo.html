@@ -6758,6 +6758,65 @@ renderBackupNudge(); renderRes();
 #theme-dock button{width:26px;height:26px;border-radius:50%;font-size:14px;line-height:1;border:2px solid transparent;background:#fff;transition:transform .15s}
 #theme-dock button:hover{transform:scale(1.15)}#theme-dock button.on{border-color:rgb(var(--c-8a9a5b));box-shadow:0 0 0 2px rgb(var(--c-8a9a5b)/0.267)}
 .card.sched-fit #tab-content-now,.card.sched-fit #now-content,.card.sched-fit #tab-content-quotes,.card.sched-fit #quotes-content{overflow:visible;flex:none}
+/* ===== Reading Now: cosy reading-nook cards (theme colours only, so every theme recolours them) ===== */
+#now-content{padding-top:2px}
+.nw-card,.nw-head{font-variant-numeric:lining-nums}
+.nw-head{display:flex;flex-wrap:wrap;gap:6px;margin:0 2px 14px}
+.nw-head span{display:inline-flex;align-items:center;gap:5px;font:700 11px Montserrat,sans-serif;color:rgb(var(--c-6b705c));background:#fff;border:1.5px solid rgb(var(--c-f0d0d8));border-radius:99px;padding:4px 12px}
+.nw-head b{color:rgb(var(--c-a8506a))}.nw-head i{font-style:normal}
+.nw-card{position:relative;margin:0 2px 18px;padding:16px 18px 14px;border-radius:24px;background:#fff;border:2px solid #fff;box-shadow:0 0 0 1.5px rgb(var(--c-f0d0d8)),0 10px 24px -14px rgb(var(--c-a8506a)/0.45)}
+.nw-card.nw-cur{padding:20px 20px 16px;margin-top:10px;background:radial-gradient(circle,rgb(var(--c-e8a0b4)/0.16) 1.4px,transparent 2px) 0 0/18px 18px,linear-gradient(140deg,rgb(var(--c-fde7ec)),#fff 45%,rgb(var(--c-eef2e2)));box-shadow:0 0 0 2px rgb(var(--c-f0d0d8)),0 14px 30px -14px rgb(var(--c-a8506a)/0.5);outline:2px dashed rgb(var(--c-e8a0b4)/0.55);outline-offset:-9px}
+.nw-tape{position:absolute;top:-10px;left:50%;width:84px;height:20px;margin-left:-42px;transform:rotate(-2deg);background:repeating-linear-gradient(45deg,rgb(var(--c-e8a0b4)/0.75) 0 6px,rgb(var(--c-f4b6c2)/0.55) 6px 12px);border-left:2px dotted rgba(255,255,255,.7);border-right:2px dotted rgba(255,255,255,.7)}
+.nw-top{display:flex;gap:16px;align-items:flex-start}
+.nw-cvb{flex:none;padding:0;border:0;background:none;cursor:pointer;border-radius:4px 9px 9px 4px;transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+#now-content button.nw-cvb:hover{transform:translateY(-3px) rotate(-3deg);filter:none;background:none;box-shadow:none}
+.nw-cv{display:block;width:78px;height:117px;border-radius:4px 9px 9px 4px!important;box-shadow:inset 4px 0 5px -2px rgba(0,0,0,.2),0 8px 16px -6px rgb(var(--c-3e4a3d)/0.45)!important}
+.nw-cur .nw-cv{width:104px;height:156px}
+.nw-main{flex:1;min-width:0}
+.nw-kick{display:block;font:800 9.5px Montserrat,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:rgb(var(--c-a8506a))}
+.nw-kick i{font-style:normal;font-weight:600;letter-spacing:.02em;text-transform:none;color:rgb(var(--c-6b705c))}
+.nw-title{margin:3px 0 0;font:700 18px/1.2 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nw-cur .nw-title{font-size:22px}
+.nw-by{margin:2px 0 0;font:italic 500 12px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+.nw-prog{display:flex;align-items:center;gap:14px;margin-top:12px}
+.nw-ringw{flex:none;position:relative;width:64px;height:64px;border-radius:50%;background:#fff;box-shadow:0 3px 10px -4px rgb(var(--c-a8506a)/0.45)}
+.nw-ring{position:absolute;inset:0;border-radius:50%;background:conic-gradient(rgb(var(--c-a3b18a)),rgb(var(--c-8a9a5b)) calc(var(--p)*.5%),rgb(var(--c-e8a0b4)) calc(var(--p)*1%),rgb(var(--c-f6dfe4)) 0);-webkit-mask:radial-gradient(circle,transparent 0 23px,#000 24px);mask:radial-gradient(circle,transparent 0 23px,#000 24px)}
+.nw-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:800 16px/1 'Playfair Display',serif;color:rgb(var(--c-3e4a3d))}
+.nw-pct small{font-size:10px;margin-left:1px}
+.nw-nums{min-width:0;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.nw-chip{display:inline-flex;align-items:center;gap:4px;font:600 11px Montserrat,sans-serif;color:rgb(var(--c-6b705c));background:#fff;border:1.5px solid rgb(var(--c-e8c4c4));border-radius:99px;padding:3px 10px;cursor:pointer;white-space:nowrap;transition:transform .2s cubic-bezier(.3,1.5,.5,1),border-color .2s}
+.nw-chip b{color:rgb(var(--c-3e4a3d))}.nw-chip u{text-decoration:none;opacity:.55;font-size:10px}
+#now-content button.nw-chip:hover{transform:translateY(-1px) rotate(-1deg);border-color:rgb(var(--c-e8a0b4));filter:none;background:#fff}
+.nw-last{flex-basis:100%;font:500 11px Montserrat,sans-serif;color:rgb(var(--c-6b705c))}.nw-last b{color:rgb(var(--c-3e4a3d))}
+.nw-path{position:relative;height:8px;margin:14px 10px 4px 0;border-radius:99px;background:repeating-linear-gradient(90deg,rgb(var(--c-f0d0d8)) 0 8px,transparent 8px 13px),rgb(var(--c-fde7ec))}
+.nw-path i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,rgb(var(--c-a3b18a)),rgb(var(--c-8a9a5b)) 40%,rgb(var(--c-e8a0b4)));box-shadow:0 2px 6px -1px rgb(var(--c-8a9a5b)/0.5)}
+.nw-path em{position:absolute;top:50%;font-style:normal;font-size:15px;line-height:1;transform:translate(-50%,-62%) scaleX(-1);filter:drop-shadow(0 2px 1px rgba(0,0,0,.15))}
+.nw-pace{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:14px}
+.nw-st{min-width:0;padding:8px 10px;border-radius:14px;background:rgb(var(--c-fff8e6));border:1.5px dashed rgb(var(--c-f0d9a0))}
+.nw-st:nth-child(2){background:rgb(var(--c-eef2e2));border-color:rgb(var(--c-cfdbb0))}.nw-st:nth-child(3){background:rgb(var(--c-f3e8ff));border-color:rgb(var(--c-e0c8f7))}.nw-st:nth-child(4){background:rgb(var(--c-fde7ec));border-color:rgb(var(--c-f0d0d8))}
+.nw-st i{font-style:normal;font-size:13px;margin-right:3px}
+.nw-st small{font:800 8.5px Montserrat,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:rgb(var(--c-6b705c))}
+.nw-st b{display:block;margin-top:1px;font:700 13px 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nw-hint{margin:12px 0 0;padding:7px 12px;font:500 11px/1.45 Montserrat,sans-serif;color:rgb(var(--c-6b705c));background:rgb(var(--c-fff8e6));border:1.5px dashed rgb(var(--c-f0d9a0));border-radius:12px}
+.nw-log{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:2px dotted rgb(var(--c-f0d0d8))}
+.nw-f{flex:1 1 120px;min-width:0;display:flex;align-items:center;gap:6px;padding:0 12px;height:36px;background:#fff;border:1.5px solid rgb(var(--c-e8c4c4));border-radius:99px;transition:border-color .2s,box-shadow .2s}
+.nw-f:focus-within{border-color:rgb(var(--c-8a9a5b));box-shadow:0 0 0 3px rgb(var(--c-8a9a5b)/0.18)}
+.nw-f span{font-size:13px}.nw-f input{flex:1;min-width:0;border:0!important;outline:0;background:transparent;box-shadow:none!important;padding:0;font:600 12px Montserrat,sans-serif;color:rgb(var(--c-3e4a3d))}
+.nw-logb{flex:none;height:36px;padding:0 18px;border:0;border-radius:99px;font:800 12px Montserrat,sans-serif;color:#fff;background:linear-gradient(135deg,rgb(var(--c-a3b18a)),rgb(var(--c-8a9a5b)));box-shadow:0 3px 0 rgb(var(--c-75834d)),0 6px 14px -4px rgb(var(--c-8a9a5b)/0.6);cursor:pointer;transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+#now-content button.nw-logb:hover{transform:translateY(-2px);filter:none}#now-content button.nw-logb:active{transform:translateY(1px);box-shadow:0 1px 0 rgb(var(--c-75834d))}
+#now-content .nw-log .tl-open-now{flex:none;height:36px;padding:0 14px;border-radius:99px;border:1.5px solid rgb(var(--c-e8c4c4));background:#fff;font:700 11.5px Montserrat,sans-serif}
+#now-content .nw-log .tl-open-now:hover{background:rgb(var(--c-fde7ec))}
+.nw-card .x-wrap{margin-top:12px}
+.nw-card .x-mood{background:rgb(var(--c-fde7ec))}
+.nw-tip{margin:-4px 0 6px;text-align:center;font:italic 500 12px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+.nw-empty{text-align:center;margin:30px auto;max-width:340px;padding:26px 20px;border:2px dashed rgb(var(--c-f0d0d8));border-radius:24px;background:#fff}
+.nw-empty span{display:block;font-size:36px;animation:qc-bob 3s ease-in-out infinite}.nw-empty b{display:block;margin-top:6px;font:800 15px 'Playfair Display',serif;color:rgb(var(--c-3e4a3d))}.nw-empty p{margin:4px 0 0;font-size:12px;color:rgb(var(--c-6b705c))}
+@media (max-width:640px){.nw-pace{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.nw-card,.nw-card.nw-cur{padding:16px 14px 14px}.nw-top{gap:12px}.nw-cv{width:64px;height:96px}.nw-cur .nw-cv{width:80px;height:120px}.nw-cur .nw-title{font-size:18px}.nw-title{font-size:16px}
+  .nw-top{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:12px}.nw-main{display:contents}
+  .nw-hd{grid-column:2;align-self:center}.nw-prog,.nw-path{grid-column:1/-1}.nw-prog{margin-top:12px}.nw-path{margin-right:0}
+  .nw-log .nw-f{flex-basis:calc(50% - 4px);padding:0 10px}.nw-f input{font-size:11.5px}.nw-logb{flex:1 1 auto}}
+@media (prefers-reduced-motion:reduce){.nw-empty span{animation:none}}
 .nw-in{font-size:12px;padding:5px 8px;border:1px solid rgb(var(--c-e8c4c4));border-radius:8px;background:#fff;outline:0}
 .nw-btn{font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;background:rgb(var(--c-8a9a5b));color:#fff}
 .qt{position:relative;background:linear-gradient(135deg,#fffdfb,#fdeef0cc);border:1px solid #f0dede;border-left:5px solid rgb(var(--c-e8a0b4));border-radius:16px;padding:14px 16px 13px 20px;margin-bottom:11px;cursor:pointer;box-shadow:0 3px 10px rgba(168,80,106,.07);transition:transform .25s cubic-bezier(.3,1.2,.5,1),box-shadow .25s,border-color .25s}
@@ -6844,28 +6903,51 @@ renderBackupNudge(); renderRes();
     const ago = k => { const d = new Date(k + 'T00:00'), n = new Date(); n.setHours(0, 0, 0, 0); const x = Math.round((n - d) / 864e5); return x <= 0 ? 'today' : x === 1 ? 'yesterday' : x + ' days ago'; };
     // the current scroll (top of the backlog) always shows, plus every other book you have already started
     const readingList = () => { const cur = books.find(inNow); return books.map((b, i) => ({ b, i })).filter(x => x.b === cur || (inNow(x.b) && (x.b.minutesRead > 0 || (x.b.pagesRead || 0) > 0 || x.b.status === 'rereading'))); };
+    // one cosy "reading nook" card per book; ids now-m-/now-p- and the logCurrent button are what the add-ons hook into
     const nowCard = ({ b, i }, first) => {
-        const tp = b.totalPages || 0, pr = pagesReadOf(b), pct = Math.round(progPct(b));
-        const last = (b.sessions || []).map(x => x.date).filter(Boolean).sort().pop(), bm = b.bookmark, notes = (b.pageNotes || []).slice().sort((a, z) => a.p - z.p);
-        return `<div class="bg-white/80 border border-[rgb(var(--c-e8c4c4))] rounded-2xl p-4 mb-4 shadow-sm">
-            <div class="flex gap-4 items-start"><div class="book-cover shrink-0" style="${coverStyle(b)};width:84px;height:126px"></div><div class="flex-1 min-w-0">
-                <span class="text-[10px] uppercase font-bold tracking-wide text-[rgb(var(--c-a8506a))]">${first ? '📖 Current scroll' : '📚 Also reading'}</span>
-                <h4 class="bk-title font-serif font-bold text-lg text-[rgb(var(--c-3e4a3d))] leading-tight">${esc(b.title)}</h4>
-                <p class="text-xs italic text-[rgb(var(--c-6b705c))]">${authorText(b) ? 'by ' + esc(authorText(b)) : ''}${tp ? ' • ' + tp + ' pages' : ''}</p>
-                <div class="flex justify-between items-end mt-3 mb-1">
-                    <button onclick="editMinutesRead(${bookRef(b)})" class="text-xs text-[rgb(var(--c-6b705c))] underline decoration-dotted hover:text-[rgb(var(--c-3e4a3d))]" title="Fix how much time you have actually read">⏱ ${formatTime(b.minutesRead)} / ${b.durationStr} ✎</button>
-                    <span class="text-xs text-[rgb(var(--c-5f6e3a))] font-bold">${pct}%</span></div>
-                <div class="h-2.5 rounded-full bg-[rgb(var(--c-e8c4c4)/0.5)] overflow-hidden"><div style="width:${pct}%;height:100%;background:linear-gradient(90deg,rgb(var(--c-8a9a5b)),rgb(var(--c-e8a0b4)))"></div></div>
-                <button onclick="editPagesRead(${bookRef(b)})" class="mt-1.5 text-xs text-[rgb(var(--c-6b705c))] underline decoration-dotted hover:text-[rgb(var(--c-3e4a3d))]" title="Fix how many pages you have actually read">📄 ${pr} / ${tp} pages ✎</button>
-                <p class="text-xs text-[rgb(var(--c-6b705c))] mt-1">🕰️ ${last ? `Last read <b>${ago(last)}</b> (${fmtKey(last)})` : 'No reading sessions logged yet'}</p>
-            </div></div>
-            ${paceHTML(b)}
-            <div class="flex items-center gap-1.5 mt-3 pt-3 border-t border-[rgb(var(--c-e8c4c4)/0.6)]">
-                <input type="number" id="now-m-${escHtml(b.id)}" placeholder="Minutes" min="0" class="w-1/3 px-1.5 py-1 text-xs border border-[rgb(var(--c-e8c4c4))] rounded outline-none bg-white">
-                <input type="number" id="now-p-${escHtml(b.id)}" placeholder="Pages read" min="0" class="w-1/3 px-1.5 py-1 text-xs border border-[rgb(var(--c-e8c4c4))] rounded outline-none bg-white">
-                <button onclick="logCurrent(${bookRef(b)})" class="flex-1 px-2 py-1.5 bg-[rgb(var(--c-e8c4c4))] hover:bg-[rgb(var(--c-dcb2b2))] text-[rgb(var(--c-3e4a3d))] font-bold rounded text-xs shadow-sm">Log</button>
+        const tp = +b.totalPages || 0, pr = pagesReadOf(b) || 0, pct = Math.round(progPct(b)) || 0, mr = +b.minutesRead || 0, ref = bookRef(b), id = escHtml(b.id);
+        const last = (b.sessions || []).map(x => x.date).filter(Boolean).sort().pop(), au = authorText(b);
+        let sp = null; try { sp = bookSpeed(b); } catch (e) {}
+        let pace = '';
+        if (sp && tp) {
+            const left = Math.round(pagesLeft(b)), ml = remainingMinutes(b), days = Math.max(1, Math.ceil(ml / getGoal())), eta = new Date(); eta.setDate(eta.getDate() + days - 1);
+            const T = (e, l, v) => `<div class="nw-st"><i aria-hidden="true">${e}</i><small>${l}</small><b>${v}</b></div>`;
+            pace = `<div class="nw-pace">${T('⚡', 'speed', Math.round(sp.ppm * 60) + ' pg/hr')}${T('📖', 'pages left', left)}${T('⏳', 'time left', '~' + formatTime(ml))}${T('🏁', 'finish', '≈ ' + formatDateString(eta))}</div>`;
+        } else pace = `<p class="nw-hint">🌱 ${tp ? 'Log minutes <em>and</em> pages once' : 'Add the total pages (✎ on the book) and log minutes <em>and</em> pages'} to see your speed and a finish date.</p>`;
+        const started = b.startedAt ? ` · started ${ago(b.startedAt)}` : '';
+        return `<div class="nw-card${first ? ' nw-cur' : ''}" style="--p:${pct}">
+            ${first ? '<span class="nw-tape" aria-hidden="true"></span>' : ''}
+            <div class="nw-top">
+                <button type="button" class="nw-cvb" onclick="openBookPage(${ref})" title="Open the book page"><span class="book-cover nw-cv" style="${String(coverStyle(b)).replace(/background-color:\s*undefined;?/g, '')}"></span></button>
+                <div class="nw-main">
+                    <div class="nw-hd"><span class="nw-kick">${first ? '📖 Current scroll' : '📚 Also reading'}<i>${started}</i></span>
+                    <h4 class="nw-title">${esc(b.title)}</h4>
+                    ${au || tp ? `<p class="nw-by">${au ? 'by ' + esc(au) : ''}${au && tp ? ' · ' : ''}${tp ? tp + ' pages' : ''}</p>` : ''}</div>
+                    <div class="nw-prog">
+                        <div class="nw-ringw" role="img" aria-label="${pct}% read"><i class="nw-ring"></i><span class="nw-pct">${pct}<small>%</small></span></div>
+                        <div class="nw-nums">
+                            <button type="button" class="nw-chip" onclick="editPagesRead(${ref})" title="Fix how many pages you have actually read">📄 <b>${pr}</b> / ${tp || '?'} pages <u>✎</u></button>
+                            <button type="button" class="nw-chip" onclick="editMinutesRead(${ref})" title="Fix how much time you have actually read">⏱ <b>${formatTime(mr)}</b> / ${esc(b.durationStr || formatTime(+b.duration || 0))} <u>✎</u></button>
+                            <span class="nw-last">${last ? `🕰️ Last read <b>${ago(last)}</b> · ${fmtKey(last)}` : '🕰️ No reading sessions logged yet'}</span>
+                        </div>
+                    </div>
+                    <div class="nw-path" aria-hidden="true"><i style="width:${pct}%"></i><em style="left:${pct}%">🐌</em></div>
+                </div>
+            </div>
+            ${pace}
+            <div class="nw-log">
+                <label class="nw-f"><span aria-hidden="true">⏱</span><input type="number" id="now-m-${id}" placeholder="Minutes" min="0" aria-label="Minutes read"></label>
+                <label class="nw-f"><span aria-hidden="true">📄</span><input type="number" id="now-p-${id}" placeholder="Pages read" min="0" aria-label="Pages read"></label>
+                <button type="button" class="nw-logb" onclick="logCurrent(${ref})">🌱 Log it</button>
             </div>
         </div>`;
+    };
+    // a little summary ribbon above the cards
+    const nowHead = act => {
+        const left = act.reduce((t, { b }) => t + (b.totalPages ? Math.round(pagesLeft(b)) : 0), 0);
+        const last = act.flatMap(({ b }) => (b.sessions || []).map(x => x.date)).filter(Boolean).sort().pop();
+        const S = (e, v) => `<span><i aria-hidden="true">${e}</i>${v}</span>`;
+        return `<section class="nw-head">${S('📚', `<b>${act.length}</b> book${act.length === 1 ? '' : 's'} on the go`)}${left ? S('📄', `<b>${left.toLocaleString()}</b> pages to go`) : ''}${last ? S('🔥', `last read <b>${ago(last)}</b>`) : ''}</section>`;
     };
     // bookmark + page-note bodies, shown as little pills under the card (see the pill row further down)
     window.nowParts = b => {
@@ -6882,9 +6964,9 @@ renderBackupNudge(); renderRes();
         const tg = $('sp-target'); if (tg) tg.textContent = act.length ? '📖 ' + act[0].b.title : 'No active scroll yet';
         if (!box) return;
         const keep = {}; box.querySelectorAll('input[id]').forEach(el => { if (el.value) keep[el.id] = el.value; }); // don't lose what you were typing
-        if (!act.length) { box.innerHTML = '<p class="text-center text-sm text-[rgb(var(--c-6b705c))] mt-10">No active scroll right now. Add one in the Backlog 🌿</p>'; return; }
-        box.innerHTML = act.map((x, k) => nowCard(x, k === 0)).join('')
-            + (act.length === 1 ? '<p class="text-[11px] italic text-center text-[rgb(var(--c-6b705c))]">Reading a second book too? Log some pages on it in the Backlog and it gets its own card here 📚</p>' : '');
+        if (!act.length) { box.innerHTML = '<div class="nw-empty"><span aria-hidden="true">📖</span><b>No book open right now</b><p>Add one in the Backlog and it gets a cosy card here 🌿</p></div>'; return; }
+        box.innerHTML = nowHead(act) + act.map((x, k) => nowCard(x, k === 0)).join('')
+            + (act.length === 1 ? '<p class="nw-tip">Reading a second book too? Log some pages on it in the Backlog and it gets its own card here 📚</p>' : '');
         Object.entries(keep).forEach(([id, v]) => { const el = $(id); if (el) el.value = v; });
     };
     window.__nowRefresh = () => { const c = $('tab-count-now'); if (c) c.textContent = readingList().length; if (currentTab === 'now') renderNow(); };
