@@ -1138,8 +1138,7 @@ html[data-theme=cocoa]{--c-322323:52 34 37;--c-3c2828:62 38 42;--c-3e4a3d:78 68 
             <div id="tab-content-book" class="hidden flex-1 flex flex-col overflow-hidden"><div id="bp-root" class="flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-3"></div></div>
 
             <div id="tab-content-favorites" class="hidden flex-1 flex flex-col overflow-hidden">
-                <h3 class="font-serif font-bold text-[rgb(var(--c-3e4a3d))] text-sm mb-3">My Favorite Shelf 💖</h3>
-                <div id="favorites-content" class="flex-1 overflow-y-auto scroll-container pr-2"></div>
+                                <div id="favorites-content" class="flex-1 overflow-y-auto scroll-container pr-2"></div>
             </div>
 
         </div>
@@ -4500,15 +4499,17 @@ window.SAFE = SAFE;
     const starStr = r => r > 0 ? '★'.repeat(Math.round(r)) + '☆'.repeat(5 - Math.round(r)) : '';
     function renderFavorites() {
         const favs = books.map((b, i) => ({ b, i })).filter(x => x.b.favorite).sort((x, y) => (y.b.rating || 0) - (x.b.rating || 0) || x.b.title.localeCompare(y.b.title));
-        document.getElementById('favorites-content').innerHTML = favs.length ? `<div class="shelf-grid">${favs.map(({ b, i }) => `<div class="shelf-item">
-            <button class="shelf-heart" onclick="toggleFavorite(${bookRef(b)})" title="Remove from favorites">💔</button>
-            <div class="shelf-book" style="${coverStyle(b)}" onclick="openReviewModal(${bookRef(b)})" title="Open details">${b.cover ? '' : `<span>${esc(b.title)}</span>`}</div>
-            <div class="shelf-plank"></div>
-            <div class="text-center mt-2">
-                <div class="bk-title font-serif font-bold text-[12px] text-[rgb(var(--c-3e4a3d))] leading-tight" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden" title="${esc(b.title)}">${esc(b.title)}</div>
-                <div class="text-[10px] text-[rgb(var(--c-6b705c))] italic truncate">${esc(authorText(b) || 'Unknown author')}</div>
-                <div class="text-[11px] font-bold text-amber-600 mt-0.5">${b.rating ? `${starStr(b.rating)} <span class="text-[10px]">${fmtRating(b.rating)}</span>` : '<span class="text-gray-400 font-normal italic text-[10px]">Unrated</span>'}</div>
-            </div></div>`).join('')}</div>` : '<p class="text-center text-sm text-[rgb(var(--c-6b705c))] mt-10">No favorites yet. Tap the 🤍 on a book in the Finished tab to shelve it here. 💖</p>';
+        const rated = favs.filter(x => x.b.rating > 0), avg = rated.length ? rated.reduce((t, x) => t + x.b.rating, 0) / rated.length : 0;
+        const open = b => `(typeof openBookPage==='function'?openBookPage:openReviewModal)(${bookRef(b)})`;
+        const TP = ['f4b6c2', 'cfdbb0', 'f0d9a0', 'e0c8f7', 'bfe0d8'], RT = [-2.2, 1.6, -1, 2.4, -1.8, 1];
+        const hero = `<section class="fv-hero"><span class="fv-heart-big" aria-hidden="true">💖</span><div><h3>My Favorites</h3><p>The books and characters you couldn't stop thinking about</p><div class="fv-pills" id="fv-pills"><span>📚 <b>${favs.length}</b> book${favs.length === 1 ? '' : 's'}</span>${avg ? `<span>⭐ <b>${fmtRating(avg)}</b> avg</span>` : ''}</div></div><i class="fv-sp a"></i><i class="fv-sp b"></i><i class="fv-sp c"></i></section>`;
+        const wall = favs.length ? `<div class="ao-div"><span>💖 Favorite books</span></div><div class="fv-wall">${favs.map(({ b }, k) => `<div class="fv-card" style="--r:${RT[k % RT.length]}deg;--tp:var(--c-${TP[k % TP.length]})">
+            <span class="fv-tape" aria-hidden="true"></span>${k < 3 ? `<span class="fv-rank r${k + 1}" title="Top ${k + 1}">${k + 1}</span>` : ''}
+            <button type="button" class="fv-x" onclick="toggleFavorite(${bookRef(b)})" title="Take off favorites" aria-label="Take off favorites">💖</button>
+            <div class="fv-pic" style="${String(coverStyle(b)).replace(/background-color:\s*undefined;?/g, '')}" onclick="${open(b)}" title="Open the book">${b.cover ? '' : `<span>${esc(b.title)}</span>`}</div>
+            <div class="fv-cap"><b title="${esc(b.title)}">${esc(b.title)}</b><i>${esc(authorText(b) || 'Unknown author')}</i>${b.rating ? `<em>${starStr(b.rating)} <u>${fmtRating(b.rating)}</u></em>` : '<em class="no">Unrated</em>'}</div></div>`).join('')}</div>`
+            : '<div class="fv-empty"><span aria-hidden="true">💖</span><b>No favorite books yet</b><p>Tap the 🤍 on a book in the Finished tab and it hangs here.</p></div>';
+        document.getElementById('favorites-content').innerHTML = hero + '<div id="fv-chars"></div>' + wall;
     }
 
     // ===== Abandoned tab =====
@@ -9420,10 +9421,13 @@ renderBackupNudge(); renderRes();
     const _pe = passesExtraFilters; passesExtraFilters = b => _pe(b) && (!lf.chars || charNames(b).some(n => ckey(n) === ckey(lf.chars)));
 
     function favSection() {
-        const host = $('favorites-content'); if (!host) return;
+        const host = $('favorites-content'), slot = host && host.querySelector('#fv-chars'); if (!slot) return;
         const a = favs(), cnt = n => books.filter(b => charNames(b).some(x => ckey(x) === ckey(n))).length;
-        const chips = a.map(n => `<span class="fc-chip">★ <u style="cursor:pointer" data-n="${E(n)}" onclick="charPage(this.dataset.n)" title="See every book">${E(n)}</u> <small>${cnt(n)} book${cnt(n) === 1 ? '' : 's'}</small><button type="button" data-n="${E(n)}" title="Show in backlog" onclick="favGo(this,'b')">📜</button><button type="button" data-n="${E(n)}" title="Show in finished" onclick="favGo(this,'f')">✨</button><button type="button" data-n="${E(n)}" title="Remove" onclick="favDel(this)">✕</button></span>`).join('');
-        host.insertAdjacentHTML('afterbegin', `<div class="fc-box"><div class="ao-div"><span>🧚 Favorite characters</span></div>${chips || '<p class="ao-info">Star a character in a book\u2019s character list (☆), or add one here.</p>'}<div class="ao-row"><input id="fc-in" class="fc-in" list="fc-dl" placeholder="Add a favorite character…" onkeydown="if(event.key==='Enter')favAdd()"><datalist id="fc-dl">${allChars().map(c => `<option value="${E(c.name)}">`).join('')}</datalist><button type="button" class="ao-btn ao-pri" onclick="favAdd()">＋ Add</button></div></div>`);
+        const PAL = [['fde7ec', 'f4b6c2'], ['eef2e2', 'cfdbb0'], ['fff3d6', 'f0d9a0'], ['f3e8ff', 'e0c8f7'], ['e4ebd0', 'b5c78a'], ['fdf0ee', 'f0d0d8']];
+        const cards = a.map((n, k) => { const c = cnt(n), p = PAL[k % PAL.length];
+            return `<div class="fv-ch" style="--bg:var(--c-${p[0]});--bd:var(--c-${p[1]})"><button type="button" class="fv-rm" data-n="${E(n)}" title="Remove" aria-label="Remove ${E(n)}" onclick="favDel(this)"></button><button type="button" class="fv-av" data-n="${E(n)}" onclick="charPage(this.dataset.n)" title="See every book"><span>${E(String(n).trim().charAt(0).toUpperCase())}</span>${k === 0 ? '<s aria-hidden="true">👑</s>' : ''}</button><b title="${E(n)}">${E(n)}</b><small>${c} book${c === 1 ? '' : 's'}</small><div class="fv-go"><button type="button" data-n="${E(n)}" title="Show in backlog" onclick="favGo(this,'b')">📜</button><button type="button" data-n="${E(n)}" title="Show in finished" onclick="favGo(this,'f')">✨</button></div></div>`; }).join('');
+        slot.innerHTML = `<div class="ao-div"><span>🧚 Favorite characters</span></div><div class="fv-chars">${cards || '<p class="fv-hint">Star a character in a book’s character list (☆), or add one below.</p>'}</div><div class="fv-add"><input id="fc-in" class="fc-in" list="fc-dl" placeholder="Add a favorite character…" onkeydown="if(event.key==='Enter')favAdd()"><datalist id="fc-dl">${allChars().map(c => `<option value="${E(c.name)}">`).join('')}</datalist><button type="button" class="ao-btn ao-pri" onclick="favAdd()">＋ Add</button></div>`;
+        const pl = host.querySelector('#fv-pills'); if (pl && a.length) pl.insertAdjacentHTML('beforeend', `<span>🧚 <b>${a.length}</b> character${a.length === 1 ? '' : 's'}</span>`);
     }
     const _rf = renderFavorites; renderFavorites = function () { _rf.apply(this, arguments); favSection(); };
     window.favAdd = () => { const v = $('fc-in').value.trim(); if (!v) return; const m = allChars().find(c => ckey(c.name) === ckey(v)); if (!isFavChar(v)) favToggle(m ? m.name : v); renderFavorites(); };
@@ -11005,7 +11009,7 @@ body.no-mini .tourx-mini,body.no-mini .tourx-minirow{display:none!important}
     [['#abandoned-list', '#tab-content-abandoned'], 'abandoned', `Graveyard 🪦`, 'Library', `<p>Books you stopped reading rest here under twinkling stars. Send one with <b>🪦 Lay to rest</b> in its card's <b>⋯</b> menu.</p><ul><li>Tap an <b>epitaph</b> to rewrite it</li><li>🪦 <b>Why do you stop?</b> – tap reasons on a tombstone and the patterns show up</li><li><b>↩ Resurrect</b> sends a book back to your backlog, ✎ edits it and 🗑️ removes it</li><li><b>📅 Add to plan</b> schedules a buried book in your backlog and Weekly Path while it stays here</li></ul>`],
     ],
     'favorites': [
-    [['#favorites-content'], 'favorites', `Favorites 💖`, 'Library', `<p>Your favorite books on a wooden shelf. Tap a cover for details, or 💔 to take it off the shelf.</p><ul><li>🧚 <b>Favorite characters</b> – star them in a book's character list, or <b>＋ Add</b> one here</li><li>🌟 <b>Recurring cast</b> – characters who show up in more than one book</li></ul>`],
+    [['#favorites-content'], 'favorites', `Favorites 💖`, 'Library', `<p>Your favorite books hung up as polaroids. Tap a cover for details, or the 💖 to take it off the wallf.</p><ul><li>🧚 <b>Favorite characters</b> – star them in a book's character list, or <b>＋ Add</b> one here</li><li>🌟 <b>Recurring cast</b> – characters who show up in more than one book</li></ul>`],
     ],
     'quotes': [
     [['#tab-content-quotes'], 'quotes', `Quotes ❝`, 'Library', `<p>The <b>Quote Collection</b> gathers every 💖 highlight from every book, with a running count. Add or import highlights (including <b>from Apple Books</b>) inside a book's review, then tap the heart.</p>`],
@@ -14120,6 +14124,45 @@ button.au-chip{cursor:pointer}button.au-chip:hover{transform:translateY(-2px) ro
 #dup-body .cm-c{border-radius:18px;padding:10px 14px}.cm-r{border-radius:12px}
 @media(max-width:420px){.au-tiles{grid-template-columns:repeat(2,1fr)}}
 @media (prefers-reduced-motion:reduce){.au-ov,.dup-ov,.au-c,.dup-card,.au-em,.au-c::before,.au-c::after,.dup-card::before,.dup-card::after,.au-empty span{animation:none}}
+</style>
+
+<style id="fav-css">
+/* ===== Favorites: hero, character stickers and a polaroid wall ===== */
+#favorites-content{padding:4px 4px 16px}
+.fv-hero{position:relative;overflow:hidden;display:flex;align-items:center;gap:16px;padding:18px 20px;margin:0 0 6px;border-radius:26px;background:radial-gradient(circle,rgb(var(--c-e8a0b4)/0.2) 1.4px,transparent 2px) 0 0/16px 16px,linear-gradient(135deg,rgb(var(--c-fde7ec)),rgb(var(--c-fff8f8)) 55%,rgb(var(--c-f3e8ff)));border:2.5px solid rgb(var(--c-f4c9d2));box-shadow:0 14px 30px -16px rgb(var(--c-a8506a)/0.5),0 0 0 5px rgb(var(--c-f4c9d2)/0.25)}
+.fv-heart-big{flex:none;font-size:52px;line-height:1;filter:drop-shadow(0 6px 6px rgb(var(--c-a8506a)/0.3));animation:au-bob 2.6s ease-in-out infinite}
+.fv-hero h3{margin:0;font:800 22px/1.15 'Playfair Display',serif;color:rgb(var(--c-a8506a))}.fv-hero p{margin:2px 0 8px;font:italic 500 12px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+.fv-pills{display:flex;flex-wrap:wrap;gap:6px}.fv-pills span{font:700 11px Montserrat,sans-serif;color:rgb(var(--c-6b705c));background:#fff;border:1.5px solid rgb(var(--c-f0d0d8));border-radius:99px;padding:3px 11px}.fv-pills b{color:rgb(var(--c-a8506a))}
+.fv-sp{position:absolute;width:13px;height:13px;background:rgb(var(--c-e8a0b4));clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);animation:au-tw 3s ease-in-out infinite}
+.fv-sp.a{top:12px;right:22px}.fv-sp.b{bottom:14px;right:64px;width:9px;height:9px;animation-delay:1s;background:rgb(var(--c-a3b18a))}.fv-sp.c{top:40px;right:80px;width:8px;height:8px;animation-delay:1.8s;background:rgb(var(--c-d9cff0))}
+.fv-chars{display:flex;flex-wrap:wrap;gap:12px;padding:6px 2px 4px}
+.fv-ch{position:relative;width:112px;padding:12px 8px 8px;text-align:center;border-radius:22px;background:rgb(var(--bg));border:2px solid rgb(var(--bd));transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+.fv-ch:hover{transform:translateY(-4px) rotate(-1.5deg)}
+.fv-av{position:relative;display:flex;align-items:center;justify-content:center;width:54px;height:54px;margin:0 auto 6px;border-radius:50%;border:3px solid #fff;background:linear-gradient(135deg,rgb(var(--bd)),#fff 140%);box-shadow:0 5px 10px -4px rgb(var(--c-a8506a)/0.4);cursor:pointer}
+.fv-av span{font:800 24px 'Playfair Display',serif;color:rgb(var(--c-3e4a3d))}.fv-av s{position:absolute;top:-14px;right:-6px;font-size:18px;text-decoration:none;transform:rotate(18deg)}
+.fv-ch>b{display:block;font:800 12px/1.2 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fv-ch>small{display:block;font:700 9.5px Montserrat,sans-serif;color:rgb(var(--c-6b705c));margin-top:1px}
+.fv-go{display:flex;justify-content:center;gap:5px;margin-top:6px}.fv-go button{width:24px;height:24px;border-radius:50%;border:0;background:#fff;font-size:11px;cursor:pointer;box-shadow:0 1px 3px rgb(0 0 0/0.12);transition:transform .15s}.fv-go button:hover{transform:scale(1.2)}
+.fv-rm{position:absolute;top:6px;right:6px;width:20px;height:20px;padding:0;border-radius:50%;border:0;background:#fff;cursor:pointer;opacity:.0;transition:opacity .15s}
+.fv-rm::before,.fv-rm::after{content:'';position:absolute;left:50%;top:50%;width:9px;height:2px;margin:-1px 0 0 -4.5px;background:rgb(var(--c-a8506a));border-radius:2px;transform:rotate(45deg)}.fv-rm::after{transform:rotate(-45deg)}
+.fv-ch:hover .fv-rm,.fv-rm:focus-visible{opacity:1}
+.fv-add{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.fv-add .fc-in{border:2px solid rgb(var(--c-f0d0d8));border-radius:99px;padding:7px 14px;font-size:12px}.fv-add .fc-in:focus{border-color:rgb(var(--c-e8a0b4))}
+.fv-hint{margin:6px 0;font:italic 600 11.5px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+.fv-wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:26px 18px;padding:14px 4px 10px}
+.fv-card{position:relative;padding:10px 10px 10px;background:#fff;border-radius:6px 6px 14px 14px;border:1.5px solid rgb(var(--c-f6dfe3));box-shadow:0 2px 0 rgb(var(--c-f0d0d8)),0 12px 20px -12px rgb(var(--c-a8506a)/0.5);transform:rotate(var(--r));transition:transform .3s cubic-bezier(.3,1.5,.5,1),box-shadow .3s}
+.fv-card:hover{transform:rotate(0) translateY(-6px) scale(1.03);box-shadow:0 2px 0 rgb(var(--c-f0d0d8)),0 20px 28px -12px rgb(var(--c-a8506a)/0.6);z-index:2}
+.fv-tape{position:absolute;top:-9px;left:50%;width:62px;height:17px;margin-left:-31px;transform:rotate(calc(var(--r) * -1.5));background:repeating-linear-gradient(45deg,rgb(var(--tp)/0.85) 0 6px,rgb(var(--tp)/0.55) 6px 12px);border-left:2px dotted rgba(255,255,255,.7);border-right:2px dotted rgba(255,255,255,.7)}
+.fv-pic{position:relative;aspect-ratio:2/3;border-radius:3px 8px 8px 3px;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px 8px 8px 14px;background-size:cover;background-position:center;box-shadow:inset 5px 0 0 rgba(255,255,255,.3),inset -2px 0 4px rgba(0,0,0,.15),0 4px 9px rgba(0,0,0,.22)}
+.fv-pic span{font:700 12px/1.25 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));text-shadow:0 1px 0 rgba(255,255,255,.5);overflow:hidden;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical}
+.fv-cap{padding:9px 2px 0;text-align:center}.fv-cap b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font:800 12px/1.25 'Playfair Display',serif;color:rgb(var(--c-3e4a3d))}
+.fv-cap i{display:block;font:italic 500 10.5px 'Playfair Display',serif;color:rgb(var(--c-6b705c));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fv-cap em{display:block;margin-top:2px;font-style:normal;font:700 11px Montserrat,sans-serif;color:rgb(var(--c-b07b12))}.fv-cap em u{text-decoration:none;font-size:10px}.fv-cap em.no{color:rgb(var(--c-a39f92));font-weight:500;font-style:italic;font-size:10px}
+.fv-x{position:absolute;top:2px;right:2px;z-index:3;width:28px;height:28px;padding:0;border-radius:50%;border:2px solid rgb(var(--c-f0d0d8));background:#fff;font-size:13px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 6px rgb(var(--c-a8506a)/0.25);transition:transform .2s cubic-bezier(.3,1.6,.5,1)}.fv-x:hover{transform:scale(1.2) rotate(-10deg)}
+.fv-rank{position:absolute;top:-8px;left:-8px;z-index:3;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 12px 'Playfair Display',serif;color:#fff;background:linear-gradient(135deg,#f3d58a,#e0a93c);border:2.5px solid #fff;box-shadow:0 3px 6px rgb(0 0 0/0.2)}
+.fv-rank.r2{background:linear-gradient(135deg,#e6e9ee,#aab2bf)}.fv-rank.r3{background:linear-gradient(135deg,#f2cfa8,#c98a57)}
+.fv-empty{text-align:center;margin:26px auto;max-width:320px;padding:26px 20px;border:2px dashed rgb(var(--c-f0d0d8));border-radius:24px;background:#fff}.fv-empty span{display:block;font-size:40px;animation:au-bob 2.6s ease-in-out infinite}.fv-empty b{display:block;margin-top:4px;font:800 15px 'Playfair Display',serif;color:rgb(var(--c-a8506a))}.fv-empty p{margin:3px 0 0;font-size:12px;color:rgb(var(--c-6b705c))}
+@media(max-width:520px){.fv-hero{padding:14px}.fv-heart-big{font-size:40px}.fv-wall{grid-template-columns:repeat(2,1fr);gap:24px 14px}.fv-ch{width:calc(50% - 6px)}}
+@media (prefers-reduced-motion:reduce){.fv-heart-big,.fv-sp,.fv-empty span{animation:none}.fv-card{transform:none}}
 </style>
 </body>
 </html>
