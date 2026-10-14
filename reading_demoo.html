@@ -4824,7 +4824,7 @@ window.SAFE = SAFE;
     .bs-plank { position: relative; height: 15px; margin: 0 -6px; border-radius: 4px; background: linear-gradient(#e0b48a, #c8946a 35%, #a8744a); box-shadow: 0 6px 8px -4px rgba(90,55,30,.5), inset 0 2px 0 rgba(255,240,220,.45); }
 
     #shelf-content .sp-cell { position: relative; min-height: 162px; display: flex; align-items: flex-end; flex: none; }
-    #shelf-content .sp { position: relative; border: 0; padding: 0; border-radius: 5px 5px 3px 3px; cursor: pointer; writing-mode: vertical-rl; font: 600 9.5px/1.15 Fredoka, 'Playfair Display', serif; letter-spacing: .02em; overflow: hidden; text-align: center; transform-origin: bottom center; transform: rotate(var(--r, 0deg)); display: flex; align-items: center; justify-content: center;
+    #shelf-content .sp { position: relative; border: 0; padding: 0; border-radius: 5px 5px 3px 3px; cursor: pointer; writing-mode: vertical-rl; font: 700 9.5px/1.15 'Playfair Display', serif; letter-spacing: .02em; overflow: hidden; text-align: center; transform-origin: bottom center; transform: rotate(var(--r, 0deg)); display: flex; align-items: center; justify-content: center;
         background-image: linear-gradient(90deg, rgba(0,0,0,.16), rgba(255,255,255,.22) 22%, rgba(255,255,255,0) 48%, rgba(0,0,0,.05) 75%, rgba(0,0,0,.2));
         box-shadow: inset 0 2px 0 rgba(255,255,255,.35), 1px 0 2px rgba(0,0,0,.18); transition: transform .35s cubic-bezier(.3,1.4,.5,1), box-shadow .3s, opacity .35s, filter .35s; }
     #shelf-content .sp-cell:hover { z-index: 6; }
@@ -4840,7 +4840,7 @@ window.SAFE = SAFE;
     #shelf-content .sp.flat.out { transform: translateX(26px) scale(1.04); }
     #shelf-content .sp.flat span { max-height: none; max-width: calc(100% - 22px); padding: 1px 9px; white-space: nowrap; line-height: 1.25; }
     #shelf-content .sp.flat i { top: 0; bottom: 0; right: 12px; width: 6px; height: auto; clip-path: none; box-shadow: none; }
-    #shelf-content .sp span { font-family: Fredoka, 'Playfair Display', serif; position: relative; z-index: 1; display: block; flex: none; margin: 0; max-height: calc(100% - 40px); max-width: calc(100% - 8px); padding: 8px 2px; overflow: hidden; text-overflow: ellipsis; border-radius: 99px; background: rgba(255,251,244,.86); color: #4a3a30; box-shadow: 0 0 0 1.5px rgba(255,255,255,.5); }
+    #shelf-content .sp span { font-family: 'Playfair Display', serif; position: relative; z-index: 1; display: block; flex: none; margin: 0; max-height: calc(100% - 40px); max-width: calc(100% - 8px); padding: 8px 2px; overflow: hidden; text-overflow: ellipsis; border-radius: 99px; background: rgba(255,251,244,.86); color: #4a3a30; box-shadow: 0 0 0 1.5px rgba(255,255,255,.5); }
     #shelf-content .sp.thin span { font-size: 8px; padding: 6px 1px; max-width: calc(100% - 6px); }
     #shelf-content .sp b { position: absolute; left: 0; right: 0; font-style: normal; pointer-events: none; }
     #shelf-content .sp.series .b1, #shelf-content .sp.series .b2 { height: 4px; background: linear-gradient(#f3dd92, rgb(var(--c-d4a94a)) 55%, #b8891f); box-shadow: 0 0 2px rgba(0,0,0,.25); display: block; }
@@ -4850,7 +4850,7 @@ window.SAFE = SAFE;
 
     .bs-tip { position: absolute; left: 50%; bottom: calc(100% + 4px); transform: translate(-50%, 6px) scale(.92); opacity: 0; pointer-events: none; z-index: 10; width: max-content; max-width: 190px; text-align: center; background: #fffdf8; border: 2px solid #e8c4c4; border-radius: 14px; padding: 6px 10px 7px; box-shadow: 0 8px 18px -6px rgba(168,80,106,.35); transition: opacity .2s, transform .25s cubic-bezier(.3,1.4,.5,1); }
     .bs-tip::after { content: ''; position: absolute; left: 50%; bottom: -7px; width: 10px; height: 10px; background: #fffdf8; border-right: 2px solid #e8c4c4; border-bottom: 2px solid #e8c4c4; transform: translateX(-50%) rotate(45deg); }
-    .bs-tip b { display: block; font: 600 12px/1.25 Fredoka, 'Playfair Display', serif; color: #3e4a3d; }
+    .bs-tip b { display: block; font: 800 11.5px/1.25 'Playfair Display', serif; color: #3e4a3d; }
     .bs-tip small { display: block; margin-top: 2px; font: 600 10px Montserrat, sans-serif; color: #6b705c; }
     .bs-tip em { display: inline-block; margin-top: 3px; font: 800 10px Montserrat, sans-serif; font-style: normal; color: #b45309; }
     #shelf-content .sp-cell:hover .bs-tip { opacity: 1; transform: translate(-50%, -6px) scale(1); }
@@ -4890,12 +4890,12 @@ window.SAFE = SAFE;
         }
         const DECO = ['🪴', '🕯️', '🍄', '🫖', '🔮', '🌵', '🧸', '🍓', '🐌', '🪻', '⭐', '🦋', '🌙', '🐚', '🍵', '🌷'];
         // measure titles in the real spine font so long ones get a taller (or, if needed, wider) spine instead of being cut off
-        const SPF = "Fredoka, 'Playfair Display', serif";
+        const SPF = "'Playfair Display', serif";
         let mctx = null;
         const measure = (t, px) => {
             if (!mctx) { try { mctx = document.createElement('canvas').getContext('2d'); } catch (e) {} }
             if (!mctx) return t.length * px * .62;
-            mctx.font = `600 ${px}px ${SPF}`; return mctx.measureText(t).width * 1.04;   // a little slack for letter-spacing
+            mctx.font = `700 ${px}px ${SPF}`; return mctx.measureText(t).width * 1.04;   // a little slack for letter-spacing
         };
         function linesAt(words, L, px) {   // greedy word wrap into columns of length L
             const sp = measure(' ', px); let n = 1, cur = 0;
@@ -4913,11 +4913,12 @@ window.SAFE = SAFE;
             return { w: Math.min(MAXW, Math.max(w, Math.ceil(need * lh + 14))), ht: MAXH };
         }
         const labelOf = b => shortTitle(b.title == null || b.title === '' ? 'Untitled' : b.title);
+        const pageW = b => Math.max(24, Math.min(74, Math.round(16 + (+b.totalPages || 150) / 9)));   // thicker = more pages (upright width / flat height)
         function dims(b) {   // upright spine size: thicker = more pages, taller for series / long titles
             const h = hash(b.title), label = labelOf(b), len = label.length;
             let ht = len > 30 ? 158 : 116 + (b.seriesId ? 30 : h % 40);
             const cols = Math.min(4, Math.ceil(len * 9.5 * 0.55 / (ht - 50)));
-            let w = Math.max(24, Math.min(74, Math.max(Math.round(16 + (+b.totalPages || 150) / 9), cols * 12 + 14)));
+            let w = Math.max(pageW(b), Math.min(74, cols * 12 + 14));
             ({ w, ht } = fitSpine(label, w, ht));   // grow the spine until the whole title fits in its bubble
             return { label, w, ht };
         }
@@ -4938,7 +4939,7 @@ window.SAFE = SAFE;
         function flatDims(b, maxLen) {
             const d = dims(b), tw = measure(d.label, 9);
             if (tw + 46 > maxLen) return null;   // title would not fit on one line, keep it upright instead
-            return { b, label: d.label, len: Math.round(Math.min(maxLen, Math.max(tw + 46, d.ht * .72, 86))), t: Math.max(21, Math.min(32, Math.round(15 + (+b.totalPages || 150) / 40))) };
+            return { b, label: d.label, len: Math.round(Math.min(maxLen, Math.max(tw + 46, d.ht * .72, 86))), t: pageW(b) };
         }
         function stackHtml(u, edge) {
             const top = u.top ? `<span class="bs-stack-top" aria-hidden="true">${u.top}</span>` : '';
@@ -4968,11 +4969,11 @@ window.SAFE = SAFE;
                     const want = 2 + (h >>> 5) % 2, fl = []; let tt = 0;
                     for (let j = k; j < items.length && fl.length < want; j++) {
                         const f = !items[j].seriesId && flatDims(items[j], maxLen);
-                        if (!f || tt + f.t > 112) break;
+                        if (!f || tt + f.t > 150) break;   // a pile never towers over the upright books
                         fl.push(f); tt += f.t;
                     }
                     if (fl.length >= 2) {
-                        units.push({ type: 'stack', fl, w: Math.max(...fl.map(f => f.len)) + 14, top: tt <= 92 && (h >>> 9) % 2 ? STACK_TOP[(h >>> 12) % STACK_TOP.length] : '' });
+                        units.push({ type: 'stack', fl, w: Math.max(...fl.map(f => f.len)) + 14, top: tt <= 120 && (h >>> 9) % 2 ? STACK_TOP[(h >>> 12) % STACK_TOP.length] : '' });
                         k += fl.length; since = 0; continue;
                     }
                 }
@@ -5016,7 +5017,7 @@ window.SAFE = SAFE;
             }).join('') + `</div>`;
         }
         // the cute spine font loads lazily: re-measure once it has arrived so the bubbles fit it exactly
-        try { document.fonts && document.fonts.load(`600 10px ${SPF}`).then(() => { mctx = null; if (currentTab === 'shelf') window.setShelfView(shelfView); }); } catch (e) {}
+        try { document.fonts && document.fonts.load(`700 10px ${SPF}`).then(() => { mctx = null; if (currentTab === 'shelf') window.setShelfView(shelfView); }); } catch (e) {}
         try { document.fonts && document.fonts.ready.then(() => { if (currentTab === 'shelf') window.setShelfView(shelfView); }); } catch (e) {}
         // re-fit the shelves when the page width changes
         let shW = 0, shT = 0;
@@ -5087,7 +5088,7 @@ window.SAFE = SAFE;
         });
     })();
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* ---- shelf filters ---- */
 .sf{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px;padding:8px;background:#fff8;border:1px dashed rgb(var(--c-e8c4c4));border-radius:12px}
