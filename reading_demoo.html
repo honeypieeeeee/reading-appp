@@ -12405,6 +12405,7 @@ html .tab-nav{border-radius:0 0 20px 20px}
 #ib label{display:flex;flex-direction:column;gap:3px;font-weight:700}
 #ib label.ib-ck{flex-direction:row;align-items:center;gap:6px}
 #ib select,#ib input[type=file]{font:600 12px Montserrat,sans-serif;padding:6px 8px;border:1.5px solid #e8c4c4;border-radius:10px;background:#fff;outline:0}
+#ib-lbk{padding:9px 12px;line-height:1.5}
 #ib-opts{display:flex;flex-direction:column;gap:10px}
 .ib-r{display:flex;justify-content:flex-end;gap:8px}
 #ib .ib-r button,#ib-undo{font:700 12px Montserrat,sans-serif;padding:7px 16px;border-radius:99px;border:1.5px solid #e8c4c4;background:#fff;color:#3e4a3d;cursor:pointer}
@@ -12752,7 +12753,8 @@ s.G{background:#f2b84b}s.A{background:#fff;outline:2px dashed #e8a0b4;outline-of
   }
   function fillLib() {
     const q = $('ib-laq').value.trim().toLowerCase(), sel = $('ib-lbk'), cur = sel.value, all = books.filter(b => b.vault && !b.read && b.status !== 'abandoned'), list = all.filter(b => !q || b.title.toLowerCase().includes(q));
-    sel.innerHTML = list.map(b => `<option value="${esc(b.id)}">${esc(b.title.length > 60 ? b.title.slice(0, 59) + '…' : b.title)}</option>`).join('') || '<option value="">No matching library books</option>';
+    const lbkLabel = t => { const s = String(t == null ? '' : t).replace(/^(\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic}|[\u{1F3FB}-\u{1F3FF}])*\uFE0F?)\s*/u, ''); return s.length > 60 ? s.slice(0, 59) + '…' : s; };
+    sel.innerHTML = list.map(b => `<option value="${esc(b.id)}">${esc(lbkLabel(b.title))}</option>`).join('') || '<option value="">No matching library books</option>';
     sel.value = q && list.length ? String(list[0].id) : ([...sel.options].some(x => x.value === cur) ? cur : sel.value);
     $('ib-lw').querySelectorAll('option[value="start"],option[value="after"]').forEach(x => { x.disabled = !all.length; });
     if (!all.length) $('ib-lw').value = 'end';
