@@ -5956,6 +5956,13 @@ body{padding-left:62px}
 #tab-content-book .bpx-bc b{font:800 19px 'Playfair Display',serif;color:var(--fg);line-height:1.15}
 #tab-content-book .bpx-bc span{font:700 9.5px 'Playfair Display',serif;letter-spacing:.06em;text-transform:uppercase;color:rgb(var(--c-6b705c))}
 #tab-content-book .bpx-bc small{font:600 9.5px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+/* Review tab: big-cover-left / details-right header */
+#tab-content-book .rv-head{display:flex;flex-direction:column;gap:14px;background:rgba(255,255,255,.8);border:2px solid rgb(var(--c-e8c4c4));border-radius:20px;padding:15px 16px;box-shadow:0 5px 14px rgb(var(--c-e8a4b5)/0.2);animation:bp-in .3s ease both}
+#tab-content-book .rv-cover{flex:none;align-self:center;width:190px;max-width:60vw;aspect-ratio:2/3;border-radius:10px;box-shadow:0 8px 22px rgb(var(--c-3e4a3d)/0.3);background-size:cover;background-position:center;transition:transform .25s}
+#tab-content-book .rv-cover:hover{transform:rotate(-2deg) scale(1.03)}
+#tab-content-book .rv-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+#tab-content-book .rv-cards{margin-top:2px}
+@media(min-width:720px){#tab-content-book .rv-head{flex-direction:row;align-items:flex-start;gap:18px}#tab-content-book .rv-cover{align-self:flex-start;width:200px}}
 #tab-content-book .bpx-cloud{display:flex;flex-wrap:wrap;gap:6px;position:relative}
 #tab-content-book .bpx-tag{font:800 11px 'Playfair Display',serif;color:var(--fg);background:var(--bg);border-radius:11px;padding:4px 10px;transform:rotate(var(--r));box-shadow:0 2px 0 rgba(0,0,0,.06);animation:bp-pop .4s cubic-bezier(.175,.885,.32,1.275) both;animation-delay:calc(var(--i)*25ms);transition:transform .15s}
 #tab-content-book .bpx-tag:hover{transform:rotate(0) scale(1.1) translateY(-2px)}
@@ -6067,6 +6074,40 @@ body{padding-left:62px}
     }
     function reviewTab(b) {
         const out = [];
+
+        // --- big-cover-left / details-right header (mirrors the first part of detailsTab, defensively) ---
+        let cov = ''; try { cov = typeof coverStyle === 'function' ? coverStyle(b) : ''; } catch (e) { cov = ''; }
+        let fds = [], prs = []; try { fds = bookFandoms(b) || []; prs = bookPairings(b) || []; } catch (e) {}
+        let dd = null; try { dd = daysTook(b); } catch (e) {}
+        let fk = k => k; try { fk = fmtKey; } catch (e) {}
+        const u = (() => { try { return safeUrl(b.link); } catch (e) { return ''; } })();
+        let src = ''; if (u) { try { src = /archiveofourown|ao3/i.test(u) ? 'AO3' : /goodreads/i.test(u) ? 'Goodreads' : new URL(u).hostname.replace(/^www\./, ''); } catch (e) {} }
+        const pub = [src, b.publisher, b.year].filter(Boolean).filter((x, i, a) => a.findIndex(y => String(y).trim().toLowerCase() === String(x).trim().toLowerCase()) === i).join(' \u00b7 ');
+
+        const fdChips = fds.map(t => `<span class="bpx-fd fd-link" data-fd="${E(t)}" title="Open fandom page">\u{1F380} ${E(t)}</span>`).join('');
+        const prChips = prs.map(t => `<span class="bpx-pr">\u{1F495} ${E(t)}</span>`).join('');
+        const started = b.startedAt ? fk(b.startedAt) : '', finished = b.finishedAt ? fk(b.finishedAt) : '';
+        const endLabel = b.status === 'abandoned' ? 'Abandoned' : 'Finished';
+        const journey = (started || finished) ? `<div class="bpx-journey">
+            <div class="bpx-stop"><i>\u{1F331}</i><small>Started</small><b>${started ? E(started) : '\u2014'}</b></div>
+            <div class="bpx-path"><span></span>${dd ? `<em>${dd} day${dd > 1 ? 's' : ''}</em>` : '<em>\u2728</em>'}<span></span></div>
+            <div class="bpx-stop"><i>${b.status === 'abandoned' ? '\u{1F940}' : '\u{1F389}'}</i><small>${endLabel}</small><b>${finished ? E(finished) : '\u2014'}</b></div></div>` : '';
+
+        const rvCards = [];
+        if (b.totalPages) rvCards.push(['\u{1F4D6}', b.totalPages, 'pages', '']);
+        if (b.actualMinutes) rvCards.push(['\u23F1\uFE0F', fmtT(b.actualMinutes), 'read in', b.durationStr && b.durationStr !== '\u2014' ? 'listed ' + E(b.durationStr) : '']);
+        else if (b.durationStr && b.durationStr !== '\u2014') rvCards.push(['\u23F1\uFE0F', E(b.durationStr), 'listed time', '']);
+
+        const rvRight = [
+            pub ? `<span class="bpx-src">${E(pub)}</span>` : '',
+            (fdChips || prChips) ? `<div class="bpx-chiprow">${fdChips}${prChips}</div>` : '',
+            journey,
+            u ? `<a class="bpx-link" href="${u}" target="_blank" rel="noopener noreferrer">\u{1F517} Open publishing link <span>\u2197</span></a>` : '',
+            rvCards.length ? `<div class="bpx-bookgrid rv-cards">${rvCards.map((c, i) => `<div class="bpx-bc" style="--i:${i};--bg:${PAL[i % PAL.length][0]};--fg:${PAL[i % PAL.length][1]}"><i>${c[0]}</i><b>${c[1]}</b><span>${c[2]}</span>${c[3] ? `<small>${c[3]}</small>` : ''}</div>`).join('')}</div>` : ''
+        ].filter(Boolean).join('');
+
+        out.push(`<div class="rv-head"><div class="rv-cover" style="${cov}"></div><div class="rv-info">${rvRight || '<p class="bp-empty">No book details yet \u{1F331}</p>'}</div></div>`);
+
         out.push(`<div class="bp-box"><h5>Rating</h5><p style="font-weight:800;color:rgb(var(--c-d97706));font-size:14px">${b.rating ? '\u2605 ' + rt1(b.rating) + ' / 5' : '<span class="bp-empty">No rating given</span>'}${b.rr === 'y' ? ' &nbsp;\u{1F501} would reread' : ''}</p></div>`);
         const chips = (typeof ratingChips === 'function' ? ratingChips(b) : '') + (typeof feelHTML === 'function' ? feelHTML(b) : '');
         if (chips.trim()) out.push(`<div class="bp-box">${chips}</div>`);
