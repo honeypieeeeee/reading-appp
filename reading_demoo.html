@@ -6052,11 +6052,12 @@ body{padding-left:62px}
 #tab-content-book .bp-split::before,#tab-content-book .bp-split::after{content:'';flex:1;border-top:3px dotted rgb(var(--c-e0b8c0))}
 #tab-content-book .bp-split span{background:#fff;border:2px solid rgb(var(--c-e8c4c4));border-radius:99px;padding:4px 14px}
 #tab-content-book .bp-id h3{font-size:17px}
-#tab-content-book .rv-left{display:flex;flex-direction:column;gap:12px;min-width:0}
+#tab-content-book .rv-left{display:flex;flex-direction:column;gap:12px;min-width:0;container-type:inline-size}
 #tab-content-book .rv-id{text-align:center;padding:0 4px}
-#tab-content-book .rv-id h3{font-size:clamp(17px,1.9vw,22px);line-height:1.2;overflow-wrap:anywhere}
-#tab-content-book .rv-id .bp-au{font-size:12px;margin-top:3px}
-#tab-content-book .rv-id .bp-acts{justify-content:center;margin-top:10px}
+#tab-content-book .rv-id h3{font-size:clamp(13px,6.4cqi,16px);line-height:1.25;overflow-wrap:anywhere}
+#tab-content-book .rv-id .bp-au{font-size:clamp(10px,4.4cqi,11px);margin-top:2px}
+#tab-content-book .rv-id .bp-acts{justify-content:center;flex-wrap:nowrap;gap:4px;margin-top:8px}
+#tab-content-book .rv-id .bp-act{flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:clamp(8.5px,3.95cqi,10px);padding:.35em .8em;border-width:1.5px}
 #tab-content-book [data-flip]{will-change:auto}
 #tab-content-book .rv-head{position:relative;overflow:hidden;display:grid;grid-template-columns:clamp(150px,38%,270px) minmax(0,1fr);gap:20px;align-items:start;border:2px solid rgb(var(--c-e8c4c4));border-radius:22px;padding:18px;background:radial-gradient(circle at 12% 8%,#fff 0,#fdf1f1 45%,#f3f0e2 100%);box-shadow:0 5px 14px rgb(var(--c-e8a4b5)/0.2),inset 0 0 0 4px rgba(255,255,255,.7);animation:bp-in .3s ease both}
 #tab-content-book .rv-cover{position:relative;width:100%;aspect-ratio:2/3;border-radius:6px 14px 14px 6px;background-size:cover;background-position:center;box-shadow:inset 7px 0 8px -4px rgba(0,0,0,.22),inset -1px 0 0 rgba(255,255,255,.35),0 14px 28px -8px rgb(var(--c-3e4a3d)/0.45),0 3px 8px rgb(var(--c-3e4a3d)/0.18);transition:transform .3s ease,box-shadow .3s;display:flex;align-items:center;justify-content:center;overflow:hidden}
