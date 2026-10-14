@@ -5960,6 +5960,8 @@ body{padding-left:62px}
 #tab-content-book .rv-head{display:flex;flex-direction:column;gap:14px;background:rgba(255,255,255,.8);border:2px solid rgb(var(--c-e8c4c4));border-radius:20px;padding:15px 16px;box-shadow:0 5px 14px rgb(var(--c-e8a4b5)/0.2);animation:bp-in .3s ease both}
 #tab-content-book .rv-cover{flex:none;align-self:center;width:190px;max-width:60vw;aspect-ratio:2/3;border-radius:10px;box-shadow:0 8px 22px rgb(var(--c-3e4a3d)/0.3);background-size:cover;background-position:center;transition:transform .25s}
 #tab-content-book .rv-cover:hover{transform:rotate(-2deg) scale(1.03)}
+#tab-content-book .rv-cover-empty{background:linear-gradient(135deg,rgb(var(--c-e8a5b5)),rgb(var(--c-a3b18a)));display:flex;align-items:center;justify-content:center;padding:12px;text-align:center}
+#tab-content-book .rv-cover-empty span{font:800 13px 'Playfair Display',serif;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.3);line-height:1.3}
 #tab-content-book .rv-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
 #tab-content-book .rv-cards{margin-top:2px}
 @media(min-width:720px){#tab-content-book .rv-head{flex-direction:row;align-items:flex-start;gap:18px}#tab-content-book .rv-cover{align-self:flex-start;width:200px}}
@@ -6106,7 +6108,8 @@ body{padding-left:62px}
             rvCards.length ? `<div class="bpx-bookgrid rv-cards">${rvCards.map((c, i) => `<div class="bpx-bc" style="--i:${i};--bg:${PAL[i % PAL.length][0]};--fg:${PAL[i % PAL.length][1]}"><i>${c[0]}</i><b>${c[1]}</b><span>${c[2]}</span>${c[3] ? `<small>${c[3]}</small>` : ''}</div>`).join('')}</div>` : ''
         ].filter(Boolean).join('');
 
-        out.push(`<div class="rv-head"><div class="rv-cover" style="${cov}"></div><div class="rv-info">${rvRight || '<p class="bp-empty">No book details yet \u{1F331}</p>'}</div></div>`);
+        const covSafe = String(cov).replace(/background-color:\s*undefined;?/g, '');
+        out.push(`<div class="rv-head"><div class="rv-cover${b.cover ? '' : ' rv-cover-empty'}" style="${covSafe}">${b.cover ? '' : `<span>${E(String(b.title || '').slice(0, 40))}</span>`}</div><div class="rv-info">${rvRight || '<p class="bp-empty">No book details yet \u{1F331}</p>'}</div></div>`);
 
         out.push(`<div class="bp-box"><h5>Rating</h5><p style="font-weight:800;color:rgb(var(--c-d97706));font-size:14px">${b.rating ? '\u2605 ' + rt1(b.rating) + ' / 5' : '<span class="bp-empty">No rating given</span>'}${b.rr === 'y' ? ' &nbsp;\u{1F501} would reread' : ''}</p></div>`);
         const chips = (typeof ratingChips === 'function' ? ratingChips(b) : '') + (typeof feelHTML === 'function' ? feelHTML(b) : '');
@@ -13310,6 +13313,7 @@ s.G{background:#f2b84b}s.A{background:#fff;outline:2px dashed #e8a0b4;outline-of
 #pg-ov label.pg-o:has(input:checked) .pg-ck::after{content:'\u2713'}
 #pg-ov select{display:block;width:100%;margin-top:9px;font:600 12px Montserrat,sans-serif;padding:8px 12px;border:2px solid #f0d0d8;border-radius:99px;background:#fff;color:#3e4a3d;outline:0;cursor:pointer}
 #pg-ov select:focus{border-color:#e8a0b4}
+#pg-ov #pg-af{padding:9px 12px;line-height:1.5}
 #pg-ov .pg-r{display:flex;justify-content:center;gap:10px;margin-top:4px}
 #pg-ov .pg-r button{font:800 13px Montserrat,sans-serif;padding:10px 20px;border-radius:99px;border:2px solid #f0d0d8;background:#fff;color:#a8506a;cursor:pointer;transition:transform .15s,box-shadow .15s}
 #pg-ov .pg-r button:hover{transform:translateY(-2px);box-shadow:0 6px 12px -6px rgba(168,80,106,.5)}
@@ -13344,7 +13348,7 @@ s.G{background:#f2b84b}s.A{background:#fff;outline:2px dashed #e8a0b4;outline-of
 <label class="pg-o"><input type="radio" name="pg" value="next" checked><i class="pg-ic">🎀</i><span class="pg-tx"><b>Next up</b><small>Right after what I'm already reading</small></span><i class="pg-ck"></i></label>
 <label class="pg-o"><input type="radio" name="pg" value="end"><i class="pg-ic">🌙</i><span class="pg-tx"><b>At the end of my plan</b><small>After everything that's already programmed</small></span><i class="pg-ck"></i></label>
 <label class="pg-o"><input type="radio" name="pg" value="spread"><i class="pg-ic">🌼</i><span class="pg-tx"><b>Spread through my plan</b><small>Evenly between the books I already have planned</small></span><i class="pg-ck"></i></label>
-<label class="pg-o"${cand.length ? '' : ' hidden'}><input type="radio" name="pg" value="after"><i class="pg-ic">📖</i><span class="pg-tx"><b>After a book I pick</b><small>Choose the book they should follow</small><select id="pg-af">${cand.map(b => `<option value="${E(b.id)}">${E(b.title.length > 50 ? b.title.slice(0, 49) + '…' : b.title)}</option>`).join('')}</select></span><i class="pg-ck"></i></label>
+<label class="pg-o"${cand.length ? '' : ' hidden'}><input type="radio" name="pg" value="after"><i class="pg-ic">📖</i><span class="pg-tx"><b>After a book I pick</b><small>Choose the book they should follow</small><select id="pg-af">${(() => { const afLabel = t => { const s = String(t == null ? '' : t).replace(/^(\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic}|[\u{1F3FB}-\u{1F3FF}])*\uFE0F?)\s*/u, ''); return s.length > 50 ? s.slice(0, 49) + '…' : s; }; return cand.map(b => `<option value="${E(b.id)}">${E(afLabel(b.title))}</option>`).join(''); })()}</select></span><i class="pg-ck"></i></label>
 </div>
 <div class="pg-r"><button type="button" id="pg-x">Not now</button><button type="button" class="pg-go" id="pg-ok">🌷 Program ${bn(n)}</button></div></div>`;
         document.body.appendChild(d);
