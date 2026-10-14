@@ -4824,25 +4824,33 @@ window.SAFE = SAFE;
     .bs-plank { position: relative; height: 15px; margin: 0 -6px; border-radius: 4px; background: linear-gradient(#e0b48a, #c8946a 35%, #a8744a); box-shadow: 0 6px 8px -4px rgba(90,55,30,.5), inset 0 2px 0 rgba(255,240,220,.45); }
 
     #shelf-content .sp-cell { position: relative; min-height: 162px; display: flex; align-items: flex-end; flex: none; }
-    #shelf-content .sp { position: relative; border: 0; padding: 0; border-radius: 5px 5px 3px 3px; cursor: pointer; writing-mode: vertical-rl; font: 700 9.5px/1.15 'Playfair Display', serif; letter-spacing: .02em; overflow: hidden; text-align: center; transform-origin: bottom center; display: flex; align-items: center; justify-content: center;
+    #shelf-content .sp { position: relative; border: 0; padding: 0; border-radius: 5px 5px 3px 3px; cursor: pointer; writing-mode: vertical-rl; font: 600 9.5px/1.15 Fredoka, 'Playfair Display', serif; letter-spacing: .02em; overflow: hidden; text-align: center; transform-origin: bottom center; transform: rotate(var(--r, 0deg)); display: flex; align-items: center; justify-content: center;
         background-image: linear-gradient(90deg, rgba(0,0,0,.16), rgba(255,255,255,.22) 22%, rgba(255,255,255,0) 48%, rgba(0,0,0,.05) 75%, rgba(0,0,0,.2));
         box-shadow: inset 0 2px 0 rgba(255,255,255,.35), 1px 0 2px rgba(0,0,0,.18); transition: transform .35s cubic-bezier(.3,1.4,.5,1), box-shadow .3s, opacity .35s, filter .35s; }
     #shelf-content .sp-cell:hover { z-index: 6; }
-    #shelf-content .sp:hover { transform: translateY(-10px); box-shadow: inset 0 2px 0 rgba(255,255,255,.35), 0 10px 14px -4px rgba(0,0,0,.3); }
-    #shelf-content .sp.out { transform: translateY(-34px) scale(1.06); box-shadow: 0 14px 20px rgba(0,0,0,.3); z-index: 3; }
-    #shelf-content .sp.lean { transform: rotate(8deg); transform-origin: bottom right; margin-right: 18px; }
-    #shelf-content .sp.lean:hover { transform: rotate(4deg) translateY(-8px); }
-    #shelf-content .sp span { position: relative; z-index: 1; display: block; flex: none; margin: 0; max-height: calc(100% - 40px); max-width: calc(100% - 8px); padding: 8px 2px; overflow: hidden; text-overflow: ellipsis; border-radius: 99px; background: rgba(255,251,244,.86); color: #4a3a30; box-shadow: 0 0 0 1.5px rgba(255,255,255,.5); }
+    #shelf-content .sp:hover { transform: rotate(var(--r, 0deg)) translateY(-10px); box-shadow: inset 0 2px 0 rgba(255,255,255,.35), 0 10px 14px -4px rgba(0,0,0,.3); }
+    #shelf-content .sp.out { transform: rotate(var(--r, 0deg)) translateY(-34px) scale(1.06); box-shadow: 0 14px 20px rgba(0,0,0,.3); z-index: 3; }
+    #shelf-content .sp.tilt:hover { transform: rotate(calc(var(--r, 0deg) * .5)) translateY(-8px); }
+    /* little piles of books lying flat */
+    #shelf-content .bs-stack { flex: none; align-self: flex-end; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; }
+    #shelf-content .bs-stack .sp-cell { min-height: 0; display: block; }
+    #shelf-content .bs-stack-top { display: block; font-size: 21px; line-height: 1; margin-bottom: -1px; filter: drop-shadow(0 2px 1px rgba(90,55,30,.25)); user-select: none; }
+    #shelf-content .sp.flat { display: flex; writing-mode: horizontal-tb; font-size: 9px; border-radius: 3px 6px 6px 3px; background-image: linear-gradient(180deg, rgba(255,255,255,.26), rgba(255,255,255,0) 45%, rgba(0,0,0,.06) 70%, rgba(0,0,0,.2)); box-shadow: inset 2px 0 0 rgba(255,255,255,.3), 0 1px 1.5px rgba(0,0,0,.22); }
+    #shelf-content .sp.flat:hover { transform: translateX(8px); box-shadow: inset 2px 0 0 rgba(255,255,255,.3), 4px 4px 8px -2px rgba(0,0,0,.28); }
+    #shelf-content .sp.flat.out { transform: translateX(26px) scale(1.04); }
+    #shelf-content .sp.flat span { max-height: none; max-width: calc(100% - 22px); padding: 1px 9px; white-space: nowrap; line-height: 1.25; }
+    #shelf-content .sp.flat i { top: 0; bottom: 0; right: 12px; width: 6px; height: auto; clip-path: none; box-shadow: none; }
+    #shelf-content .sp span { font-family: Fredoka, 'Playfair Display', serif; position: relative; z-index: 1; display: block; flex: none; margin: 0; max-height: calc(100% - 40px); max-width: calc(100% - 8px); padding: 8px 2px; overflow: hidden; text-overflow: ellipsis; border-radius: 99px; background: rgba(255,251,244,.86); color: #4a3a30; box-shadow: 0 0 0 1.5px rgba(255,255,255,.5); }
     #shelf-content .sp.thin span { font-size: 8px; padding: 6px 1px; max-width: calc(100% - 6px); }
     #shelf-content .sp b { position: absolute; left: 0; right: 0; font-style: normal; pointer-events: none; }
     #shelf-content .sp.series .b1, #shelf-content .sp.series .b2 { height: 4px; background: linear-gradient(#f3dd92, rgb(var(--c-d4a94a)) 55%, #b8891f); box-shadow: 0 0 2px rgba(0,0,0,.25); display: block; }
     #shelf-content .sp.series .b1 { top: 12px; } #shelf-content .sp.series .b2 { bottom: 12px; }
     #shelf-content .sp i { position: absolute; top: -1px; right: 3px; width: 8px; height: 30px; z-index: 2; background: linear-gradient(#f7a1b8, #e2708f); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%); font-style: normal; box-shadow: 0 1px 2px rgba(0,0,0,.3); }
-    #shelf-content .sp.dim { opacity: .15; filter: grayscale(.9); } #shelf-content .sp.dim:hover { transform: none; opacity: .4; }
+    #shelf-content .sp.dim { opacity: .15; filter: grayscale(.9); } #shelf-content .sp.dim:hover { transform: rotate(var(--r, 0deg)); opacity: .4; }
 
     .bs-tip { position: absolute; left: 50%; bottom: calc(100% + 4px); transform: translate(-50%, 6px) scale(.92); opacity: 0; pointer-events: none; z-index: 10; width: max-content; max-width: 190px; text-align: center; background: #fffdf8; border: 2px solid #e8c4c4; border-radius: 14px; padding: 6px 10px 7px; box-shadow: 0 8px 18px -6px rgba(168,80,106,.35); transition: opacity .2s, transform .25s cubic-bezier(.3,1.4,.5,1); }
     .bs-tip::after { content: ''; position: absolute; left: 50%; bottom: -7px; width: 10px; height: 10px; background: #fffdf8; border-right: 2px solid #e8c4c4; border-bottom: 2px solid #e8c4c4; transform: translateX(-50%) rotate(45deg); }
-    .bs-tip b { display: block; font: 800 11.5px/1.25 'Playfair Display', serif; color: #3e4a3d; }
+    .bs-tip b { display: block; font: 600 12px/1.25 Fredoka, 'Playfair Display', serif; color: #3e4a3d; }
     .bs-tip small { display: block; margin-top: 2px; font: 600 10px Montserrat, sans-serif; color: #6b705c; }
     .bs-tip em { display: inline-block; margin-top: 3px; font: 800 10px Montserrat, sans-serif; font-style: normal; color: #b45309; }
     #shelf-content .sp-cell:hover .bs-tip { opacity: 1; transform: translate(-50%, -6px) scale(1); }
@@ -4864,7 +4872,7 @@ window.SAFE = SAFE;
         const lum = h => { h = String(h || '#e8c4c4').replace('#', ''); if (h.length === 3) h = h.replace(/./g, '$&$&'); const n = parseInt(h, 16) || 0; return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255; };
         const VIBE = { angst: '#6b3f5e', 'heavy angst': '#4d2a45', fluff: '#ffcfb0', swoony: '#e8a0b4', comedy: '#f2d27a', cozy: '#f0d9b5', wholesome: '#d9e8c4', dark: '#3f3440', gritty: '#4b4451', melancholic: '#6b7a8f', tearjerker: '#8fb3d1', whimsical: '#f4c6e0', unsettling: '#5a4a5e', atmospheric: '#7d8fa3', hopeful: '#cfe3b1', horror: '#3f3440', healing: '#a8c9a0', drama: '#8b5a6b', epic: '#5b6f8c', 'slice of life': '#c9dfc4', desolate: '#59606b', satire: '#c9a27a' };
         const spineColor = b => (/^#/.test(b.coverColor || '') ? b.coverColor : '#a3b18a');
-        const shortTitle = t => String(t).split(/\s*[:–—]\s+|\s+-\s+/)[0].trim();
+        const shortTitle = t => String(t == null ? '' : t).split(/\s*[:–—]\s+|\s+-\s+/)[0].trim();
         const titleOf = b => esc(b.title);
         const wrap = { shelf: 'tab-content-shelf' };
         const host = $('tab-content-favorites').parentNode;
@@ -4882,12 +4890,12 @@ window.SAFE = SAFE;
         }
         const DECO = ['🪴', '🕯️', '🍄', '🫖', '🔮', '🌵', '🧸', '🍓', '🐌', '🪻', '⭐', '🦋', '🌙', '🐚', '🍵', '🌷'];
         // measure titles in the real spine font so long ones get a taller (or, if needed, wider) spine instead of being cut off
+        const SPF = "Fredoka, 'Playfair Display', serif";
         let mctx = null;
         const measure = (t, px) => {
             if (!mctx) { try { mctx = document.createElement('canvas').getContext('2d'); } catch (e) {} }
             if (!mctx) return t.length * px * .62;
-            const fam = (() => { const r = $('shelf-content'); return r ? getComputedStyle(r).fontFamily : ''; })() || 'Montserrat, sans-serif';
-            mctx.font = `700 ${px}px ${fam}`; return mctx.measureText(t).width * 1.04;   // a little slack for letter-spacing
+            mctx.font = `600 ${px}px ${SPF}`; return mctx.measureText(t).width * 1.04;   // a little slack for letter-spacing
         };
         function linesAt(words, L, px) {   // greedy word wrap into columns of length L
             const sp = measure(' ', px); let n = 1, cur = 0;
@@ -4904,16 +4912,38 @@ window.SAFE = SAFE;
             const need = linesAt(words, room(MAXH), px);
             return { w: Math.min(MAXW, Math.max(w, Math.ceil(need * lh + 14))), ht: MAXH };
         }
-        function spineHtml(b, lean, edge) {
-            const col = spineColor(b), h = hash(b.title);
-            const label = shortTitle(b.title), len = label.length;
+        const labelOf = b => shortTitle(b.title == null || b.title === '' ? 'Untitled' : b.title);
+        function dims(b) {   // upright spine size: thicker = more pages, taller for series / long titles
+            const h = hash(b.title), label = labelOf(b), len = label.length;
             let ht = len > 30 ? 158 : 116 + (b.seriesId ? 30 : h % 40);
             const cols = Math.min(4, Math.ceil(len * 9.5 * 0.55 / (ht - 50)));
-            let w = Math.max(24, Math.min(74, Math.max(Math.round(16 + (b.totalPages || 150) / 9), cols * 12 + 14)));
+            let w = Math.max(24, Math.min(74, Math.max(Math.round(16 + (+b.totalPages || 150) / 9), cols * 12 + 14)));
             ({ w, ht } = fitSpine(label, w, ht));   // grow the spine until the whole title fits in its bubble
-            const au = typeof authorText === 'function' ? authorText(b) : '';
-            const tip = `<span class="bs-tip"><b>${esc(b.title)}</b>${au ? `<small>${esc(au)}</small>` : ''}<small>${b.seriesName ? esc(b.seriesName) + (b.part ? ' #' + b.part : '') + ' · ' : ''}${b.totalPages || '?'} pages</small>${b.rating ? `<em>★ ${(Math.round(b.rating * 10) / 10).toFixed(1)}</em>` : ''}</span>`;
-            return { w: w + (lean ? 18 : 0), html: `<div class="sp-cell${edge ? ' ' + edge : ''}">${tip}<button class="sp${b.seriesId ? ' series' : ''}${lean ? ' lean' : ''}${w < 30 ? ' thin' : ''}" style="width:${w}px;height:${ht}px;background-color:${col};color:${lum(col) > .6 ? 'rgb(var(--c-3e4a3d))' : '#fdf8ef'}" aria-label="${titleOf(b)}" onclick="pullBook(this,${bookRef(b)})">${b.favorite ? '<i></i>' : ''}${b.seriesId ? '<b class="b1"></b><b class="b2"></b>' : ''}<span>${esc(label)}</span></button></div>` };
+            return { label, w, ht };
+        }
+        const tiltRoom = (ht, deg) => Math.ceil(ht * Math.sin(deg * Math.PI / 180)) + 2;   // how far the top swings sideways
+        const spineCol = b => { const col = spineColor(b); return { col, fg: lum(col) > .6 ? 'rgb(var(--c-3e4a3d))' : '#fdf8ef' }; };
+        function tipHtml(b) {
+            const au = typeof authorText === 'function' ? authorText(b) : '', pg = +b.totalPages || 0, part = b.part != null && b.part !== '' ? ' #' + esc(b.part) : '';
+            return `<span class="bs-tip"><b>${esc(b.title || 'Untitled')}</b>${au ? `<small>${esc(au)}</small>` : ''}<small>${b.seriesName ? esc(b.seriesName) + part + ' · ' : ''}${pg ? pg + ' pages' : 'pages unknown'}</small>${+b.rating ? `<em>★ ${(Math.round(b.rating * 10) / 10).toFixed(1)}</em>` : ''}</span>`;
+        }
+        // tilt = { deg, dir } (dir -1 leans left, 1 leans right); the cell keeps a gap on that side so it never overlaps its neighbour
+        function spineHtml(b, tilt, edge) {
+            const { label, w, ht } = dims(b), { col, fg } = spineCol(b);
+            const m = tilt ? tiltRoom(ht, tilt.deg) : 0, side = tilt && tilt.dir < 0 ? 'left' : 'right';
+            const tst = tilt ? `;--r:${tilt.dir * tilt.deg}deg;transform-origin:bottom ${side}` : '';
+            return { w: w + m, html: `<div class="sp-cell${edge ? ' ' + edge : ''}"${m ? ` style="margin-${side}:${m}px"` : ''}>${tipHtml(b)}<button class="sp${b.seriesId ? ' series' : ''}${tilt ? ' tilt' : ''}${w < 30 ? ' thin' : ''}" style="width:${w}px;height:${ht}px;background-color:${col};color:${fg}${tst}" aria-label="${titleOf(b)}" onclick="pullBook(this,${bookRef(b)})">${b.favorite ? '<i></i>' : ''}${b.seriesId ? '<b class="b1"></b><b class="b2"></b>' : ''}<span>${esc(label)}</span></button></div>` };
+        }
+        // a book lying flat in a little pile: length from its height, thickness from its pages, title reads left-to-right
+        function flatDims(b, maxLen) {
+            const d = dims(b), tw = measure(d.label, 9);
+            if (tw + 46 > maxLen) return null;   // title would not fit on one line, keep it upright instead
+            return { b, label: d.label, len: Math.round(Math.min(maxLen, Math.max(tw + 46, d.ht * .72, 86))), t: Math.max(21, Math.min(32, Math.round(15 + (+b.totalPages || 150) / 40))) };
+        }
+        function stackHtml(u, edge) {
+            const top = u.top ? `<span class="bs-stack-top" aria-hidden="true">${u.top}</span>` : '';
+            return top + u.fl.map(f => { const { col, fg } = spineCol(f.b), x = (hash(f.b.title + 'x') % 11) - 5;
+                return `<div class="sp-cell flat-cell${edge ? ' ' + edge : ''}" style="left:${x}px">${tipHtml(f.b)}<button class="sp flat" style="width:${f.len}px;height:${f.t}px;background-color:${col};color:${fg}" aria-label="${titleOf(f.b)}" onclick="pullBook(this,${bookRef(f.b)})">${f.b.favorite ? '<i></i>' : ''}<span>${esc(f.label)}</span></button></div>`; }).join('');
         }
         // fairy lights: the wire stretches with the case, the bulbs are real round dots hanging from it
         function lightsSvg() {
@@ -4926,26 +4956,67 @@ window.SAFE = SAFE;
             });
             return `<div class="bs-lights" aria-hidden="true"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><path d="${d}" vector-effect="non-scaling-stroke"/></svg>${bulbs}</div>`;
         }
+        const STACK_TOP = ['🕯️', '🍵', '🪴', '🍄', '🧸', '🐌', '🔮', '🍓'];
+        // turn the ordered books into "units": upright spines (some leaning) and, every so often, a little pile of 2-3 flat books
+        function unitsOf(items, avail) {
+            const maxLen = Math.min(168, Math.round(avail * .42)), units = [];
+            let since = 3;   // books since the last pile
+            for (let k = 0; k < items.length;) {
+                const b = items[k], h = hash(String(b.id || b.title) + '~');
+                const prev = units[units.length - 1];
+                if (!b.seriesId && k < items.length - 1 && since >= 5 && (h % 4 === 0 || since >= 11)) {
+                    const want = 2 + (h >>> 5) % 2, fl = []; let tt = 0;
+                    for (let j = k; j < items.length && fl.length < want; j++) {
+                        const f = !items[j].seriesId && flatDims(items[j], maxLen);
+                        if (!f || tt + f.t > 112) break;
+                        fl.push(f); tt += f.t;
+                    }
+                    if (fl.length >= 2) {
+                        units.push({ type: 'stack', fl, w: Math.max(...fl.map(f => f.len)) + 14, top: tt <= 92 && (h >>> 9) % 2 ? STACK_TOP[(h >>> 12) % STACK_TOP.length] : '' });
+                        k += fl.length; since = 0; continue;
+                    }
+                }
+                // every few books one leans on its neighbour (never two in a row, never inside a series run)
+                const tilt = !b.seriesId && (h >>> 3) % 5 === 0 && !(prev && prev.tilt) ? { deg: 4 + (h >>> 7) % 4, dir: (h >>> 11) % 2 ? 1 : -1 } : null;
+                units.push({ type: 'sp', b, tilt, w: spineHtml(b, tilt).w });
+                k++; since++;
+            }
+            return units;
+        }
         function shelfHtml(list, view) {
             const items = order(list);
             const head = `<div class="shelf-row bs-case ${view}">${lightsSvg()}<span class="bs-perch l">${view === 'done' ? '🐈' : '🐈‍⬛'}</span><span class="bs-perch r">🌿</span><span class="bs-sign">${view === 'done' ? '✨ finished & loved' : '📜 waiting for you'}</span>`;
             if (!items.length) return head + `<div class="bs-shelf"><div class="bs-back" style="justify-content:center"><div class="bs-empty"><span>🍂</span>Nothing on this shelf yet</div></div><div class="bs-plank"></div></div></div>`;
             // fill shelves to the real width so every plank looks full but never overflows
             const cw = ($('shelf-content') || {}).clientWidth || 700, avail = Math.max(160, cw - 8 - 8 - 32 - 24 - 2);   // pr-2, case margin, case padding, back padding
-            const shelves = []; let row = [], used = 0;
-            items.forEach(b => { const sp = spineHtml(b, false); if (row.length && used + sp.w > avail) { shelves.push({ row, used }); row = []; used = 0; } row.push(b); used += sp.w + 3; });
+            const GAP = 3, shelves = []; let row = [], used = 0;
+            unitsOf(items, avail).forEach(u => { if (row.length && used + u.w > avail) { shelves.push({ row, used }); row = []; used = 0; } row.push(u); used += u.w + GAP; });
             if (row.length) shelves.push({ row, used });
+            const pick = n => DECO[n % DECO.length];   // n is always unsigned (>>>), so never undefined
             return head + shelves.map((sh, si) => {
-                const h0 = hash(String(sh.row[0].id || sh.row[0].title) + si), room = avail - sh.used;
-                const lean = room > 70 && sh.row.length > 2 && !sh.row[sh.row.length - 1].seriesId;
-                const n = sh.row.length, parts = sh.row.map((b, k) => spineHtml(b, lean && k === n - 1, k < 2 ? 'bs-l' : k >= n - 2 ? 'bs-r' : '').html);
+                const r0 = sh.row[0], h0 = hash(String(r0.b ? r0.b.id || r0.b.title : r0.fl[0].b.title) + si), n = sh.row.length;
+                // spare room at the end of the plank: let the last upright book slump into it
+                const last = sh.row[n - 1];
+                if (n > 2 && last.type === 'sp' && !sh.row.some(u => u.tilt) && !last.b.seriesId) {
+                    const { ht } = dims(last.b), m = tiltRoom(ht, 8);
+                    if (avail - sh.used > m + 30) { last.tilt = { deg: 8, dir: 1 }; sh.used += m; }
+                }
+                const room = avail - sh.used;
+                // hover cards near either end of the plank open inwards so they never poke out of the case
+                let x = 0; const TW = window.innerWidth <= 520 ? 150 : 190, lo = -12, hi = avail + 12;   // tip max-width; the back has 12px padding each side
+                const parts = sh.row.map(u => { const l = x, r = x + u.w, mid = (l + r) / 2; x = r + GAP;
+                    const fit = [['', mid - TW / 2], ['bs-l', l], ['bs-r', r - TW]].map(([c, a]) => [c, Math.max(0, lo - a) + Math.max(0, a + TW - hi)]);
+                    const edge = (fit.find(f => !f[1]) || fit.sort((p, q) => p[1] - q[1])[0])[0];
+                    return u.type === 'stack' ? `<div class="bs-stack" style="width:${u.w}px">${stackHtml(u, edge)}</div>` : spineHtml(u.b, u.tilt, edge).html; });
                 const decos = [];
-                if (room > 40) decos.push(`<span class="bs-deco end" aria-hidden="true">${DECO[h0 % DECO.length]}</span>`);
-                if (room > 120) decos.push(`<span class="bs-deco" aria-hidden="true">${DECO[(h0 >> 4) % DECO.length]}</span>`);
-                if (room > 120 && sh.row.length > 4) parts.splice(1 + (h0 % (sh.row.length - 2)), 0, `<span class="bs-deco" aria-hidden="true" style="font-size:22px">${DECO[(h0 >> 8) % DECO.length]}</span>`);
+                if (room > 40) decos.push(`<span class="bs-deco end" aria-hidden="true">${pick(h0)}</span>`);
+                if (room > 120) decos.push(`<span class="bs-deco" aria-hidden="true">${pick(h0 >>> 4)}</span>`);
+                if (room > 120 && n > 4) parts.splice(1 + (h0 % (n - 2)), 0, `<span class="bs-deco" aria-hidden="true" style="font-size:22px">${pick(h0 >>> 8)}</span>`);
                 return `<div class="bs-shelf"><div class="bs-back">${parts.join('')}${decos.join('')}</div><div class="bs-plank"></div></div>`;
             }).join('') + `</div>`;
         }
+        // the cute spine font loads lazily: re-measure once it has arrived so the bubbles fit it exactly
+        try { document.fonts && document.fonts.load(`600 10px ${SPF}`).then(() => { mctx = null; if (currentTab === 'shelf') window.setShelfView(shelfView); }); } catch (e) {}
         try { document.fonts && document.fonts.ready.then(() => { if (currentTab === 'shelf') window.setShelfView(shelfView); }); } catch (e) {}
         // re-fit the shelves when the page width changes
         let shW = 0, shT = 0;
@@ -5016,7 +5087,7 @@ window.SAFE = SAFE;
         });
     })();
 </script>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ---- shelf filters ---- */
 .sf{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:12px;padding:8px;background:#fff8;border:1px dashed rgb(var(--c-e8c4c4));border-radius:12px}
