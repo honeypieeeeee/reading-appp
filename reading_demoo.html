@@ -6619,8 +6619,15 @@ function chime() {
 function spLen() { const v = $v('sp-len').value; if (v === 'custom') { const n = Math.floor(+$v('sp-custom').value); return n >= 1 ? Math.min(n, 600) : 0; } return +v; }
 function spShow(sec, totalMin) {
     const p = n => String(n).padStart(2, '0'), big = totalMin >= 100, t = big ? `${Math.floor(sec / 3600)}:${p(Math.floor(sec % 3600 / 60))}:${p(sec % 60)}` : `${p(Math.floor(sec / 60))}:${p(sec % 60)}`;
-    const d = $v('sp-display'); d.innerText = t; d.style.fontSize = big ? '19px' : '';
+    const d = $v('sp-display'); d.innerText = t; d.style.fontSize = big ? '23px' : '';
 }
+// the chips drive the (hidden) selects, so every bit of the timer logic keeps reading the same elements
+window.spPick = function (k, v) {
+    const sel = $v(k === 'len' ? 'sp-len' : 'sp-sound'); if (!sel || (k === 'len' && sel.disabled)) return;
+    sel.value = v;
+    document.querySelectorAll('#sp-' + k + 'chips button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+    if (k === 'len') spLenChange(); else if (sprint.int) startSound(v);
+};
 function spLenChange() { $v('sp-custom-row').style.display = $v('sp-len').value === 'custom' ? '' : 'none'; if (!sprint.int) spShow(spLen() * 60, spLen()); }
 function sprintTick() {
     const left = Math.max(0, sprint.end - Date.now()), s = Math.ceil(left / 1000);
@@ -6941,7 +6948,7 @@ renderBackupNudge(); renderRes();
 
     // ===== New tabs: Reading Now + Quotes =====
     const host = $('tab-content-favorites').parentNode, dock = $('side-dock');
-    const SP_HTML = `<div id="sprint-card"><div class="sp-ringwrap"><svg viewBox="0 0 120 120"><defs><linearGradient id="sp-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="rgb(var(--c-e8a0b4))"/><stop offset="1" stop-color="rgb(var(--c-a3b18a))"/></linearGradient></defs><circle cx="60" cy="60" r="52" fill="none" stroke="rgb(var(--c-f6dfe4))" stroke-width="9"/><circle id="sp-ring" cx="60" cy="60" r="52" fill="none" stroke="url(#sp-grad)" stroke-width="9" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0" style="transition:stroke-dashoffset .5s linear"/><circle id="sp-dot" cx="112" cy="60" r="5.5" fill="#fff" stroke="rgb(var(--c-e8a0b4))" stroke-width="3"/></svg><div class="sp-face"><span class="sp-pet">📖</span><span id="sp-display">25:00</span></div></div><div class="sp-side"><h4>🌷 Story Spell</h4><p id="sp-target" class="sp-target"></p><div class="sp-row"><select id="sp-len" onchange="spLenChange()"><option value="15">🍵 15 min</option><option value="25" selected>🍰 25 min</option><option value="45">🌙 45 min</option><option value="60">🦉 60 min</option><option value="custom">✏️ Custom…</option></select><select id="sp-sound" onchange="if(sprint.int)startSound(this.value)"><option value="off">🔇 No sound</option><option value="rain">🌧️ Rain</option><option value="fire">🔥 Fireplace</option><option value="cafe">☕ Cafe</option><option value="ocean">🌊 Ocean waves</option><option value="storm">⛈️ Thunderstorm</option><option value="forest">🌲 Forest birds</option><option value="stream">🏞️ Babbling brook</option><option value="wind">🍃 Gentle wind</option><option value="night">🦗 Crickets at night</option><option value="white">⚪ White noise</option><option value="brown">🟤 Brown noise</option></select></div><div id="sp-custom-row" style="display:none"><input type="number" id="sp-custom" min="1" max="600" step="1" placeholder="How many minutes? ⏱️" oninput="spLenChange()"></div><input type="number" id="sp-pages" min="0" placeholder="Pages read (optional) 📄"><button id="sp-btn" onclick="sprintToggle()">Cast the spell ▶</button><p id="sp-msg">Logs to the book you pick above when it ends ✨</p></div></div>`;
+    const SP_HTML = `<div id="sprint-card"><i class="sp-star a"></i><i class="sp-star b"></i><i class="sp-star c"></i><div class="sp-hd"><span class="sp-hdem" aria-hidden="true">🌷</span><div><h4>Story Spell</h4><small>a cozy focus spell for your book</small></div></div><div class="sp-stage"><div class="sp-ringwrap"><svg viewBox="0 0 120 120"><defs><linearGradient id="sp-grad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="rgb(var(--c-e8a0b4))"/><stop offset="1" stop-color="rgb(var(--c-a3b18a))"/></linearGradient></defs><circle class="sp-disc" cx="60" cy="60" r="58"/><circle class="sp-dots" cx="60" cy="60" r="52"/><circle class="sp-stitch" cx="60" cy="60" r="42"/><circle id="sp-ring" cx="60" cy="60" r="52" fill="none" stroke="url(#sp-grad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0" style="transition:stroke-dashoffset .5s linear"/><circle id="sp-dot" cx="112" cy="60" r="6" fill="#fff" stroke="rgb(var(--c-e8a0b4))" stroke-width="3"/></svg><div class="sp-face"><span class="sp-pet">📖</span><span id="sp-display">25:00</span><small class="sp-lbl">of cozy focus</small></div></div></div><p id="sp-target" class="sp-target"></p><div class="sp-sec"><label>How long?</label><div class="sp-chips" id="sp-lenchips"><button type="button" data-v="15" class="" onclick="spPick('len','15')">🍵 15 min</button><button type="button" data-v="25" class="on" onclick="spPick('len','25')">🍰 25 min</button><button type="button" data-v="45" class="" onclick="spPick('len','45')">🌙 45 min</button><button type="button" data-v="60" class="" onclick="spPick('len','60')">🦉 60 min</button><button type="button" data-v="custom" onclick="spPick('len','custom')">✏️ Custom</button></div><select id="sp-len" hidden onchange="spLenChange()"><option value="15">🍵 15 min</option><option value="25" selected>🍰 25 min</option><option value="45">🌙 45 min</option><option value="60">🦉 60 min</option><option value="custom">✏️ Custom…</option></select></div><div id="sp-custom-row" style="display:none"><input type="number" id="sp-custom" min="1" max="600" step="1" placeholder="How many minutes? ⏱" oninput="spLenChange()"></div><div class="sp-sec"><label>Cozy sound</label><div class="sp-chips sp-snd" id="sp-soundchips"><button type="button" data-v="off" class="on" title="No sound" aria-label="No sound" onclick="spPick('sound','off')">🔇</button><button type="button" data-v="rain" class="" title="Rain" aria-label="Rain" onclick="spPick('sound','rain')">🌧️</button><button type="button" data-v="fire" class="" title="Fireplace" aria-label="Fireplace" onclick="spPick('sound','fire')">🔥</button><button type="button" data-v="cafe" class="" title="Cafe" aria-label="Cafe" onclick="spPick('sound','cafe')">☕</button><button type="button" data-v="ocean" class="" title="Ocean waves" aria-label="Ocean waves" onclick="spPick('sound','ocean')">🌊</button><button type="button" data-v="storm" class="" title="Thunderstorm" aria-label="Thunderstorm" onclick="spPick('sound','storm')">⛈️</button><button type="button" data-v="forest" class="" title="Forest birds" aria-label="Forest birds" onclick="spPick('sound','forest')">🌲</button><button type="button" data-v="stream" class="" title="Babbling brook" aria-label="Babbling brook" onclick="spPick('sound','stream')">🏞️</button><button type="button" data-v="wind" class="" title="Gentle wind" aria-label="Gentle wind" onclick="spPick('sound','wind')">🍃</button><button type="button" data-v="night" class="" title="Crickets at night" aria-label="Crickets at night" onclick="spPick('sound','night')">🦗</button><button type="button" data-v="white" class="" title="White noise" aria-label="White noise" onclick="spPick('sound','white')">⚪</button><button type="button" data-v="brown" class="" title="Brown noise" aria-label="Brown noise" onclick="spPick('sound','brown')">🟤</button></div><select id="sp-sound" hidden onchange="if(sprint.int)startSound(this.value)"><option value="off">🔇 No sound</option><option value="rain">🌧️ Rain</option><option value="fire">🔥 Fireplace</option><option value="cafe">☕ Cafe</option><option value="ocean">🌊 Ocean waves</option><option value="storm">⛈️ Thunderstorm</option><option value="forest">🌲 Forest birds</option><option value="stream">🏞️ Babbling brook</option><option value="wind">🍃 Gentle wind</option><option value="night">🦗 Crickets at night</option><option value="white">⚪ White noise</option><option value="brown">🟤 Brown noise</option></select></div><label class="sp-pg"><span aria-hidden="true">📄</span><input type="number" id="sp-pages" min="0" placeholder="Pages read (optional)"></label><button id="sp-btn" onclick="sprintToggle()">Cast the spell ▶</button><p id="sp-msg">Logs to the book you pick above when it ends ✨</p></div>`;
     const H = (id, t, sub, extra) => `<div id="tab-content-${id}" class="hidden flex-1 flex flex-col overflow-hidden"><h3 class="font-serif font-bold text-[rgb(var(--c-3e4a3d))] text-sm mb-1">${t}</h3><p class="text-[11px] text-[rgb(var(--c-6b705c))] mb-3">${sub}</p>${extra || ''}<div id="${id}-content" class="flex-1 overflow-y-auto scroll-container pr-2"></div></div>`;
     host.insertAdjacentHTML('beforeend', H('now', 'Reading Now 📖', 'One card for every book you are reading: progress, logging, bookmark and page notes.', SP_HTML) + H('quotes', 'Quote Collection ❝', 'Every favorite quote from every book. Add quotes in a book\'s review (one per line).', '<input id="q-search" oninput="renderQuotes()" placeholder="Search quotes, titles, authors…" class="nw-in w-full mb-3">'));
     [['quotes', '❝', 'Quotes']].forEach(([k, e, n]) => { const b = document.createElement('button'); b.className = 'dock-btn'; b.dataset.tab = k; b.title = n; b.setAttribute('aria-label', n); b.innerHTML = `${e}<em class="dock-label">${n}</em>`; b.onclick = () => switchTab(k); dock.insertBefore(b, dock.querySelector('[data-tab="backup"]')); });
@@ -9115,11 +9122,11 @@ renderBackupNudge(); renderRes();
     (function () {
         const card = $('sprint-card'), tab = $('tab-content-sessions'); if (!card || !tab) return;
         const w = document.createElement('div'); w.id = 'sp-wrap';
-        w.innerHTML = '<button type="button" id="sp-pill" class="sp-pill" onclick="spPillTog()"><span class="sp-pe">🌷</span><span class="sp-pt">Story Spell timer<small id="sp-ps"></small></span><i>▾</i></button><div id="sp-body" class="hidden"></div>';
+        w.innerHTML = '<button type="button" id="sp-pill" class="sp-pill" onclick="spPillTog()" aria-expanded="false"><span class="sp-pe"><b aria-hidden="true">🌷</b></span><span class="sp-pt">Story Spell timer<small id="sp-ps"></small></span><i aria-hidden="true"></i></button><div id="sp-body" class="hidden"></div>';
         tab.insertBefore(w, $('sessions-pager-top')); $('sp-body').appendChild(card);
         const idle = 'a cozy focus sprint for your current scroll';
-        window.spPillTog = () => { const o = $('sp-body').classList.toggle('hidden'); $('sp-pill').classList.toggle('open', !o); };
-        const tick = () => { const run = !!sprint.int; $('sp-pill').classList.toggle('run', run); $('sp-ps').textContent = run ? `${$('sp-display').innerText} left · tap to open` : idle; };
+        window.spPillTog = () => { const o = $('sp-body').classList.toggle('hidden'); $('sp-pill').classList.toggle('open', !o); $('sp-pill').setAttribute('aria-expanded', !o); };
+        const tick = () => { const run = !!sprint.int, f = run && sprint.mins ? Math.max(0, Math.min(1, (sprint.end - Date.now()) / (sprint.mins * 60000))) : 1; $('sp-pill').classList.toggle('run', run); $('sp-pill').style.setProperty('--p', Math.round(f * 100)); $('sp-ps').textContent = run ? `${$('sp-display').innerText} left · tap to open` : idle; };
         tick(); setInterval(tick, 1000);
     })();
     renderSessions();
@@ -14210,6 +14217,61 @@ button.au-chip{cursor:pointer}button.au-chip:hover{transform:translateY(-2px) ro
 .br-rk>b{width:38px;font-size:19px}
 @media(max-width:520px){.br-card{width:calc(50% - 22px);min-width:132px}.br-card .cv{width:92px;height:136px}.br-fan .cvf{width:50px;height:75px}.br-duel{gap:10px}}
 @media (prefers-reduced-motion:reduce){.br-trophy,.br-fan .cvf{animation:none}}
+</style>
+
+<style id="sp-cute">
+/* ===== Story Spell: a little spell-casting card ===== */
+#sp-wrap{margin-bottom:12px}
+.sp-pill{position:relative;width:100%;display:flex;align-items:center;gap:12px;padding:8px 18px 8px 10px;border-radius:99px;border:2.5px solid rgb(var(--c-f4c9d2));background:linear-gradient(90deg,rgb(var(--c-fde7ec)),#fffdfb 50%,rgb(var(--c-eef2e2)));box-shadow:0 8px 18px -12px rgb(var(--c-a8506a)/0.5),0 0 0 4px rgb(var(--c-f4c9d2)/0.2);text-align:left;color:rgb(var(--c-3e4a3d));transition:transform .2s cubic-bezier(.3,1.5,.5,1),box-shadow .2s}
+.sp-pill:hover{transform:translateY(-2px);box-shadow:0 12px 22px -12px rgb(var(--c-a8506a)/0.6),0 0 0 4px rgb(var(--c-f4c9d2)/0.3)}
+.sp-pe{flex:none;position:relative;width:42px;height:42px;border-radius:50%;background:conic-gradient(rgb(var(--c-e8a0b4)) calc(var(--p,100)*1%),rgb(var(--c-f6dfe4)) 0);display:flex;align-items:center;justify-content:center}
+.sp-pe::before{content:'';position:absolute;inset:4px;border-radius:50%;background:#fff}.sp-pe b{position:relative;font-size:18px;line-height:1;font-weight:400}
+.sp-pill.run .sp-pe b{animation:au-bob 1.1s ease-in-out infinite}
+.sp-pt{font:800 15px 'Playfair Display',serif;line-height:1.2}.sp-pt small{display:block;font:600 10.5px Montserrat,sans-serif;color:rgb(var(--c-6b705c))}
+.sp-pill>i{margin:0 4px 3px auto;flex:none;width:9px;height:9px;border:solid rgb(var(--c-a8506a));border-width:0 2.5px 2.5px 0;border-radius:1px;transform:rotate(45deg);transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+.sp-pill.open>i{transform:rotate(225deg) translate(-2px,-2px)}
+.sp-pill.run{border-style:solid;border-color:rgb(var(--c-e8a0b4))}
+#sp-body{margin-top:14px}
+#sprint-card{position:relative;display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;justify-content:flex-start;gap:12px;width:min(460px,100%);box-sizing:border-box;margin:0 auto;padding:20px 20px 18px;border-radius:30px;overflow:visible;background:linear-gradient(180deg,rgb(var(--c-fff4f6)) 0,#fffdfb 120px);border:2.5px solid rgb(var(--c-f4c9d2));box-shadow:0 18px 36px -18px rgb(var(--c-a8506a)/0.5),0 0 0 6px rgb(var(--c-f4c9d2)/0.25)}
+#sprint-card::before,#sprint-card::after{content:none}
+.sp-star{position:absolute;width:13px;height:13px;background:rgb(var(--c-e8a0b4));clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);animation:au-tw 3s ease-in-out infinite;pointer-events:none}
+.sp-star.a{top:16px;left:22px}.sp-star.b{top:30px;right:24px;width:9px;height:9px;background:rgb(var(--c-a3b18a));animation-delay:1s}.sp-star.c{top:92px;right:46px;width:7px;height:7px;background:rgb(var(--c-d9cff0));animation-delay:1.8s}
+#sprint-card.sp-on .sp-star{animation-duration:1.2s}
+.sp-hd{display:flex;align-items:center;justify-content:center;gap:10px;text-align:center}.sp-hdem{font-size:32px;line-height:1;filter:drop-shadow(0 3px 4px rgb(var(--c-a8506a)/0.25));animation:au-bob 2.4s ease-in-out infinite}
+.sp-hd h4{margin:0;font:800 21px 'Playfair Display',serif;color:rgb(var(--c-a8506a))}.sp-hd small{display:block;font:italic 500 11.5px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+.sp-stage{display:flex;justify-content:center;padding:6px 0 2px}
+.sp-ringwrap{position:relative;flex:none;width:196px;height:196px}
+.sp-ringwrap svg{display:block;width:100%;height:100%;overflow:visible;transform:rotate(-90deg);filter:drop-shadow(0 8px 10px rgb(var(--c-a8506a)/0.25));transition:filter .4s}
+#sprint-card.sp-on .sp-ringwrap svg{filter:drop-shadow(0 0 12px rgb(var(--c-e8a0b4)/0.75))}
+.sp-disc{fill:#fff;stroke:rgb(var(--c-f6dfe4));stroke-width:1.2}
+.sp-dots{fill:none;stroke:rgb(var(--c-f0d0d8));stroke-width:4.5;stroke-linecap:round;stroke-dasharray:0 8.17}
+.sp-stitch{fill:rgb(var(--c-fff8e6));stroke:rgb(var(--c-f0d9a0));stroke-width:1.1;stroke-dasharray:2.4 3.2}
+.sp-face{position:absolute;inset:0;border-radius:50%;background:none;box-shadow:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+.sp-pet{font-size:28px;line-height:1;margin-bottom:2px}#sprint-card.sp-on .sp-pet{animation:au-bob 1.1s ease-in-out infinite}
+#sp-display{font:800 36px/1.05 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));font-variant-numeric:lining-nums tabular-nums;letter-spacing:-.01em}
+.sp-lbl{font:800 8.5px Montserrat,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:rgb(var(--c-a8506a));margin-top:2px}
+.sp-target{margin:0;text-align:center;font:600 12px Montserrat,sans-serif;color:rgb(var(--c-6b705c))}
+.sp-sec{display:flex;flex-direction:column;gap:6px}
+.sp-sec>label{text-align:center;font:800 9px Montserrat,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgb(var(--c-a8506a))}
+.sp-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.sp-chips button{font:800 12px Montserrat,sans-serif;padding:7px 13px;border-radius:99px;border:2px solid rgb(var(--c-f0d0d8));background:#fff;color:rgb(var(--c-6b705c));cursor:pointer;transition:transform .2s cubic-bezier(.3,1.6,.5,1),background .15s,border-color .15s,box-shadow .15s}
+.sp-chips button:hover{transform:translateY(-2px)}
+.sp-chips button.on{background:linear-gradient(135deg,rgb(var(--c-fde7ec)),rgb(var(--c-eef2e2)));border-color:rgb(var(--c-e8a0b4));color:rgb(var(--c-3e4a3d));box-shadow:0 4px 10px -4px rgb(var(--c-a8506a)/0.45)}
+.sp-snd button{width:40px;height:40px;padding:0;font-size:17px;line-height:1;display:flex;align-items:center;justify-content:center}
+#sprint-card.sp-on #sp-lenchips{opacity:.45;pointer-events:none}
+#sprint-card .cz-btn,#sprint-card .cz-wrap{display:none!important}
+#sp-custom-row input{width:100%;box-sizing:border-box;height:40px;padding:0 16px;border-radius:99px;border:2px solid rgb(var(--c-f0d0d8));background:#fff;font:700 12.5px Montserrat,sans-serif;text-align:center;outline:0}#sp-custom-row input:focus{border-color:rgb(var(--c-e8a0b4))}
+.sp-pg{display:flex;align-items:center;gap:8px;height:42px;padding:0 16px;border-radius:99px;border:2px solid rgb(var(--c-f0d0d8));background:#fff;transition:border-color .15s,box-shadow .15s}
+.sp-pg:focus-within{border-color:rgb(var(--c-a3b18a));box-shadow:0 0 0 3px rgb(var(--c-a3b18a)/0.2)}
+.sp-pg input{flex:1;min-width:0;border:0!important;outline:0;background:transparent;box-shadow:none!important;padding:0!important;font:700 12.5px Montserrat,sans-serif;color:rgb(var(--c-3e4a3d))}
+#sprint-card #sp-btn{height:50px;border:0;border-radius:99px;font:800 16px 'Playfair Display',serif;color:#fff;background:linear-gradient(90deg,rgb(var(--c-f7b6cc)),rgb(var(--c-b5c78a)));box-shadow:0 4px 0 rgb(var(--c-d98aa0)/0.7),0 14px 22px -10px rgb(var(--c-a8506a)/0.55);text-shadow:0 1px 0 rgba(0,0,0,.1);cursor:pointer;transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+#sprint-card #sp-btn:hover{transform:translateY(-2px)}#sprint-card #sp-btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgb(var(--c-d98aa0)/0.7)}
+#sprint-card.sp-on #sp-btn{background:linear-gradient(90deg,rgb(var(--c-e8a0b4)),rgb(var(--c-c0554a)))}
+#sp-msg{margin:0;min-height:16px;text-align:center;font:italic 600 11.5px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+#sp-pick .cd-b{height:40px;border-radius:99px;border:2px solid rgb(var(--c-f0d0d8));padding:0 16px;font-size:12.5px}
+.sp-tl{text-align:center;font:800 9px Montserrat,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:rgb(var(--c-a8506a));margin-bottom:5px}
+@media(max-width:420px){.sp-ringwrap{width:172px;height:172px}#sp-display{font-size:32px}#sprint-card{padding:18px 14px 16px}}
+@media (prefers-reduced-motion:reduce){.sp-star,.sp-hdem,.sp-pet,.sp-pill.run .sp-pe b{animation:none!important}}
 </style>
 </body>
 </html>
