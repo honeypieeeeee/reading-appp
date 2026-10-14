@@ -11592,8 +11592,7 @@ body.shuf-on #book-list[data-view=covers]>[data-bi]:not(.shuf-sel):not(.vw-open)
     var y = yr(), lab = y === 'all' ? 'all time' : y, S = all()[y], cur = pool(y);
     if (cur.length < 2) { root.innerHTML = '<section class="wr-sec"><h4>🏆 Book tournament</h4><p class="text-xs italic text-[rgb(var(--c-6b705c))]">Finish at least two books in ' + lab + ' to start a bracket 🌱</p></section>'; return; }
     if (!S) {
-      var fan = cur.slice(0, 5).map(function (b, k) { return '<span class="cvf" style="--k:' + (k - (Math.min(cur.length, 5) - 1) / 2) + ';' + String(coverStyle(b)).replace(/background-color:\s*undefined;?/g, '') + '"></span>'; }).join('');
-      root.innerHTML = '<section class="wr-sec br-intro"><div class="br-fan" aria-hidden="true">' + fan + '<span class="br-trophy">🏆</span></div><h3>Best book of ' + lab + '</h3><p class="br-lead">' + cur.length + ' books will face off two at a time.</p><ol class="br-steps"><li><b>1</b>Pick your favorite in each duel</li><li><b>2</b>Winners climb the bracket</li><li><b>3</b>Crown a champion and get a full ranking</li></ol><button class="br-btn go" data-a="draw">🎲 Draw the bracket</button><i class="fv-sp a"></i><i class="fv-sp b"></i><i class="fv-sp c"></i></section>';
+      root.innerHTML = '<section class="wr-sec br-win"><span class="crown" style="animation:none">🏆</span><h3>Best book of ' + lab + '</h3><p>' + cur.length + ' books will face off two at a time.<br>Pick your favorite each round and the winner moves on, until every book is ranked.</p><div style="margin-top:12px"><button class="br-btn go" data-a="draw">🎲 Draw the bracket</button></div></section>';
       return;
     }
     var M = model(S), done = !!M.champ, ids = S.order.filter(Boolean).sort().join(), now = cur.map(function (b) { return String(b.id); }).sort().join();
@@ -11602,10 +11601,10 @@ body.shuf-on #book-list[data-view=covers]>[data-bi]:not(.shuf-sel):not(.vw-open)
     if (ids !== now) h += '<div class="br-note">📚 Your finished books changed since this draw. <button class="br-btn" data-a="redraw">Redraw with current books</button></div>';
     if (!done) {
       var m = M.R[M.next.r][M.next.i], cnt = M.R[M.next.r].filter(function (x) { return x.b !== null; }), idx = M.R[M.next.r].slice(0, M.next.i).filter(function (x) { return x.b !== null; }).length + 1;
-      h += '<section class="wr-sec br-arena"><i class="fv-sp a"></i><i class="fv-sp b"></i><div class="br-round">' + rn(M.next.r, M.R.length) + '</div><div class="br-sub">Duel ' + idx + ' of ' + cnt.length + ' · tap the book you prefer</div><div class="br-duel">' + card(S, m.a) + '<div class="br-vs">VS</div>' + card(S, m.b) + '</div></section>';
+      h += '<section class="wr-sec br-arena"><div class="br-round">' + rn(M.next.r, M.R.length) + '</div><div class="br-sub">Duel ' + idx + ' of ' + cnt.length + ' · tap the book you prefer</div><div class="br-duel">' + card(S, m.a) + '<div class="br-vs">VS</div>' + card(S, m.b) + '</div></section>';
     } else {
       var rk = ranking(S, M);
-      h += '<section class="wr-sec br-win"><i class="fv-sp a"></i><i class="fv-sp b"></i><i class="fv-sp c"></i><span class="crown">👑</span>' + cv(S, M.champ, 'cv', 1) + '<h3>' + esc(ttl(S, M.champ)) + '</h3><p>' + esc(authorText(byId(M.champ) || {})) + ' · your book of ' + lab + '</p></section>';
+      h += '<section class="wr-sec br-win"><span class="crown">👑</span>' + cv(S, M.champ, 'cv', 1) + '<h3>' + esc(ttl(S, M.champ)) + '</h3><p>' + esc(authorText(byId(M.champ) || {})) + ' · your book of ' + lab + '</p></section>';
     }
     h += '<section class="wr-sec"><h4>🌳 The bracket</h4>' + tree(S, M) + '</section>';
     var rrOn = rr && rr.y === y && done && S.rk; if (rrOn) h += rrArena(S);
@@ -11690,7 +11689,7 @@ body.shuf-on #book-list[data-view=covers]>[data-bi]:not(.shuf-sel):not(.vw-open)
   // ---- All-Time Bracket tab: the same tournament, with every book you have finished ----
   var fav = $('tab-content-favorites'), dock = $('side-dock');
   if (fav && dock && !$('tab-content-alltime')) {
-    fav.parentNode.insertAdjacentHTML('beforeend', '<div id="tab-content-alltime" class="hidden flex-1 flex flex-col overflow-hidden"><h3 class="br-title">All-Time Bracket \uD83C\uDFC6</h3><div class="flex-1 overflow-y-auto scroll-container pr-2"><div id="br-alltime-root"></div></div></div>');
+    fav.parentNode.insertAdjacentHTML('beforeend', '<div id="tab-content-alltime" class="hidden flex-1 flex flex-col overflow-hidden"><h3 class="font-serif font-bold text-[rgb(var(--c-3e4a3d))] text-sm mb-2">All-Time Bracket \uD83C\uDFC6</h3><div class="flex-1 overflow-y-auto scroll-container pr-2"><div id="br-alltime-root"></div></div></div>');
     var ab = document.createElement('button'); ab.className = 'dock-btn'; ab.dataset.tab = 'alltime'; ab.title = 'All-Time Bracket'; ab.setAttribute('aria-label', 'All-Time Bracket');
     ab.innerHTML = '\uD83C\uDFC6<em class="dock-label">All-Time Bracket</em>'; ab.onclick = function () { switchTab('alltime'); };
     var anchor = dock.querySelector('[data-tab="soundtrack"]'); if (anchor) anchor.insertAdjacentElement('afterend', ab); else dock.appendChild(ab);
@@ -14164,52 +14163,6 @@ button.au-chip{cursor:pointer}button.au-chip:hover{transform:translateY(-2px) ro
 .fv-empty{text-align:center;margin:26px auto;max-width:320px;padding:26px 20px;border:2px dashed rgb(var(--c-f0d0d8));border-radius:24px;background:#fff}.fv-empty span{display:block;font-size:40px;animation:au-bob 2.6s ease-in-out infinite}.fv-empty b{display:block;margin-top:4px;font:800 15px 'Playfair Display',serif;color:rgb(var(--c-a8506a))}.fv-empty p{margin:3px 0 0;font-size:12px;color:rgb(var(--c-6b705c))}
 @media(max-width:520px){.fv-hero{padding:14px}.fv-heart-big{font-size:40px}.fv-wall{grid-template-columns:repeat(2,1fr);gap:24px 14px}.fv-ch{width:calc(50% - 6px)}}
 @media (prefers-reduced-motion:reduce){.fv-heart-big,.fv-sp,.fv-empty span{animation:none}.fv-card{transform:none}}
-</style>
-
-<style id="br-cute">
-/* ===== All-Time Bracket: a pink stage for the duels ===== */
-.br-title{margin:0 0 8px;font:800 20px 'Playfair Display',serif;color:rgb(var(--c-a8506a))}
-#br-root,#br-alltime-root{gap:16px;padding:2px 2px 14px}
-#br-root .wr-sec,#br-alltime-root .wr-sec{background:#fffdfb;border:2px solid rgb(var(--c-f6dfe3));border-radius:24px;padding:14px 16px}
-#br-root .wr-sec>h4,#br-alltime-root .wr-sec>h4{display:inline-flex;font:800 12.5px 'Playfair Display',serif;padding:3px 16px;margin-bottom:12px;background:repeating-linear-gradient(135deg,rgb(var(--c-f9d9de)) 0 6px,rgb(var(--c-fdeef0)) 6px 12px);clip-path:polygon(0 0,100% 0,96% 50%,100% 100%,0 100%,4% 50%);transform:rotate(-1deg)}
-#br-root .wr-sec>h4::after,#br-alltime-root .wr-sec>h4::after{display:none}
-.br-top{padding:8px 12px;border-radius:99px;background:#fff;border:2px solid rgb(var(--c-f6dfe3))}
-.br-top .pg{height:12px;background:repeating-linear-gradient(90deg,rgb(var(--c-f6dfe4)) 0 8px,transparent 8px 12px),rgb(var(--c-fde7ec));border-radius:99px}.br-top .pg i{background:linear-gradient(90deg,rgb(var(--c-a3b18a)),rgb(var(--c-e8a0b4)));border-radius:99px;box-shadow:0 2px 6px -1px rgb(var(--c-e8a0b4)/0.6)}
-.br-btn{font-weight:800;padding:6px 14px;border:2px solid rgb(var(--c-f0d0d8));color:rgb(var(--c-a8506a))}
-.br-btn.go{background:linear-gradient(90deg,rgb(var(--c-f7b6cc)),rgb(var(--c-b5c78a)));border-color:transparent;color:#fff;font-size:13px;padding:10px 24px;box-shadow:0 4px 0 rgb(var(--c-d98aa0)/0.6),0 10px 18px -8px rgb(var(--c-a8506a)/0.5)}
-.br-note{border-radius:18px;border:2px dashed rgb(var(--c-f0b9c6))}
-/* intro + champion: glowing aura cards */
-.br-intro,#br-root .wr-sec.br-win,#br-alltime-root .wr-sec.br-win{position:relative;overflow:hidden;text-align:center;border:2.5px solid rgb(var(--c-f4c9d2))!important;background:radial-gradient(circle,rgb(var(--c-e8a0b4)/0.16) 1.4px,transparent 2px) 0 0/16px 16px,linear-gradient(180deg,rgb(var(--c-fff4f6)),#fffdfb 70%,rgb(var(--c-eef2e2)))!important;box-shadow:0 18px 36px -16px rgb(var(--c-a8506a)/0.5),0 0 0 6px rgb(var(--c-f4c9d2)/0.25)}
-.br-intro{padding:26px 18px 22px!important}.br-intro h3{margin:8px 0 2px;font:800 24px 'Playfair Display',serif;color:rgb(var(--c-a8506a))}.br-lead{margin:0 0 12px;font:italic 500 13px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
-.br-fan{position:relative;height:130px;margin-bottom:22px;display:flex;align-items:flex-end;justify-content:center}
-.br-fan .cvf{width:62px;height:93px;margin:0 -9px;border-radius:3px 7px 7px 3px;background-size:cover;background-position:center;background-color:rgb(var(--c-e8c4c4));box-shadow:inset 4px 0 3px -2px rgba(0,0,0,.2),0 8px 14px -4px rgba(0,0,0,.35);transform:translateY(calc(var(--k) * var(--k) * 4px)) rotate(calc(var(--k) * 9deg));transform-origin:bottom center;animation:brIn .6s cubic-bezier(.3,1.5,.5,1) backwards}
-.br-trophy{position:absolute;top:-4px;left:50%;margin-left:-22px;font-size:44px;line-height:1;filter:drop-shadow(0 6px 6px rgb(var(--c-a8506a)/0.3));animation:brCrown 2.2s ease-in-out infinite;z-index:2}
-.br-steps{list-style:none;margin:0 auto 16px;padding:0;display:flex;flex-direction:column;gap:6px;max-width:330px;text-align:left}
-.br-steps li{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:99px;background:#fff;border:2px solid rgb(var(--c-f6dfe3));font:600 12px Montserrat,sans-serif;color:rgb(var(--c-3e4a3d))}
-.br-steps b{flex:none;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgb(var(--c-e8a0b4));color:#fff;font:800 11px Montserrat,sans-serif}
-.br-win .fv-sp,.br-intro .fv-sp,.br-arena .fv-sp{position:absolute}
-/* the stage */
-#br-root .wr-sec.br-arena,#br-alltime-root .wr-sec.br-arena{position:relative;overflow:hidden;border:2.5px solid rgb(var(--c-f4c9d2));background:radial-gradient(ellipse at 50% 0,rgb(var(--c-fde7ec)),transparent 65%),radial-gradient(circle,rgb(var(--c-e8a0b4)/0.14) 1.4px,transparent 2px) 0 0/16px 16px,#fffdfb;box-shadow:0 0 0 6px rgb(var(--c-f4c9d2)/0.25)}
-.br-round{display:inline-block;padding:3px 18px;background:repeating-linear-gradient(135deg,rgb(var(--c-f9d9de)) 0 6px,rgb(var(--c-fdeef0)) 6px 12px);clip-path:polygon(0 0,100% 0,97% 50%,100% 100%,0 100%,3% 50%);font:800 14px 'Playfair Display',serif;transform:rotate(-1.2deg)}
-.br-duel{gap:14px}
-.br-card{position:relative;width:172px;padding:14px 10px 12px;border:2px solid rgb(var(--c-f6dfe3));border-radius:8px 8px 18px 18px;background:#fff;box-shadow:0 2px 0 rgb(var(--c-f0d0d8)),0 12px 20px -12px rgb(var(--c-a8506a)/0.5)}
-.br-card::before{content:'';position:absolute;top:-9px;left:50%;width:58px;height:16px;margin-left:-29px;transform:rotate(-3deg);background:repeating-linear-gradient(45deg,rgb(var(--c-f4b6c2)/0.85) 0 6px,rgb(var(--c-f4b6c2)/0.55) 6px 12px)}
-.br-card+.br-vs+.br-card::before{transform:rotate(3deg);background:repeating-linear-gradient(45deg,rgb(var(--c-cfdbb0)/0.9) 0 6px,rgb(var(--c-cfdbb0)/0.6) 6px 12px)}
-.br-card:hover{border-color:rgb(var(--c-e8a0b4));box-shadow:0 2px 0 rgb(var(--c-f0d0d8)),0 20px 28px -12px rgb(var(--c-a8506a)/0.6)}
-.br-vs{box-shadow:0 0 0 5px rgb(var(--c-f4c9d2)/0.5),0 6px 14px rgb(var(--c-a8506a)/0.3)}
-/* the tree */
-.br-scroll{border-radius:18px;background:rgb(var(--c-fff8f8)/0.6);border:1.5px dashed rgb(var(--c-f0d0d8))}
-.br-col h6{display:flex;align-items:center;justify-content:center}
-.br-m{border:2px solid rgb(var(--c-f6dfe3));border-radius:14px}.br-m.now{border-color:rgb(var(--c-e8a0b4))}
-.br-lines path{stroke:rgb(var(--c-f0d0d8));stroke-dasharray:2 5;stroke-width:2.5}.br-lines path.on{stroke:rgb(var(--c-a3b18a));stroke-dasharray:1}
-/* champion + ranking */
-.br-win .crown{filter:drop-shadow(0 6px 6px rgb(var(--c-a8506a)/0.3))}
-#br-root .wr-sec.br-win .cv,#br-alltime-root .wr-sec.br-win .cv{box-shadow:0 0 0 4px #fff,0 0 0 7px rgb(var(--c-f3d58a,243 213 138)/0.8),0 16px 28px -8px rgb(var(--c-a8506a)/0.5)}
-.br-rk{padding:8px 12px;margin-bottom:6px;border-radius:18px;background:#fff!important;border:2px solid rgb(var(--c-f6dfe3))}
-.br-rk:nth-child(-n+4){background:linear-gradient(90deg,rgb(var(--c-fff8e6)),#fff 60%)!important;border-color:rgb(var(--c-f0d9a0))}
-.br-rk>b{width:38px;font-size:19px}
-@media(max-width:520px){.br-card{width:calc(50% - 22px);min-width:132px}.br-card .cv{width:92px;height:136px}.br-fan .cvf{width:50px;height:75px}.br-duel{gap:10px}}
-@media (prefers-reduced-motion:reduce){.br-trophy,.br-fan .cvf{animation:none}}
 </style>
 </body>
 </html>
