@@ -4745,6 +4745,8 @@ window.SAFE = SAFE;
     .shelf-tab { padding: 7px 17px; border-radius: 99px; border: 2px solid rgb(var(--c-f0d0d8)); background: #fff; font: 800 12px 'Playfair Display', serif; color: rgb(var(--c-a8506a)); cursor: pointer; transition: background .2s, color .2s, transform .2s cubic-bezier(.3,1.5,.5,1), box-shadow .2s; box-shadow: 0 2px 0 rgb(var(--c-f0d0d8)); }
     .shelf-tab:hover { transform: translateY(-2px); background: #fdeef2; }
     .shelf-tab.on { background: linear-gradient(135deg, rgb(var(--c-f4b6c2)), rgb(var(--c-e8a0b4))); border-color: rgb(var(--c-e8a0b4)); color: #fff; box-shadow: 0 3px 0 rgb(var(--c-d98aa0)), 0 6px 14px rgb(var(--c-e8a0b4)/0.45); }
+    #shelf-content { overflow-x: hidden; }
+    @media (max-width: 520px) { #shelf-content .bs-tip { max-width: 150px; } }
     .bs-stats { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
     .bs-stats span { font: 700 10.5px Montserrat, sans-serif; color: #7a5a3a; background: #fffaf2; border: 1.5px dashed #e2c9a8; border-radius: 99px; padding: 3px 11px; }
     .bs-stats b { color: rgb(var(--c-a8506a)); }
@@ -4774,7 +4776,7 @@ window.SAFE = SAFE;
     .bs-case.done .bs-back { background: radial-gradient(circle, rgb(var(--c-e8a0b4)/0.32) 1.6px, transparent 2.2px) 0 0 / 22px 22px, radial-gradient(circle, #e9d5f5 1.6px, transparent 2.2px) 11px 11px / 22px 22px, linear-gradient(#fdf0f2, #f6e4e6); }
     .bs-plank { position: relative; height: 15px; margin: 0 -6px; border-radius: 4px; background: linear-gradient(#e0b48a, #c8946a 35%, #a8744a); box-shadow: 0 6px 8px -4px rgba(90,55,30,.5), inset 0 2px 0 rgba(255,240,220,.45); }
 
-    #shelf-content .sp-cell { position: relative; height: 162px; display: flex; align-items: flex-end; flex: none; }
+    #shelf-content .sp-cell { position: relative; min-height: 162px; display: flex; align-items: flex-end; flex: none; }
     #shelf-content .sp { position: relative; border: 0; padding: 0; border-radius: 5px 5px 3px 3px; cursor: pointer; writing-mode: vertical-rl; font: 700 9.5px/1.15 'Playfair Display', serif; letter-spacing: .02em; overflow: hidden; text-align: center; transform-origin: bottom center; display: flex; align-items: center; justify-content: center;
         background-image: linear-gradient(90deg, rgba(0,0,0,.16), rgba(255,255,255,.22) 22%, rgba(255,255,255,0) 48%, rgba(0,0,0,.05) 75%, rgba(0,0,0,.2));
         box-shadow: inset 0 2px 0 rgba(255,255,255,.35), 1px 0 2px rgba(0,0,0,.18); transition: transform .35s cubic-bezier(.3,1.4,.5,1), box-shadow .3s, opacity .35s, filter .35s; }
@@ -4797,8 +4799,8 @@ window.SAFE = SAFE;
     .bs-tip small { display: block; margin-top: 2px; font: 600 10px Montserrat, sans-serif; color: #6b705c; }
     .bs-tip em { display: inline-block; margin-top: 3px; font: 800 10px Montserrat, sans-serif; font-style: normal; color: #b45309; }
     #shelf-content .sp-cell:hover .bs-tip { opacity: 1; transform: translate(-50%, -6px) scale(1); }
-    #shelf-content .sp-cell.bs-l .bs-tip { left: -4px; transform: translate(0, 6px) scale(.92); transform-origin: bottom left; } #shelf-content .sp-cell.bs-l:hover .bs-tip { transform: translate(0, -6px) scale(1); } #shelf-content .sp-cell.bs-l .bs-tip::after { left: 18px; }
-    #shelf-content .sp-cell.bs-r .bs-tip { left: auto; right: -4px; transform: translate(0, 6px) scale(.92); transform-origin: bottom right; } #shelf-content .sp-cell.bs-r:hover .bs-tip { transform: translate(0, -6px) scale(1); } #shelf-content .sp-cell.bs-r .bs-tip::after { left: auto; right: 12px; }
+    #shelf-content .sp-cell.bs-l .bs-tip { left: 0; transform: translate(0, 6px) scale(.92); transform-origin: bottom left; } #shelf-content .sp-cell.bs-l:hover .bs-tip { transform: translate(0, -6px) scale(1); } #shelf-content .sp-cell.bs-l .bs-tip::after { left: 18px; }
+    #shelf-content .sp-cell.bs-r .bs-tip { left: auto; right: 0; transform: translate(0, 6px) scale(.92); transform-origin: bottom right; } #shelf-content .sp-cell.bs-r:hover .bs-tip { transform: translate(0, -6px) scale(1); } #shelf-content .sp-cell.bs-r .bs-tip::after { left: auto; right: 12px; }
     .bs-deco { flex: none; align-self: flex-end; font-size: 27px; line-height: 1; padding: 0 3px 1px; filter: drop-shadow(0 3px 2px rgba(90,55,30,.25)); transition: transform .3s cubic-bezier(.3,1.6,.5,1); cursor: default; user-select: none; }
     .bs-deco:hover { transform: translateY(-4px) rotate(-8deg) scale(1.12); }
     .bs-deco.end { margin-left: auto; }
@@ -4832,12 +4834,36 @@ window.SAFE = SAFE;
             return out;
         }
         const DECO = ['🪴', '🕯️', '🍄', '🫖', '🔮', '🌵', '🧸', '🍓', '🐌', '🪻', '⭐', '🦋', '🌙', '🐚', '🍵', '🌷'];
+        // measure titles in the real spine font so long ones get a taller (or, if needed, wider) spine instead of being cut off
+        let mctx = null;
+        const measure = (t, px) => {
+            if (!mctx) { try { mctx = document.createElement('canvas').getContext('2d'); } catch (e) {} }
+            if (!mctx) return t.length * px * .62;
+            const fam = (() => { const r = $('shelf-content'); return r ? getComputedStyle(r).fontFamily : ''; })() || 'Montserrat, sans-serif';
+            mctx.font = `700 ${px}px ${fam}`; return mctx.measureText(t).width * 1.04;   // a little slack for letter-spacing
+        };
+        function linesAt(words, L, px) {   // greedy word wrap into columns of length L
+            const sp = measure(' ', px); let n = 1, cur = 0;
+            for (const wd of words) { const ww = measure(wd, px); if (!cur) cur = ww; else if (cur + sp + ww <= L) cur += sp + ww; else { n++; cur = ww; } if (ww > L) return 99; }
+            return n;
+        }
+        const MAXH = 236, MAXW = 96;
+        function fitSpine(label, w, ht) {
+            const words = String(label).split(/\s+/).filter(Boolean); if (!words.length) return { w, ht };
+            const px = w < 30 ? 8 : 9.5, lh = px * 1.15, colsOf = ww => Math.max(1, Math.floor((ww - 8 - 4) / lh)), room = hh => hh - 40 - 16 - 4;
+            if (linesAt(words, room(ht), px) <= colsOf(w)) return { w, ht };
+            for (let hh = ht + 6; hh <= MAXH; hh += 6) if (linesAt(words, room(hh), px) <= colsOf(w)) return { w, ht: hh };
+            // still too long at the tallest spine: add columns by widening it
+            const need = linesAt(words, room(MAXH), px);
+            return { w: Math.min(MAXW, Math.max(w, Math.ceil(need * lh + 14))), ht: MAXH };
+        }
         function spineHtml(b, lean, edge) {
             const col = spineColor(b), h = hash(b.title);
             const label = shortTitle(b.title), len = label.length;
-            const ht = len > 30 ? 158 : 116 + (b.seriesId ? 30 : h % 40);
+            let ht = len > 30 ? 158 : 116 + (b.seriesId ? 30 : h % 40);
             const cols = Math.min(4, Math.ceil(len * 9.5 * 0.55 / (ht - 50)));
-            const w = Math.max(24, Math.min(74, Math.max(Math.round(16 + (b.totalPages || 150) / 9), cols * 12 + 14)));
+            let w = Math.max(24, Math.min(74, Math.max(Math.round(16 + (b.totalPages || 150) / 9), cols * 12 + 14)));
+            ({ w, ht } = fitSpine(label, w, ht));   // grow the spine until the whole title fits in its bubble
             const au = typeof authorText === 'function' ? authorText(b) : '';
             const tip = `<span class="bs-tip"><b>${esc(b.title)}</b>${au ? `<small>${esc(au)}</small>` : ''}<small>${b.seriesName ? esc(b.seriesName) + (b.part ? ' #' + b.part : '') + ' · ' : ''}${b.totalPages || '?'} pages</small>${b.rating ? `<em>★ ${(Math.round(b.rating * 10) / 10).toFixed(1)}</em>` : ''}</span>`;
             return { w: w + (lean ? 18 : 0), html: `<div class="sp-cell${edge ? ' ' + edge : ''}">${tip}<button class="sp${b.seriesId ? ' series' : ''}${lean ? ' lean' : ''}${w < 30 ? ' thin' : ''}" style="width:${w}px;height:${ht}px;background-color:${col};color:${lum(col) > .6 ? 'rgb(var(--c-3e4a3d))' : '#fdf8ef'}" aria-label="${titleOf(b)}" onclick="pullBook(this,${bookRef(b)})">${b.favorite ? '<i></i>' : ''}${b.seriesId ? '<b class="b1"></b><b class="b2"></b>' : ''}<span>${esc(label)}</span></button></div>` };
@@ -4873,6 +4899,7 @@ window.SAFE = SAFE;
                 return `<div class="bs-shelf"><div class="bs-back">${parts.join('')}${decos.join('')}</div><div class="bs-plank"></div></div>`;
             }).join('') + `</div>`;
         }
+        try { document.fonts && document.fonts.ready.then(() => { if (currentTab === 'shelf') window.setShelfView(shelfView); }); } catch (e) {}
         // re-fit the shelves when the page width changes
         let shW = 0, shT = 0;
         if (window.ResizeObserver) new ResizeObserver(() => { const c = $('shelf-content'); if (!c || !c.clientWidth || currentTab !== 'shelf' || Math.abs(c.clientWidth - shW) < 24) return; shW = c.clientWidth; clearTimeout(shT); shT = setTimeout(() => window.setShelfView(shelfView), 120); }).observe(document.body);
