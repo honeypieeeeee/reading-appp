@@ -409,8 +409,7 @@ html[data-theme=autumn]{--c-0f082d:0 16 43;--c-1b103a:0 23 64;--c-1f4463:3 74 85
         #sound-count b { color: rgb(var(--c-a8506a)); }
         #tab-content-soundtrack #sx-btn { font: 800 11px Montserrat, sans-serif !important; color: #fff; background: linear-gradient(135deg, rgb(var(--c-f4b6c2)), rgb(var(--c-e8a0b4))); border: 0; border-radius: 99px; padding: 6px 14px !important; margin: 0 0 14px !important; box-shadow: 0 3px 0 rgb(var(--c-d98aa0)), 0 6px 14px rgb(var(--c-e8a0b4)/0.4); }
         .stk-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; margin-bottom: 18px; padding: 6px 2px 0; }
-        .stk-crate { position: relative; flex: var(--n, 1) 1 auto; min-width: 250px; padding: 14px 20px 18px; border-radius: 22px; background: radial-gradient(circle, color-mix(in srgb, var(--ac) 45%, transparent) 1.4px, transparent 2px) 0 0 / 18px 18px, var(--pp); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--ac), 0 10px 22px -12px color-mix(in srgb, var(--fg) 70%, transparent); outline: 2px dashed color-mix(in srgb, var(--ac) 90%, #fff); outline-offset: -9px; }
-        .stk-last .stk-crate { flex-grow: 0; }
+        .stk-crate { position: relative; flex: none; width: var(--w, auto); max-width: 100%; min-width: 250px; padding: 14px 20px 18px; border-radius: 22px; background: radial-gradient(circle, color-mix(in srgb, var(--ac) 45%, transparent) 1.4px, transparent 2px) 0 0 / 18px 18px, var(--pp); border: 2px solid #fff; box-shadow: 0 0 0 2px var(--ac), 0 10px 22px -12px color-mix(in srgb, var(--fg) 70%, transparent); outline: 2px dashed color-mix(in srgb, var(--ac) 90%, #fff); outline-offset: -9px; }
         .stk-crate::before { content: ''; position: absolute; top: -9px; left: 26px; width: 64px; height: 18px; transform: rotate(var(--tilt)); background: repeating-linear-gradient(45deg, color-mix(in srgb, var(--ac) 90%, transparent) 0 6px, color-mix(in srgb, var(--ac) 55%, transparent) 6px 12px); border-left: 2px dotted rgba(255,255,255,.7); border-right: 2px dotted rgba(255,255,255,.7); opacity: .95; }
         .stk-hd { position: relative; display: flex; align-items: center; gap: 11px; margin-bottom: 14px; padding-bottom: 11px; border-bottom: 2px dotted color-mix(in srgb, var(--ac) 85%, transparent); }
         .stk-bk { flex: none; width: 34px; height: 50px; border: 0; padding: 0; border-radius: 3px 6px 6px 3px; background-size: cover; background-position: center; background-color: var(--ac); box-shadow: inset 3px 0 3px -1px rgba(0,0,0,.2), 0 3px 8px rgba(0,0,0,.2); cursor: pointer; transition: transform .25s cubic-bezier(.3,1.5,.5,1); }
@@ -420,6 +419,7 @@ html[data-theme=autumn]{--c-0f082d:0 16 43;--c-1b103a:0 23 64;--c-1f4463:3 74 85
         .stk-ht b { display: block; font: 800 14px 'Playfair Display', serif; color: rgb(var(--c-3e4a3d)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
         .stk-ht b:hover { text-decoration: underline; text-decoration-style: dotted; }
         .stk-ht i { display: block; font: 600 10.5px Montserrat, sans-serif; font-style: normal; color: rgb(var(--c-6b705c)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .stk-crate.stk-solo { min-width: 0; } .stk-solo .stk-n { display: none; }
         .stk-n { flex: none; font: 800 10px Montserrat, sans-serif; color: var(--fg); background: #fff; border: 1.5px solid var(--ac); border-radius: 99px; padding: 3px 10px; }
         .stk-songs { display: flex; flex-wrap: wrap; gap: 14px 18px; }
         .stk-song { width: 138px; flex: none; }
@@ -446,7 +446,7 @@ html[data-theme=autumn]{--c-0f082d:0 16 43;--c-1b103a:0 23 64;--c-1f4463:3 74 85
         .stk-empty-rec { width: 70px; height: 70px; margin: 0 auto 10px; border-radius: 50%; background: radial-gradient(circle, #f4b6c2 0 18%, #111 19% 21%, transparent 22%), repeating-radial-gradient(circle, #1a1718 0 2px, #2e2a2c 2px 3px); animation: vinyl-spin 6s linear infinite; }
         .stk-empty b { display: block; font: 800 14px 'Playfair Display', serif; color: rgb(var(--c-3e4a3d)); }
         .stk-empty p { margin: 4px 0 0; font-size: 11.5px; color: rgb(var(--c-6b705c)); }
-        @media (max-width: 520px) { .stk-crate { min-width: 0; flex-basis: 100%; padding: 14px 14px 16px; } .stk-songs { gap: 14px 12px; justify-content: center; }
+        @media (max-width: 520px) { .stk-crate { min-width: 0; width: 100%; padding: 14px 14px 16px; } .stk-songs { gap: 14px 12px; justify-content: center; }
             .stk-song { width: 108px; } .stk-sleeve, .stk-art { width: 86px; height: 86px; } .stk-disc { width: 74px; height: 74px; left: 22px; top: 6px; } .stk-song:hover .stk-disc { transform: translateX(14px); } .stk-song.playing .stk-disc { transform: translateX(18px); } }
         @media (prefers-reduced-motion: reduce) { .stk-disc, .stk-empty-rec { animation: none !important; } }
 
@@ -6651,9 +6651,10 @@ function renderSoundtrack() {
     const groups = books.map(b => ({ b, songs: b.songs || (b.song ? [b.song] : []) })).filter(g => g.songs.length);
     const total = groups.reduce((t, g) => t + g.songs.length, 0), playable = groups.reduce((t, g) => t + g.songs.filter(x => x.preview).length, 0);
     $v('sound-count').innerHTML = total ? `<span>🎵 <b>${total}</b> song${total === 1 ? '' : 's'}</span><span>📚 <b>${groups.length}</b> book${groups.length === 1 ? '' : 's'}</span>${playable ? `<span>▶ <b>${playable}</b> with a preview</span>` : ''}` : '';
-    const host = $v('soundtrack-content'), TILE = 138, SGAP = 18, BGAP = 16, PAD = 40, LOOK = 8;
+    const host = $v('soundtrack-content'), TILE = 138, SGAP = 18, BGAP = 16, PAD = 44, LOOK = 8;   // PAD = side padding + border
     const avail = Math.max(300, (host.clientWidth || 640) - 8 - 6);
-    const wOf = g => Math.max(250, g.songs.length * TILE + (g.songs.length - 1) * SGAP + PAD);
+    const perLine = Math.max(1, Math.floor((avail - PAD + SGAP) / (TILE + SGAP)));
+    const wOf = g => { const k = Math.min(g.songs.length, perLine); return Math.max(k === 1 ? 210 : 250, k * TILE + (k - 1) * SGAP + PAD); };   // hugs its songs (a lone song needs no track-count pill, so it can be slimmer)
     const rows = [], rest = groups.slice();
     while (rest.length) {   // pack crates by the width actually available; a later small one may fill a gap
         const first = rest.shift(), row = [first]; let used = wOf(first);
@@ -6676,7 +6677,7 @@ function renderSoundtrack() {
     };
     let gi = 0;
     const crate = g => { const p = PAL[gi++ % PAL.length], n = g.songs.length;
-        return `<section class="stk-crate" style="--n:${n};--pp:${p[0]};--ac:${p[1]};--fg:${p[2]};--tilt:${[-1.4, 1.1, -.8, 1.5, -1.1, .7][gi % 6]}deg">
+        return `<section class="stk-crate${n === 1 ? ' stk-solo' : ''}" style="--w:${wOf(g)}px;--pp:${p[0]};--ac:${p[1]};--fg:${p[2]};--tilt:${[-1.4, 1.1, -.8, 1.5, -1.1, .7][gi % 6]}deg">
             <header class="stk-hd"><button type="button" class="stk-bk" style="${cv(g.b)}" onclick="openBookPage(${bookRef(g.b)})" title="Open the book"></button>
                 <div class="stk-ht"><small>soundtrack for</small><b onclick="openBookPage(${bookRef(g.b)})">${esc(g.b.title)}</b>${authorsOf(g.b).length ? `<i>by ${authorLinks(g.b)}</i>` : ''}</div>
                 <span class="stk-n">${n} track${n === 1 ? '' : 's'}</span></header>
