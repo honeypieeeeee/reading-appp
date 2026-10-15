@@ -14967,5 +14967,180 @@ p.wpx-title{display:flex!important;align-items:center;gap:12px;margin:0 0 12px!i
 })();
 </script>
 
+<style id="lib-redesign-css">
+/* ======================================================================
+   Library tab redesign, matching the Finished tab: hero with an "Up next"
+   mini shelf, pill search + segmented filter, pink panels and cards,
+   partly filled stars for rated books, and pink shelf planks in Covers.
+   ====================================================================== */
+@keyframes lbxbob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-3px) rotate(5deg)}}
+
+/* ---- hero ---- */
+#tab-content-lib .lb-hero{flex:none;gap:16px;padding:14px 16px;margin:2px 0 12px;border-radius:22px;border:2px solid rgb(var(--c-f4c9d2));box-shadow:0 10px 24px -16px rgb(var(--c-a8506a)/.5),0 0 0 5px rgb(var(--c-f4c9d2)/.2)}
+#tab-content-lib .lb-hero-em{width:50px;height:50px;font-size:25px;box-shadow:0 0 0 2px rgb(var(--c-f0c9d4)),0 5px 12px -4px rgb(var(--c-a8506a)/.45)}
+#tab-content-lib .lb-hero-em>span{display:inline-block;animation:lbxbob 2.8s ease-in-out infinite}
+#tab-content-lib .lb-hero-t{flex:1}
+#tab-content-lib .lb-hero-t b{font-size:19px}
+#tab-content-lib .lb-hero .lb-stats{margin:8px 0 0}
+#tab-content-lib .lb-hero .lb-st{padding:3px 11px;font-size:10px;background:#fff}
+#tab-content-lib .lb-hero .lb-st.g{background:#fff}
+#tab-content-lib .lb-hero .lb-prog{height:9px;margin:9px 0 0;max-width:420px}
+.lbx-cap{display:block;margin-top:4px;font:800 9px Montserrat,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:rgb(var(--c-a88a96))}
+/* "Up next" mini shelf, same as the Finished tab's Top shelf */
+.lbx-top{flex:none;align-self:flex-end;display:flex;flex-direction:column;align-items:center;margin:20px 4px -2px 0}
+.lbx-top[hidden]{display:none}
+.lbx-row{display:flex;align-items:flex-end;gap:5px;padding:0 10px}
+.lbx-sb{position:relative;width:34px;height:51px;flex:none;border:0;padding:0;border-radius:2px 5px 5px 2px;cursor:pointer;background-size:cover;background-position:center;box-shadow:inset 3px 0 0 rgba(0,0,0,.12),0 3px 6px -2px rgb(var(--c-3e4a3d)/.45);transition:transform .2s cubic-bezier(.3,1.5,.5,1)}
+.lbx-sb:nth-child(2n){height:47px}.lbx-sb:nth-child(3n){height:54px}
+.lbx-sb:hover{transform:translateY(-6px) rotate(-3deg)}
+.lbx-sb:first-child::before{content:'🎀';position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:12px}
+.lbx-shelf{display:block;align-self:stretch;height:9px;border-radius:3px;background:linear-gradient(rgb(var(--c-f4c9d2)) 0 3px,rgb(var(--c-e8b4c2)) 3px);box-shadow:0 5px 8px -4px rgb(var(--c-a8506a)/.55)}
+.lbx-top small{margin-top:5px;font:800 9px Montserrat,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:rgb(var(--c-a8506a))}
+
+/* ---- search + All / In plan / Library only ---- */
+#tab-content-lib .lb-bar{flex:none}
+#lb-q{height:38px;padding:0 16px 0 38px!important;border:2px solid rgb(var(--c-f0d0d8))!important;border-radius:99px!important;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23d98aa0' stroke-width='2.6' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 14px 50%!important;font:600 13px Montserrat,sans-serif!important;color:rgb(var(--c-3e4a3d));transition:border-color .15s,box-shadow .15s}
+#lb-q::placeholder{color:rgb(var(--c-a88a96));font-style:italic;font-weight:500}
+#lb-q:focus{border-color:rgb(var(--c-e8a0b4))!important;box-shadow:0 0 0 4px rgb(var(--c-f4c9d2)/.35)}
+.lbx-seg{display:inline-flex;gap:2px;padding:3px;border-radius:99px;background:#fff;border:2px solid rgb(var(--c-f0d0d8))}
+.lbx-seg>.lb-pill{padding:6px 13px;border:0!important;background:transparent;color:rgb(var(--c-6b705c));font-size:11px}
+.lbx-seg>.lb-pill:hover{transform:none;background:#fdeef0;color:rgb(var(--c-a8506a))}
+.lbx-seg>.lb-pill.on{background:linear-gradient(135deg,rgb(var(--c-e8a0b4)),rgb(var(--c-d98aa0)));color:#fff;text-shadow:0 1px 1px rgb(var(--c-a8506a)/.45);box-shadow:0 4px 10px -5px rgb(var(--c-a8506a)/.55)}
+.lbx-seg>.lb-pill small{opacity:.75}
+
+/* ---- every other pill button in the tab ---- */
+#tab-content-lib .lb-pill:not([data-f]){height:34px;padding:0 14px;border:2px solid rgb(var(--c-f0d0d8));color:rgb(var(--c-a8506a));font-size:11px;transition:transform .15s,box-shadow .15s,border-color .15s}
+#tab-content-lib .lb-pill:not([data-f]):not(:disabled):hover{border-color:rgb(var(--c-e8a0b4));box-shadow:0 6px 12px -6px rgb(var(--c-a8506a)/.5)}
+#lb-ftoggle[aria-expanded="true"]{background:linear-gradient(135deg,#fdeef0,rgb(var(--c-eef2e2)));border-color:rgb(var(--c-e8a0b4))!important}
+#lb-farrow{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;margin-left:2px;border-radius:50%;background:#fdeef0;font-size:8px}
+#lb-fcount:not(:empty){padding:2px 8px;border-radius:99px;background:linear-gradient(90deg,rgb(var(--c-f7b6cc)),rgb(var(--c-e8a0b4)));color:#fff!important;font-size:9.5px!important}
+#tab-content-lib .vw-seg{border-width:2px;border-color:rgb(var(--c-f0d0d8));padding:3px}
+#tab-content-lib .vw-seg button{padding:4px 11px;font-size:10.5px}
+#tab-content-lib .lb-pill.lb-go{background:linear-gradient(90deg,rgb(var(--c-b5c78a)),rgb(var(--c-8a9a5b)));color:#fff;border-color:transparent}
+
+/* ---- filters & sort panel ---- */
+#lb-filters{flex:none;padding:12px 12px 4px;margin:0 0 12px;border-radius:22px;background:#fffdfb;border:2px solid rgb(var(--c-f0dcdc));box-shadow:0 8px 18px -16px rgb(var(--c-a8506a)/.6)}
+#lb-filters .cz-btn{height:34px;padding:0 14px!important;border:2px solid rgb(var(--c-f0d0d8))!important;border-radius:99px!important;background:#fff!important;font:700 11.5px Montserrat,sans-serif!important;color:rgb(var(--c-3e4a3d));transition:border-color .15s,box-shadow .15s}
+#lb-filters .cz-btn:hover,#lb-filters .cz-btn[aria-expanded="true"]{border-color:rgb(var(--c-e8a0b4))!important;box-shadow:0 0 0 4px rgb(var(--c-f4c9d2)/.3)}
+#lb-filters .cz-btn .cz-chev{color:rgb(var(--c-d98aa0))}
+
+/* ---- "6 of 15 programmed" bar ---- */
+#lb-bulk{padding:7px 8px 7px 14px;margin-bottom:10px;border-radius:99px;background:linear-gradient(135deg,#fff4f6,rgb(var(--c-eef4dd)));border:2px dashed rgb(var(--c-e8b4c2))}
+#lb-bulk:has(.lb-selbar){border-radius:20px;padding:10px 12px}
+#lb-bulk .lb-sum{font:700 11px Montserrat,sans-serif;color:rgb(var(--c-6b705c))}
+#lb-bulk .lb-sum b{color:rgb(var(--c-a8506a))}
+
+/* ---- pager ---- */
+#tab-content-lib .lb-pager{flex:none}
+#tab-content-lib .lb-pager .lb-pill{height:30px;padding:0 13px;font-size:10.5px}
+#tab-content-lib .lb-pager .cz-btn{padding:4px 12px!important;border:2px solid rgb(var(--c-f0d0d8))!important;border-radius:99px!important;background:#fff!important;color:rgb(var(--c-a8506a))!important;font:800 10.5px Montserrat,sans-serif!important}
+#tab-content-lib .lb-pgm{color:rgb(var(--c-a8506a))}
+
+/* ---- the "In plan" / "Program" toggle on each book ---- */
+#lib-content .lb-tg{border:2px solid rgb(var(--c-f0d0d8));background:#fff;color:rgb(var(--c-a8506a));box-shadow:none;border-radius:99px}
+#lib-content .lb-tg:hover{border-color:rgb(var(--c-e8a0b4));box-shadow:0 5px 10px -6px rgb(var(--c-a8506a)/.6)}
+#lib-content .lb-tg.on{border-color:transparent;background:linear-gradient(90deg,rgb(var(--c-b5c78a)),rgb(var(--c-8a9a5b)));color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.1);box-shadow:0 5px 10px -6px rgb(var(--c-5f6e3a)/.7)}
+
+/* ---- list rows and grid cards ---- */
+#lib-content .lb-row,#lib-content .lb-card{border:2px solid rgb(var(--c-f0dcdc));border-radius:20px;background:linear-gradient(135deg,#fff,#fffafa 60%,#fff6f8);box-shadow:0 8px 18px -14px rgb(var(--c-a8506a)/.55)}
+#lib-content .lb-row{padding:10px 12px;margin-bottom:10px}
+#lib-content .lb-row:hover,#lib-content .lb-card:hover{border-color:rgb(var(--c-e8b4c2));box-shadow:0 10px 20px -12px rgb(var(--c-a8506a)/.55)}
+#lib-content .lb-row.prog,#lib-content .lb-card.prog{border-color:rgb(var(--c-cfdbb0));background:linear-gradient(135deg,#fff,#fbfcf6 60%,rgb(var(--c-eef4dd)))}
+#lib-content .lb-row .lb-sw{width:38px;height:56px}
+#lib-content .lb-row .lb-sw,#lib-content .lb-card .lb-sw{border-radius:3px 7px 7px 3px;box-shadow:inset 3px 0 0 rgba(0,0,0,.12),0 4px 10px -3px rgb(var(--c-3e4a3d)/.4)}
+#lib-content .lb-t b{font:800 15px 'Playfair Display',serif;color:rgb(var(--c-a8506a))}
+#lib-content .lb-card .lb-t b{font-size:16px;line-height:1.25}
+.lbx-r{display:flex;align-items:center;margin-top:3px}
+.lbx-r .fsx-num{font-size:11px;white-space:nowrap}
+.lbx-r .fsx-stars{flex:none}
+#tab-content-lib .lbx-r .fsx-num small{display:inline;overflow:visible}
+
+/* ---- Covers view = the same pink bookshelf as Finished ---- */
+#lib-content[data-view=covers]{row-gap:26px;padding:8px 6px 4px}
+#lib-content .lb-tile .lb-sw{border-radius:2px 6px 6px 2px;box-shadow:inset 4px 0 0 rgba(0,0,0,.13),0 -1px 0 rgba(255,255,255,.4) inset;transform-origin:bottom center;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+#lib-content .lb-tile:hover .lb-sw{transform:translateY(-8px) rotate(-2deg)}
+#lib-content .lb-plank{height:9px;margin:0 -8px 8px;border-radius:0;background:linear-gradient(rgb(var(--c-f4c9d2)) 0 3px,rgb(var(--c-e8b4c2)) 3px);box-shadow:0 5px 8px -4px rgb(var(--c-a8506a)/.55)}
+#lib-content .lb-tn{font:800 12px/1.25 'Playfair Display',serif;color:rgb(var(--c-a8506a))}
+#lib-content .lb-tile .lbx-r{justify-content:center;flex-wrap:wrap;margin:0}
+#lib-content .lb-tile .lbx-r .fsx-st{--s:11px}
+#lib-content .lb-tile .lbx-r .fsx-num{font-size:10px;margin-left:4px}
+#lib-content .lb-tile .lb-tg{padding:4px 6px;font-size:9.5px}
+#lib-content .lb-tile.prog .lb-sw::after{border:2px solid rgb(var(--c-f0d0d8))}
+#lib-content .lb-empty{padding:26px 16px;border-radius:22px;border:2px dashed rgb(var(--c-e8b4c2));background:#fffafa;color:rgb(var(--c-a8506a))}
+
+@media(max-width:640px){
+ #tab-content-lib .lb-hero{flex-direction:column;align-items:stretch;gap:6px;padding:12px}
+ #tab-content-lib .lb-hero-em{width:42px;height:42px;font-size:21px}
+ #tab-content-lib .lb-hero-t b{font-size:17px}
+ .lbx-top{align-self:center;margin:14px 0 0}
+ #lb-q{flex-basis:100%}.lbx-seg{width:100%}.lbx-seg>.lb-pill{flex:1;padding:6px 4px}
+ #lb-bulk{border-radius:20px}
+ #tab-content-lib .lb-pager{row-gap:8px}
+ #tab-content-lib .lb-pager>[data-pg="-1"]{order:1}#tab-content-lib .lb-pager>[data-pg="1"]{order:2}
+ #tab-content-lib .lb-pager>.lb-pgm{order:3;flex:1 1 100%;justify-content:center}
+ #lib-content .lb-row{flex-wrap:wrap}#lib-content .lb-row .lb-t{flex:1 1 60%}
+ #lib-content .lb-row .lb-tg{flex:1 1 100%;margin-top:2px}
+ #lib-content[data-view=covers]{padding:8px 2px 4px}
+}
+@media (prefers-reduced-motion:reduce){#tab-content-lib .lb-hero-em>span{animation:none}}
+</style>
+<script type="text/plain" data-app id="lib-redesign-js">
+(function () {
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const root = $('tab-content-lib'), box = $('lib-content'), hero = root && root.querySelector('.lb-hero');
+    if (!root || !box || !hero) return;
+    const E = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+    // ---- hero: bobbing badge, stats + progress inside it, "Up next" shelf on the right ----
+    const em = hero.querySelector('.lb-hero-em'); if (em) em.innerHTML = '<span>📚</span>';
+    const tx = hero.querySelector('.lb-hero-t');
+    const t = tx && tx.querySelector('b'); if (t) t.textContent = 'Your Library';
+    const stats = $('lb-stats'), prog = $('lb-prog');
+    if (tx && stats) tx.appendChild(stats);
+    if (tx && prog) { tx.appendChild(prog); prog.insertAdjacentHTML('afterend', '<span class="lbx-cap" id="lbx-cap"></span>'); }
+    hero.insertAdjacentHTML('beforeend', '<div class="lbx-top" id="lbx-top" hidden></div>');
+
+    // ---- search row: segmented All / In plan / Library only ----
+    const q = $('lb-q');
+    if (q) {
+        q.placeholder = 'Search your library…';
+        const pills = [...q.parentNode.querySelectorAll(':scope > .lb-pill[data-f]')];
+        if (pills.length) { const seg = document.createElement('div'); seg.className = 'lbx-seg'; seg.setAttribute('role', 'group'); seg.setAttribute('aria-label', 'Show'); q.after(seg); pills.forEach(p => seg.appendChild(p)); }
+    }
+
+    const cov = b => b.cover ? `background-image:url(${E(b.cover)});background-color:${E(b.coverColor || '')}` : `background:${E(b.coverColor || 'rgb(var(--c-e8c4c4))')}`;
+    function heroPaint() {
+        const all = books.filter(b => !b.read && b.status !== 'abandoned');
+        let next = []; try { next = all.filter(isProg).slice(0, 6); } catch (e) {}
+        const top = $('lbx-top');
+        if (top) {
+            top.innerHTML = next.length ? `<div class="lbx-row">${next.map(b => `<button type="button" class="lbx-sb" style="${cov(b)}" data-open="${E(b.id)}" title="${E(b.title)}" aria-label="Open ${E(b.title)}"></button>`).join('')}</div><i class="lbx-shelf"></i><small>🌷 Up next</small>` : '';
+            top.hidden = !next.length;
+        }
+        const cap = $('lbx-cap'); if (cap && prog) cap.textContent = prog.title || '';
+    }
+
+    // ---- stars for books that already have a rating (rereads, imports) ----
+    function decorate() {
+        if (typeof window.fsxStars !== 'function') return;
+        box.querySelectorAll('[data-open]').forEach(el => {
+            const card = el.closest('.lb-row,.lb-card,.lb-tile'); if (!card || card.querySelector('.lbx-r')) return;
+            const b = books.find(x => String(x.id) === el.dataset.open); if (!b || !(b.rating > 0)) return;
+            const r = typeof window.fsxExact === 'function' ? window.fsxExact(b) : +b.rating;
+            const html = `<div class="lbx-r">${window.fsxStars(r, 'sm', true)}</div>`;
+            const after = card.querySelector('.lb-by') || card.querySelector('.lb-tn') || card.querySelector('.lb-t b');
+            if (after) after.insertAdjacentHTML('afterend', html);
+        });
+    }
+
+    const paint = () => { try { decorate(); heroPaint(); } catch (e) {} };
+    // the Library draws itself from its own render(); watch its output instead of wrapping it
+    new MutationObserver(paint).observe(box, { childList: true });
+    if (stats) new MutationObserver(paint).observe(stats, { childList: true });
+    paint();
+})();
+</script>
+
 </body>
 </html>
