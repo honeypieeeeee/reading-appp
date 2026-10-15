@@ -14762,5 +14762,210 @@ p.wpx-title{display:flex!important;align-items:center;gap:12px;margin:0 0 12px!i
 })();
 </script>
 
+<style id="fin-redesign-css">
+/* ======================================================================
+   Finished tab redesign: hero with a "top shelf", pill toolbar, pink cards,
+   partly filled stars (3.84 = 3 full stars + 84% of the 4th) and the Covers
+   view turned into a real bookshelf with planks under every row.
+   ====================================================================== */
+@keyframes fsxbob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-3px) rotate(5deg)}}
+@keyframes fsxshine{0%{transform:translateX(-120%) skewX(-20deg)}60%,100%{transform:translateX(320%) skewX(-20deg)}}
+
+/* ---- partly filled stars ---- */
+.fsx-stars{display:inline-flex;align-items:center;gap:2px;vertical-align:middle;line-height:1}
+.fsx-st{--s:15px;position:relative;display:inline-block;width:var(--s);height:var(--s);flex:none;background:rgb(var(--c-f0dcdc));-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1.8l2.95 6.6 7.2.7-5.4 4.8 1.55 7.1L12 17.4 5.7 21l1.55-7.1-5.4-4.8 7.2-.7z' stroke='black' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1.8l2.95 6.6 7.2.7-5.4 4.8 1.55 7.1L12 17.4 5.7 21l1.55-7.1-5.4-4.8 7.2-.7z' stroke='black' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+.fsx-st>i{position:absolute;inset:0 auto 0 0;background:linear-gradient(160deg,#ffd76a,#f5a83a)}
+.fsx-stars.sm .fsx-st{--s:11px}.fsx-stars.lg .fsx-st{--s:19px}
+.fsx-num{margin-left:6px;font:800 12px Montserrat,sans-serif;color:rgb(var(--c-a8506a))}
+.fsx-num small{font-weight:700;font-size:10px;color:rgb(var(--c-a88a96))}
+.fsx-none{font:italic 600 11px 'Playfair Display',serif;color:rgb(var(--c-a88a96))}
+
+/* ---- hero ---- */
+.fsx-hero{position:relative;overflow:hidden;flex:none;display:flex;align-items:center;gap:16px;padding:14px 16px;margin:2px 0 12px;border-radius:22px;background:linear-gradient(135deg,rgb(var(--c-fde3e9)),rgb(var(--c-f7ecdc)) 55%,rgb(var(--c-dfe9c6)));border:2px solid rgb(var(--c-f4c9d2));box-shadow:0 10px 24px -16px rgb(var(--c-a8506a)/.5),0 0 0 5px rgb(var(--c-f4c9d2)/.2)}
+.fsx-main{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
+.fsx-badge{flex:none;width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:25px;box-shadow:0 0 0 2px rgb(var(--c-f0c9d4)),0 5px 12px -4px rgb(var(--c-a8506a)/.45)}
+.fsx-badge>span{display:inline-block;animation:fsxbob 2.8s ease-in-out infinite}
+.fsx-tx{flex:1;min-width:0}
+.fsx-tx>b{display:block;font:800 19px/1.1 'Playfair Display',serif;color:rgb(var(--c-a8506a))}
+.fsx-line{margin-top:3px;font:italic 600 11.5px/1.45 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+.fsx-line>span{font-style:normal}
+.fsx-line #tab-count-reviews{font-weight:800;color:rgb(var(--c-a8506a))!important}
+.fsx-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.fsx-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:99px;background:#fff;border:1.5px solid rgb(var(--c-f0d0d8));font:800 10px Montserrat,sans-serif;color:rgb(var(--c-a8506a));white-space:nowrap}
+.fsx-chip.g{border-color:rgb(var(--c-cfdbb0));color:rgb(var(--c-4f5d2c))}
+.fsx-chip .fsx-num{margin-left:2px;font-size:10px}
+.fsx-hero .fsx-add{position:absolute;top:10px;right:12px;z-index:2;overflow:hidden;padding:5px 13px!important;border-radius:99px!important;background:linear-gradient(90deg,rgb(var(--c-b5c78a)),rgb(var(--c-8a9a5b)))!important;font:800 10.5px Montserrat,sans-serif!important;text-shadow:0 1px 0 rgba(0,0,0,.1);box-shadow:0 6px 12px -6px rgb(var(--c-5f6e3a)/.6)!important;transition:transform .15s}
+.fsx-hero .fsx-add:hover{transform:translateY(-1px) scale(1.03)}
+.fsx-hero .fsx-add::after{content:'';position:absolute;top:0;bottom:0;left:0;width:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:fsxshine 3.6s ease-in-out infinite}
+
+/* top shelf inside the hero */
+.fsx-top{flex:none;align-self:flex-end;display:flex;flex-direction:column;align-items:center;margin:26px 4px -2px 0}
+.fsx-row{display:flex;align-items:flex-end;gap:5px;padding:0 10px}
+.fsx-sb{position:relative;width:34px;height:51px;flex:none;border:0;padding:0;border-radius:2px 5px 5px 2px;cursor:pointer;box-shadow:inset 3px 0 0 rgba(0,0,0,.12),0 3px 6px -2px rgb(var(--c-3e4a3d)/.45);transition:transform .2s cubic-bezier(.3,1.5,.5,1)}
+.fsx-sb:nth-child(2n){height:47px}.fsx-sb:nth-child(3n){height:54px}
+.fsx-sb:hover{transform:translateY(-6px) rotate(-3deg)}
+.fsx-sb:first-child::before{content:'👑';position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:12px}
+.fsx-plank,.fsx-shelf{display:block;height:9px;border-radius:3px;background:linear-gradient(rgb(var(--c-f4c9d2)) 0 3px,rgb(var(--c-e8b4c2)) 3px);box-shadow:0 5px 8px -4px rgb(var(--c-a8506a)/.55)}
+.fsx-top .fsx-shelf{align-self:stretch}
+.fsx-top small{margin-top:5px;font:800 9px Montserrat,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:rgb(var(--c-a8506a))}
+
+/* ---- toolbar: search + sort ---- */
+.fsx-bar{flex:none;align-items:center!important;gap:8px;margin-bottom:10px!important;flex-wrap:wrap}
+.fsx-bar>h3{display:none}
+.fsx-bar>#review-search{flex:1 1 260px;width:auto!important;margin:0!important;height:38px;padding:0 16px 0 38px!important;border:2px solid rgb(var(--c-f0d0d8))!important;border-radius:99px!important;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23d98aa0' stroke-width='2.6' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 14px 50%!important;font:600 13px Montserrat,sans-serif;color:rgb(var(--c-3e4a3d));transition:border-color .15s,box-shadow .15s}
+.fsx-bar>#review-search::placeholder{color:rgb(var(--c-a88a96));font-style:italic;font-weight:500}
+.fsx-bar>#review-search:focus{border-color:rgb(var(--c-e8a0b4))!important;box-shadow:0 0 0 4px rgb(var(--c-f4c9d2)/.35)}
+.fsx-sort{gap:6px!important;flex-wrap:nowrap!important}
+.fsx-sort>button,.fsx-sort>.cz-btn{height:38px;display:inline-flex;align-items:center;gap:6px;padding:0 14px!important;border:2px solid rgb(var(--c-f0d0d8))!important;border-radius:99px!important;background:#fff!important;color:rgb(var(--c-a8506a))!important;font:800 11px Montserrat,sans-serif!important;white-space:nowrap;transition:transform .15s,box-shadow .15s,border-color .15s}
+.fsx-sort>button:hover,.fsx-sort>.cz-btn:hover{transform:translateY(-1px);border-color:rgb(var(--c-e8a0b4))!important;box-shadow:0 6px 12px -6px rgb(var(--c-a8506a)/.5)}
+.fsx-sort>.cz-btn .cz-chev{color:rgb(var(--c-d98aa0))}
+#tab-content-reviews .vw-row{flex:none}
+#tab-content-reviews .vw-seg{border-width:2px;border-color:rgb(var(--c-f0d0d8));padding:3px}
+#tab-content-reviews .vw-seg button{padding:4px 11px;font-size:10.5px}
+
+/* ---- cards (list view, and opened cards in the other views) ---- */
+#reviews-list{padding-top:2px}
+#reviews-list:not([data-view=covers])>.fsx-card,#reviews-list>.fsx-card.vw-open{border-radius:20px!important;border:2px solid rgb(var(--c-f0dcdc))!important;background:linear-gradient(135deg,#fff,#fffafa 60%,#fff6f8)!important;box-shadow:0 8px 18px -14px rgb(var(--c-a8506a)/.55)!important}
+#reviews-list:not([data-view=covers])>.fsx-card:hover,#reviews-list>.fsx-card.vw-open:hover{border-color:rgb(var(--c-e8b4c2))!important}
+#reviews-list:not([data-view=covers])>.fsx-card .book-cover{border-radius:3px 7px 7px 3px;box-shadow:inset 3px 0 0 rgba(0,0,0,.12),0 4px 10px -3px rgb(var(--c-3e4a3d)/.4)}
+#reviews-list>.fsx-card h4{font:800 15px 'Playfair Display',serif!important;color:rgb(var(--c-a8506a))!important}
+#reviews-list>.fsx-card .fsx-r{display:flex;align-items:center;margin-top:4px!important}
+.fsx-meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.fsx-meta span{padding:2px 9px;border-radius:99px;background:#fdeef0;font:700 9.5px Montserrat,sans-serif;color:rgb(var(--c-a8506a));white-space:nowrap}
+.fsx-meta span.g{background:rgb(var(--c-eef2e2));color:rgb(var(--c-4f5d2c))}
+#reviews-list>.fsx-card .rv-actions{gap:6px}
+#reviews-list>.fsx-card .rv-actions>button:first-child{padding:5px 13px!important;border-radius:99px!important;background:linear-gradient(90deg,rgb(var(--c-b5c78a)),rgb(var(--c-8a9a5b)))!important;font-size:10.5px!important;box-shadow:0 5px 10px -6px rgb(var(--c-5f6e3a)/.7)}
+#reviews-list>.fsx-card .rv-tog{padding:5px 13px!important;border-radius:99px!important;background:#fff!important;border:2px solid rgb(var(--c-f0d0d8));color:rgb(var(--c-a8506a))!important;font-size:10.5px!important}
+#reviews-list>.fsx-card .rv-tog.on{background:#fdeef0!important;border-color:rgb(var(--c-e8a0b4))}
+#reviews-list>.fsx-card .rv-menu button{border-radius:99px!important;background:#fff!important;border:1.5px solid rgb(var(--c-f0d0d8));padding:4px 10px!important}
+#reviews-list>.fsx-card .rv-menu button:hover{background:#fdeef0!important}
+#reviews-list>p{padding:30px 16px;border-radius:22px;border:2px dashed rgb(var(--c-e8b4c2));background:#fffafa;font-family:'Playfair Display',serif;font-style:italic}
+.fsx-plank{display:none}
+
+/* ---- Covers view = a real bookshelf ---- */
+#reviews-list[data-view=covers]{gap:26px 14px!important;padding:6px 10px 4px}
+#reviews-list[data-view=covers]>div:not(.vw-open) .book-cover{margin:0!important;border-radius:2px 6px 6px 2px!important;box-shadow:inset 4px 0 0 rgba(0,0,0,.13),0 -1px 0 rgba(255,255,255,.4) inset!important;transform-origin:bottom center;transition:transform .25s cubic-bezier(.3,1.5,.5,1)!important}
+#reviews-list[data-view=covers]>div:not(.vw-open):hover .book-cover{transform:translateY(-8px) rotate(-2deg)!important}
+#reviews-list[data-view=covers]>div:not(.vw-open) .fsx-plank{display:block;width:calc(100% + 14px);margin:0 -7px 8px;border-radius:0}
+#reviews-list[data-view=covers]>div:not(.vw-open) h4{color:rgb(var(--c-a8506a))!important}
+#reviews-list[data-view=covers]>div:not(.vw-open) .fsx-r{justify-content:center;flex-wrap:wrap;row-gap:2px}
+#reviews-list[data-view=covers]>div:not(.vw-open) .fsx-num{font-size:10px;margin-left:4px}
+#reviews-list[data-view=covers]>div:not(.vw-open) .fsx-meta{display:none}
+
+/* ---- Grid view ---- */
+#reviews-list[data-view=grid]>.fsx-card .fsx-r{margin-top:4px!important}
+#reviews-list[data-view=grid]>.fsx-card .rv-actions>button:first-child{box-shadow:0 5px 10px -6px rgb(var(--c-5f6e3a)/.7)!important}
+#reviews-list[data-view=grid] .fsx-stars .fsx-st{--s:17px}
+
+/* ---- pager ---- */
+#reviews-pager button{border-radius:99px!important;border:2px solid rgb(var(--c-f0d0d8))!important;background:#fff!important;color:rgb(var(--c-a8506a))!important;font-weight:800!important}
+#reviews-pager button:not(:disabled):hover{background:#fdeef0!important}
+
+@media(max-width:640px){
+ .fsx-hero{flex-direction:column;align-items:stretch;gap:6px;padding:12px}
+ .fsx-hero .fsx-add{position:static;align-self:flex-start;order:3}
+ .fsx-tx>b{font-size:17px}.fsx-badge{width:42px;height:42px;font-size:21px}
+ .fsx-top{align-self:center;margin:16px 0 0}
+ .fsx-bar>#review-search{flex-basis:100%}.fsx-sort{width:100%}.fsx-sort>button,.fsx-sort>.cz-btn{flex:1;justify-content:center}
+ #reviews-list[data-view=covers]{gap:22px 10px!important;padding:6px 6px 4px}
+ #reviews-list[data-view=covers]>div:not(.vw-open) .fsx-plank{width:calc(100% + 10px);margin:0 -5px 6px}
+ #reviews-list:not([data-view=covers])>.fsx-card>:first-child,#reviews-list>.fsx-card.vw-open>:first-child{flex-wrap:wrap}
+ #reviews-list:not([data-view=covers])>.fsx-card .rv-actions,#reviews-list>.fsx-card.vw-open .rv-actions{width:100%;max-width:none;justify-content:flex-start;padding-top:8px;border-top:2px dotted rgb(var(--c-f0dcdc))}
+ #reviews-list[data-view=covers]>div:not(.vw-open) .fsx-st{--s:10px}
+ #reviews-list[data-view=covers]>div:not(.vw-open) .fsx-stars{gap:1px}
+}
+.fsx-num{white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.fsx-badge>span{animation:none}.fsx-hero .fsx-add::after{display:none}}
+</style>
+<script type="text/plain" data-app id="fin-redesign-js">
+(function () {
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const tab = $('tab-content-reviews'), list = $('reviews-list'), search = $('review-search'), cnt = $('tab-count-reviews');
+    if (!tab || !list || !search || !cnt) return;
+    const E = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+    // exact rating: category scores are saved rounded to 1 decimal, so recompute the true average when we have them
+    function exact(b) {
+        const v = b && b.ratings ? Object.values(b.ratings).filter(n => n > 0) : [];
+        if (v.length && b.rating > 0) return v.reduce((a, n) => a + n, 0) / v.length;
+        return b && b.rating > 0 ? +b.rating : 0;
+    }
+    const show = r => String(Math.round(r * 100) / 100);   // 3.8125 -> "3.81", 4.5 -> "4.5", 5 -> "5"
+    // five stars; star n is filled by (r - n + 1), so 3.84 gives 1, 1, 1, 0.84, 0
+    function stars(r, size, withNum) {
+        const s = [0, 1, 2, 3, 4].map(i => `<i class="fsx-st"><i style="width:${Math.round(Math.max(0, Math.min(1, r - i)) * 100)}%"></i></i>`).join('');
+        return `<span class="fsx-stars${size ? ' ' + size : ''}" role="img" aria-label="${show(r)} out of 5 stars">${s}</span>` + (withNum ? `<span class="fsx-num">${show(r)}<small> / 5</small></span>` : '');
+    }
+    window.fsxStars = stars;   // handy for other tabs later
+    window.fsxExact = exact;
+
+    // ---- toolbar: search + sort live in the old header row ----
+    const head = cnt.closest('.justify-between'), tools = cnt.closest('.flex-wrap');
+    const add = tools && tools.querySelector('button[onclick^="openFinishedBook"]');
+    const countSpan = cnt.parentElement;
+    if (head && tools) {
+        head.classList.add('fsx-bar'); tools.classList.add('fsx-sort');
+        head.insertBefore(search, tools);
+    }
+
+    // ---- hero ----
+    const hero = document.createElement('div'); hero.className = 'fsx-hero'; hero.id = 'fsx-hero';
+    hero.innerHTML = '<div class="fsx-main"><div class="fsx-badge"><span>🏆</span></div><div class="fsx-tx"><b>Your Finished Shelf</b><div class="fsx-line" id="fsx-line"></div><div class="fsx-chips" id="fsx-chips"></div></div></div><div class="fsx-top" id="fsx-top"></div>';
+    tab.insertBefore(hero, head || list);
+    const line = $('fsx-line');
+    if (countSpan) { countSpan.className = ''; countSpan.removeAttribute('style'); line.appendChild(countSpan); }
+    const extra = document.createElement('span'); line.appendChild(extra);
+    if (add) { add.classList.add('fsx-add'); add.textContent = '✨ Add finished book'; hero.appendChild(add); }
+
+    function heroPaint() {
+        const fin = books.filter(b => b.read && b.status !== 'abandoned');
+        const yr = String(new Date().getFullYear()), thisYear = fin.filter(b => (b.finishedAt || '').slice(0, 4) === yr).length;
+        const rated = fin.map(b => [b, exact(b)]).filter(x => x[1] > 0);
+        const avg = rated.length ? rated.reduce((a, x) => a + x[1], 0) / rated.length : 0;
+        const pages = fin.reduce((a, b) => a + (+b.totalPages || 0), 0);
+        const mins = fin.reduce((a, b) => a + (+b.actualMinutes || +b.duration || 0), 0);
+        const favs = fin.filter(b => b.favorite).length;
+        extra.textContent = fin.length ? (thisYear ? ` · ${thisYear} of them this year` : '') + ' ✨' : ' · your first one is waiting 🌱';
+        const c = [];
+        if (avg) c.push(`<span class="fsx-chip" title="Average rating">${stars(avg, 'sm', false)}<span class="fsx-num">${show(avg)}</span> avg</span>`);
+        if (pages) c.push(`<span class="fsx-chip">📖 ${pages.toLocaleString()} pages</span>`);
+        if (mins) c.push(`<span class="fsx-chip g">⏳ ${formatTime(mins)} read</span>`);
+        if (favs) c.push(`<span class="fsx-chip">💖 ${favs} favorite${favs === 1 ? '' : 's'}</span>`);
+        $('fsx-chips').innerHTML = c.join('');
+        const top = rated.sort((a, z) => z[1] - a[1] || String(z[0].finishedAt || '').localeCompare(String(a[0].finishedAt || ''))).slice(0, 6);
+        $('fsx-top').innerHTML = top.length ? `<div class="fsx-row">${top.map(([b, r]) => `<button type="button" class="fsx-sb" style="${coverStyle(b)}" onclick="openBookPage(${bookRef(b)})" title="${E(b.title)} · ${show(r)} ★" aria-label="${E(b.title)}, ${show(r)} stars"></button>`).join('')}</div><i class="fsx-shelf"></i><small>⭐ Top shelf</small>` : '';
+        $('fsx-top').hidden = !top.length;
+    }
+
+    // ---- cards: stars, finished date chip, and a shelf plank for the Covers view ----
+    function decorate() {
+        list.querySelectorAll(':scope > div').forEach(c => {
+            const bt = c.querySelector('button[onclick^="toggleReviewCard("]'), b = bt ? books[bookIxFrom(bt.getAttribute('onclick'))] : null;
+            if (!b) return;
+            c.classList.add('fsx-card');
+            const cover = c.querySelector('.book-cover');
+            if (cover && !(cover.nextElementSibling && cover.nextElementSibling.classList.contains('fsx-plank'))) cover.insertAdjacentHTML('afterend', '<i class="fsx-plank" aria-hidden="true"></i>');
+            const rd = c.querySelector('.text-amber-600');
+            if (rd && !rd.classList.contains('fsx-r')) {
+                const r = exact(b);
+                rd.classList.add('fsx-r');
+                rd.innerHTML = r > 0 ? stars(r, '', true) : '<span class="fsx-none">not rated yet</span>';
+                const m = [];
+                if (b.finishedAt && /^\d{4}-\d{2}-\d{2}/.test(b.finishedAt)) m.push(`<span>🌸 ${E(fmtKey(b.finishedAt.slice(0, 10)))}</span>`);
+                if (b.actualMinutes) m.push(`<span class="g">⏳ ${E(formatTime(b.actualMinutes))}</span>`);
+                if (b.favorite) m.push('<span>💖 favorite</span>');
+                if (m.length) rd.insertAdjacentHTML('afterend', `<div class="fsx-meta">${m.join('')}</div>`);
+            }
+        });
+    }
+
+    const _rr = window.renderReviews;
+    if (typeof _rr === 'function') window.renderReviews = function () { const r = _rr.apply(this, arguments); try { decorate(); heroPaint(); } catch (e) {} return r; };
+    try { decorate(); heroPaint(); } catch (e) {}
+    try { ['books:saved', 'review:saved'].forEach(n => AppEvents.on(n, () => { try { heroPaint(); } catch (e) {} })); } catch (e) {}
+})();
+</script>
+
 </body>
 </html>
