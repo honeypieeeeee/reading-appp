@@ -15142,5 +15142,121 @@ p.wpx-title{display:flex!important;align-items:center;gap:12px;margin:0 0 12px!i
 })();
 </script>
 
+<style id="shelves-css">
+/* ======================================================================
+   Cute pink shelves everywhere: TBR covers view + TBR "Up next" shelf,
+   Favorites planks, and tighter, smaller titles under every shelf
+   (Finished, Library, TBR, Favorites) so fewer of them wrap to 2 lines.
+   ====================================================================== */
+.shx-plank{display:none}
+
+/* ---- TBR: Covers view = the same pink bookshelf ---- */
+#book-list[data-view=covers]{gap:24px 14px!important;padding:6px 10px 4px}
+#book-list[data-view=covers]>[data-bi]:not(.vw-open)>.book-cover{margin:0!important;border-radius:2px 6px 6px 2px;box-shadow:inset 4px 0 0 rgba(0,0,0,.13),0 -1px 0 rgba(255,255,255,.4) inset;transform-origin:bottom center;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+#book-list[data-view=covers]>[data-bi]:not(.vw-open):hover>.book-cover{transform:translateY(-8px) rotate(-2deg)}
+#book-list[data-view=covers]>[data-bi]:not(.vw-open)>.shx-plank{display:block;width:calc(100% + 14px);height:9px;margin:0 -7px 4px;background:linear-gradient(rgb(var(--c-f4c9d2)) 0 3px,rgb(var(--c-e8b4c2)) 3px);box-shadow:0 5px 8px -4px rgb(var(--c-a8506a)/.55)}
+#book-list[data-view=covers]>[data-bi]:not(.vw-open)>.min-w-0>.justify-between.mt-1{display:none}
+#book-list[data-view=covers]>[data-bi]:not(.vw-open) label.bk-title{margin:0 -6px;font:800 11px/1.2 'Playfair Display',serif!important;color:rgb(var(--c-a8506a))!important}
+#book-list[data-view=covers]>[data-bi]:not(.vw-open)>.min-w-0>.h-1\.5{width:64%;height:4px;margin:4px auto 0;background:#fdeef0}
+#book-list[data-view=covers]>[data-bi]:not(.vw-open)>.min-w-0>.h-1\.5>div{background:linear-gradient(90deg,rgb(var(--c-f7b6cc)),rgb(var(--c-e8a0b4)))}
+
+/* ---- TBR hero: "Up next" shelf (same look as Library / Finished) ---- */
+.tbr-hero .shx-top{margin:24px 4px -2px 0}
+.tbr-hero:has(.shx-top:not([hidden])) .bl-exp{position:absolute;top:10px;right:12px;z-index:2}
+
+/* ---- Finished covers: smaller title, right under the plank ---- */
+#reviews-list[data-view=covers]>div:not(.vw-open) .fsx-plank{margin-bottom:3px!important}
+#reviews-list[data-view=covers]>.fsx-card:not(.vw-open) h4{margin:0 -6px!important;font-size:11px!important;line-height:1.2!important}
+#reviews-list[data-view=covers]>div:not(.vw-open) .fsx-r{margin-top:2px!important}
+#reviews-list[data-view=covers]>div:not(.vw-open) .fsx-st{--s:11px}
+#reviews-list[data-view=covers]>div:not(.vw-open) .fsx-stars{gap:1px}
+#reviews-list[data-view=covers]>div:not(.vw-open) .fsx-num{font-size:9.5px}
+
+/* ---- Library covers: same treatment ---- */
+#lib-content .lb-tile{gap:0}
+#lib-content .lb-plank{margin:0 -8px 4px}
+#lib-content .lb-tile .lb-tn{margin:0 -6px;font-size:11px;line-height:1.2}
+#lib-content .lb-tile .lbx-r{margin-top:2px}
+#lib-content .lb-tile .lb-tg{margin-top:5px}
+
+/* ---- Favorites: pink planks, small titles, partly filled stars ---- */
+#favorites-content .shelf-grid{row-gap:24px}
+#favorites-content .shelf-plank{height:9px;margin:0 -10px;border-radius:0;background:linear-gradient(rgb(var(--c-f4c9d2)) 0 3px,rgb(var(--c-e8b4c2)) 3px);box-shadow:0 5px 8px -4px rgb(var(--c-a8506a)/.55)}
+#favorites-content .shelf-plank::after{display:none}
+#favorites-content .shelf-item .text-center{margin:4px -6px 0}
+#favorites-content .shelf-item .bk-title{font:800 11px/1.2 'Playfair Display',serif!important;color:rgb(var(--c-a8506a))!important}
+#favorites-content .shelf-item .text-center>div:nth-child(2){margin-top:1px;font-size:9.5px!important;line-height:1.2}
+#favorites-content .shelf-item .text-amber-600.shx-r{display:flex;justify-content:center;align-items:center;margin-top:2px;padding:0;background:none;border:0}
+#favorites-content .shx-r .fsx-stars{flex:none;gap:1px}
+#favorites-content .shx-r .fsx-st{--s:11px}
+#favorites-content .shx-r .fsx-num{margin-left:4px;font-size:9.5px;white-space:nowrap}
+#favorites-content .shx-r .fsx-num small{display:inline}
+
+/* the little "Up next / Top shelf" captions sit closer to their shelf too */
+.lbx-top small,.fsx-top small{margin-top:3px}
+
+@media(max-width:640px){
+ #book-list[data-view=covers]{gap:20px 10px!important;padding:6px 6px 4px}
+ #book-list[data-view=covers]>[data-bi]:not(.vw-open)>.shx-plank{width:calc(100% + 10px);margin:0 -5px 4px}
+ #book-list[data-view=covers]>[data-bi]:not(.vw-open) label.bk-title,#reviews-list[data-view=covers]>.fsx-card:not(.vw-open) h4,#lib-content .lb-tile .lb-tn,#favorites-content .shelf-item .bk-title{font-size:10px!important}
+ #reviews-list[data-view=covers]>div:not(.vw-open) .fsx-st,#lib-content .lb-tile .lbx-r .fsx-st,#favorites-content .shx-r .fsx-st{--s:9.5px}
+ .tbr-hero .shx-top{display:none}   /* the TBR list has very little height on phones, so keep the hero short */
+}
+@media (prefers-reduced-motion:reduce){#book-list[data-view=covers]>[data-bi]:not(.vw-open):hover>.book-cover{transform:none}}
+</style>
+<script type="text/plain" data-app id="shelves-js">
+(function () {
+    'use strict';
+    const $ = id => document.getElementById(id);
+    const E = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+    const exact = b => typeof window.fsxExact === 'function' ? window.fsxExact(b) : +b.rating || 0;
+
+    // ---- TBR covers: a plank under every cover (rows are cached, so this only runs for new ones) ----
+    const list = $('book-list');
+    function planks() {
+        if (!list) return;
+        list.querySelectorAll(':scope > [data-bi]').forEach(it => {
+            if (it.querySelector(':scope > .shx-plank')) return;
+            const cv = it.querySelector(':scope > .book-cover');
+            if (cv) cv.insertAdjacentHTML('afterend', '<i class="shx-plank" aria-hidden="true"></i>');
+        });
+    }
+
+    // ---- TBR hero: "Up next" shelf with the first 6 books of the plan ----
+    const hero = $('tbr-hero');
+    if (hero) {
+        const exp = hero.querySelector('.bl-exp');
+        const top = document.createElement('div'); top.className = 'lbx-top shx-top'; top.id = 'shx-tbr-top'; top.hidden = true;
+        if (exp) hero.insertBefore(top, exp); else hero.appendChild(top);
+    }
+    function heroPaint() {
+        const top = $('shx-tbr-top'); if (!top) return;
+        let next = [];
+        try { next = books.filter(b => !b.read && b.status !== 'abandoned' && b.status !== 'onhold' && isProg(b)).slice(0, 6); } catch (e) {}
+        top.innerHTML = next.length ? `<div class="lbx-row">${next.map(b => `<button type="button" class="lbx-sb" style="${coverStyle(b)}" onclick="openReviewModal(${bookRef(b)})" title="${E(b.title)}" aria-label="Open ${E(b.title)}"></button>`).join('')}</div><i class="lbx-shelf"></i><small>🌷 Up next</small>` : '';
+        top.hidden = !next.length;
+    }
+
+    // ---- Favorites: partly filled stars instead of the ★★★★★ text ----
+    const fav = $('favorites-content');
+    function favStars() {
+        if (!fav || typeof window.fsxStars !== 'function') return;
+        fav.querySelectorAll('.shelf-item').forEach(it => {
+            const rd = it.querySelector('.text-amber-600'); if (!rd || rd.classList.contains('shx-r')) return;
+            const bk = it.querySelector('.shelf-book[onclick]'); if (!bk) return;
+            const b = books[bookIxFrom(bk.getAttribute('onclick'))]; if (!b) return;
+            rd.classList.add('shx-r');
+            const r = exact(b); if (r > 0) rd.innerHTML = window.fsxStars(r, 'sm', true);
+        });
+    }
+
+    const run = f => () => { try { f(); } catch (e) {} };
+    if (list) new MutationObserver(run(planks)).observe(list, { childList: true });
+    if (fav) new MutationObserver(run(favStars)).observe(fav, { childList: true });
+    run(planks)(); run(favStars)(); run(heroPaint)();
+    try { ['books:saved', 'books:rendered', 'progress:saved'].forEach(n => AppEvents.on(n, run(heroPaint))); } catch (e) {}
+})();
+</script>
+
 </body>
 </html>
