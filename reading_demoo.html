@@ -790,22 +790,21 @@ html[data-theme=cocoa]{--c-322323:52 34 37;--c-3c2828:62 38 42;--c-3e4a3d:78 68 
         </div>
 
         <!-- Progress Garden -->
-        <div class="card text-center flex flex-col justify-center">
-            <h2 class="font-serif text-xl font-bold text-[rgb(var(--c-3e4a3d))]">The Progress Garden</h2>
-            <div class="text-[rgb(var(--c-5f6e3a))] tracking-[3px] my-2 text-xs">✧ ✧ ✧</div>
-            <div id="garden-wrap"><div id="garden-years" class="gy-row" style="display:none" role="group" aria-label="Filter garden by year"></div><div id="garden-scene"></div><p id="garden-caption" class="text-[11px] text-[rgb(var(--c-6b705c))] mt-2 min-h-[16px] font-medium" aria-live="polite"></p><div id="garden-legend" aria-label="Flower colour shows the rating"></div></div>
-            <p class="text-xs text-[rgb(var(--c-6b705c))] mt-2">This year you have read <strong id="time-read" class="text-[rgb(var(--c-3e4a3d))]">0h 0m</strong> out of <strong id="time-total" class="text-[rgb(var(--c-3e4a3d))]">0h 0m</strong>.</p>
-            <p class="text-xs text-[rgb(var(--c-6b705c))] mt-1">📖 <strong id="pages-read-count" class="text-[rgb(var(--c-3e4a3d))]">0</strong> of <strong id="pages-total-count" class="text-[rgb(var(--c-3e4a3d))]">0</strong> pages explored.</p>
-            <div class="w-full h-4 bg-[rgb(var(--c-e0e5d8))] rounded-full overflow-hidden mt-3 relative">
-                <div id="progress-fill" class="h-full bg-gradient-to-r from-[rgb(var(--c-8a9a5b))] to-[rgb(var(--c-a3b18a))] w-0 transition-all duration-500"></div>
+        <div class="card pgx-card text-center flex flex-col justify-center" id="pgx-card">
+            <i class="pgx-sp s1" aria-hidden="true">✦</i><i class="pgx-sp s2" aria-hidden="true">♡</i><i class="pgx-sp s3" aria-hidden="true">✧</i>
+            <div class="pgx-head"><span class="pgx-badge" aria-hidden="true"><span>🌷</span></span><div class="pgx-ht"><h2 class="font-serif font-bold">The Progress Garden</h2><small>one flower for every book you finish</small></div></div>
+            <div id="garden-wrap"><div id="garden-years" class="gy-row" style="display:none" role="group" aria-label="Filter garden by year"></div><div class="pgx-frame"><i class="pgx-tape l" aria-hidden="true"></i><i class="pgx-tape r" aria-hidden="true"></i><div id="garden-scene"></div></div><p id="garden-caption" class="pgx-cap" aria-live="polite"></p><div id="garden-legend" aria-label="Flower colour shows the rating"></div></div>
+            <div class="pgx-stats">
+                <div class="pgx-st t"><i aria-hidden="true">⏳</i><span><small>read this year</small><b><strong id="time-read">0h 0m</strong> <em>of <strong id="time-total">0h 0m</strong></em></b></span></div>
+                <div class="pgx-st p"><i aria-hidden="true">📖</i><span><small>pages explored</small><b><strong id="pages-read-count">0</strong> <em>of <strong id="pages-total-count">0</strong></em></b></span></div>
             </div>
-            <p class="text-[10px] text-[rgb(var(--c-6b705c))] mt-2 font-medium tracking-wide uppercase" id="progress-percent-text">0% Complete</p>
-            <div class="mt-4 pt-3 border-t border-[rgb(var(--c-e8c4c4)/0.6)] flex items-center justify-center gap-3">
-                <svg width="64" height="64" viewBox="0 0 64 64" class="-rotate-90"><circle cx="32" cy="32" r="26" fill="none" stroke="#e0e5d8" stroke-width="7"/><circle id="goal-ring" cx="32" cy="32" r="26" fill="none" stroke="rgb(var(--c-8a9a5b))" stroke-width="7" stroke-linecap="round" stroke-dasharray="163.4" stroke-dashoffset="163.4" style="transition:stroke-dashoffset .6s"/></svg>
+            <div class="pgx-prog"><div class="pgx-bar"><div id="progress-fill" class="h-full w-0 transition-all duration-500"><i class="pgx-sprout" aria-hidden="true">🌱</i></div></div><p id="progress-percent-text">0% Complete</p></div>
+            <div class="pgx-goal">
+                <span class="pgx-ring"><svg width="64" height="64" viewBox="0 0 64 64" class="-rotate-90" aria-hidden="true"><defs><linearGradient id="pgx-gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f4b6c2"/><stop offset="1" stop-color="#8a9a5b"/></linearGradient></defs><circle cx="32" cy="32" r="26" fill="none" stroke="#f6e3e7" stroke-width="7"/><circle id="goal-ring" cx="32" cy="32" r="26" fill="none" stroke="url(#pgx-gg)" stroke-width="7" stroke-linecap="round" stroke-dasharray="163.4" stroke-dashoffset="163.4" style="transition:stroke-dashoffset .6s"/></svg><i class="pgx-gem" aria-hidden="true">☕</i></span>
                 <div class="text-left">
-                    <div class="text-[10px] uppercase font-bold tracking-wide text-[rgb(var(--c-6b705c))]">Today's goal</div>
-                    <div class="text-sm font-bold text-[rgb(var(--c-3e4a3d))]"><span id="goal-done">0</span> / <span id="goal-target">60</span> min</div>
-                    <div id="goal-msg" class="text-[10px] text-[rgb(var(--c-6b705c))]"></div>
+                    <div class="pgx-gk">Today's goal</div>
+                    <div class="pgx-gv"><span id="goal-done">0</span> / <span id="goal-target">60</span> min</div>
+                    <div id="goal-msg"></div>
                 </div>
             </div>
         </div>
@@ -1140,8 +1139,8 @@ html[data-theme=cocoa]{--c-322323:52 34 37;--c-3c2828:62 38 42;--c-3e4a3d:78 68 
 
             <!-- TAB 4: YEAR IN REVIEW -->
             <div id="tab-content-year" class="hidden flex-1 flex flex-col overflow-hidden">
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-serif font-bold text-[rgb(var(--c-3e4a3d))] text-sm">Your Reading Year</h3>
+                <div class="flex justify-between items-center mb-3 ymx-top">
+                    <h3 class="ymx-h"><span class="ymx-badge" aria-hidden="true"><span>📊</span></span><span><b>Your Reading Year</b><small>a little scrapbook of everything you read</small></span></h3>
                     <select id="year-select" onchange="renderYear()" class="bg-white/80 border border-[rgb(var(--c-e8c4c4))] rounded px-2 py-0.5 text-xs font-bold text-[rgb(var(--c-3e4a3d))] outline-none cursor-pointer"></select>
                 </div>
                 <div id="year-content" class="flex-1 overflow-y-auto scroll-container pr-2 flex flex-col gap-4"></div>
@@ -1149,8 +1148,8 @@ html[data-theme=cocoa]{--c-322323:52 34 37;--c-3c2828:62 38 42;--c-3e4a3d:78 68 
 
             <!-- TAB 5: MONTHLY RECAP -->
             <div id="tab-content-month" class="hidden flex-1 flex flex-col overflow-hidden">
-                <div class="flex justify-between items-center mb-3 gap-2 flex-wrap">
-                    <h3 class="font-serif font-bold text-[rgb(var(--c-3e4a3d))] text-sm">Your Reading Month</h3>
+                <div class="flex justify-between items-center mb-3 gap-2 flex-wrap ymx-top">
+                    <h3 class="ymx-h"><span class="ymx-badge m" aria-hidden="true"><span>🌙</span></span><span><b>Your Reading Month</b><small>this month's pages, days and feelings</small></span></h3>
                     <div class="flex items-center gap-1">
                         <button onclick="shiftMonth(-1)" class="text-[10px] font-bold text-[rgb(var(--c-3e4a3d))] bg-white/70 border border-[rgb(var(--c-e8c4c4))] hover:bg-[rgb(var(--c-e8c4c4)/0.4)] px-2 py-1 rounded transition" title="Previous month">‹</button>
                         <select id="month-m" onchange="monthChanged()" class="bg-white/80 border border-[rgb(var(--c-e8c4c4))] rounded px-2 py-0.5 text-xs font-bold text-[rgb(var(--c-3e4a3d))] outline-none cursor-pointer"></select>
@@ -7115,11 +7114,18 @@ renderBackupNudge(); renderRes();
         const box = $('abandoned-list'); if (!box) return;
         box.querySelectorAll('.tomb').forEach(t => { const ep = t.querySelector('.ep'), b = books[bookIxFrom(ep && ep.getAttribute('onclick'))]; if (!b) return;
             t.insertAdjacentHTML('beforeend', `<div class="dnf">${WHY.map((w, k) => `<span class="fc${(b.dnfReasons || []).includes(w) ? ' on' : ''}" onclick="dnfTog(${bookRef(b)},${k})">${w}</span>`).join('')}</div>`); });
-        const ab = books.filter(b => b.status === 'abandoned' && (b.dnfReasons || []).length); if (!ab.length) { box.insertAdjacentHTML('afterbegin', '<div class="dnfp"><h4>🪦 Why do you stop?</h4>Tap reasons on a tombstone below and patterns will show up here.</div>'); return; }
+        let dOpen = true; try { dOpen = localStorage.getItem('enchantedDnfOpen') !== '0'; } catch (e) {}
+        const ab = books.filter(b => b.status === 'abandoned' && (b.dnfReasons || []).length); if (!ab.length) { box.insertAdjacentHTML('afterbegin', `<details class="dnfp"${dOpen ? ' open' : ''}><summary><span class="dnf-ic">🕯</span><h4>Why do you stop?</h4><i class="dnf-chev">▾</i></summary><p class="dnf-empty">Tap reasons on a tombstone below and a little pie of your patterns will grow here.</p></details>`); box.querySelector('.dnfp').addEventListener('toggle', e => { try { localStorage.setItem('enchantedDnfOpen', e.target.open ? '1' : '0'); } catch (x) {} }); return; }
         const cnt = {}, yr = {}; ab.forEach(b => b.dnfReasons.forEach(r => { cnt[r] = (cnt[r] || 0) + 1; const y = (b.finishedAt || '').slice(0, 4) || '?'; (yr[y] = yr[y] || {})[r] = (yr[y][r] || 0) + 1; }));
-        const rows = Object.entries(cnt).sort((a, z) => z[1] - a[1]), mx = rows[0][1];
-        box.insertAdjacentHTML('afterbegin', `<div class="dnfp"><h4>🪦 Why do you stop? (${ab.length} of ${books.filter(b => b.status === 'abandoned').length} tagged)</h4>${rows.map(([r, n]) => `<div class="r"><b>${r}</b><i style="width:${n / mx * 45}%"></i><span>${n}</span></div>`).join('')}
-            <div style="margin-top:8px;opacity:.85">${Object.keys(yr).sort().reverse().map(y => { const top = Object.entries(yr[y]).sort((a, z) => z[1] - a[1])[0]; return `<div><b>${y}</b>: mostly ${top[0]} (${top[1]})</div>`; }).join('')}</div></div>`);
+        const rows = Object.entries(cnt).sort((a, z) => z[1] - a[1]), tot = rows.reduce((t, r) => t + r[1], 0);
+        const PAL = ['#f4a6bd', '#c9a8ee', '#a9c27a', '#f3d9a4', '#8fb3d1', '#e9799f', '#9a7bc4', '#7fc4b0', '#e0b463', '#b8b2c8'];
+        let acc = 0; const stops = rows.map(([r, n], k) => { const a0 = acc / tot * 100; acc += n; return `${PAL[k % PAL.length]} ${a0}% ${acc / tot * 100}%`; }).join(',');
+        const top = rows[0];
+        box.insertAdjacentHTML('afterbegin', `<details class="dnfp"${dOpen ? ' open' : ''}><summary><span class="dnf-ic">🕯</span><h4>Why do you stop?</h4><small>${ab.length} of ${books.filter(b => b.status === 'abandoned').length} tagged · mostly ${top[0]}</small><i class="dnf-chev">▾</i></summary>
+            <div class="dnf-body"><div class="dnf-pie" style="background:conic-gradient(${stops})" role="img" aria-label="Reasons: ${rows.map(([r, n]) => r + ' ' + n).join(', ')}"><span><b>${tot}</b><small>reason${tot === 1 ? '' : 's'}</small></span></div>
+            <ul class="dnf-leg">${rows.map(([r, n], k) => `<li><i style="background:${PAL[k % PAL.length]}"></i><span>${r}</span><em>${n} · ${Math.round(n / tot * 100)}%</em></li>`).join('')}</ul></div>
+            <div class="dnf-yrs">${Object.keys(yr).sort().reverse().map(y => { const t = Object.entries(yr[y]).sort((a, z) => z[1] - a[1])[0]; return `<div><b>${y}</b>: mostly ${t[0]} (${t[1]})</div>`; }).join('')}</div></details>`);
+        box.querySelector('.dnfp').addEventListener('toggle', e => { try { localStorage.setItem('enchantedDnfOpen', e.target.open ? '1' : '0'); } catch (x) {} });
     };
     window.dnfTog = (i, k) => { const b = books[i], w = WHY[k], a = b.dnfReasons || []; b.dnfReasons = a.includes(w) ? a.filter(x => x !== w) : [...a, w]; if (!b.dnfReasons.length) b.dnfReasons = undefined; saveBooks(); renderAbandoned(); };
 })();
@@ -15972,6 +15978,126 @@ p.wpx-title{display:flex!important;align-items:center;gap:12px;margin:0 0 12px!i
 .gy-empty{margin:40px auto;max-width:300px;padding:18px;border-radius:22px;border:1.5px dashed rgba(233,220,255,.5);background:rgba(255,255,255,.08);text-align:center;font:italic 600 13px/1.5 'Playfair Display',serif;color:#e9dcff}
 #abandoned-pager button{border-radius:99px!important;background:rgba(255,255,255,.15)!important;color:#f6e9ff!important;border:1.5px solid rgba(255,255,255,.3)!important}
 @media (prefers-reduced-motion:reduce){#ev-card .ev-badge>span,#ev-card .ev-sp,#ev-card .ev-st.on,.bgw .bg-sp,.bgw .bg-pip,.srx-badge>span,.srx-sp,.gy-badge>span{animation:none}}
+</style>
+
+<style id="pgx-css">
+/* ===== 🌷 Progress Garden card ===== */
+.pgx-card{position:relative;overflow:hidden;gap:12px;border:2px solid #f0d0d8!important;border-radius:24px!important;background:radial-gradient(#f6dfe4 1px,transparent 1.4px) 0 0/16px 16px,linear-gradient(160deg,#fff 0%,#fff6f8 50%,#f3f8ea 100%)!important;box-shadow:0 10px 22px -18px rgba(168,80,106,.7)!important}
+.pgx-sp{position:absolute;font-style:normal;font-size:11px;color:#e8a0b4;opacity:.6;pointer-events:none;animation:spxtw 2.8s ease-in-out infinite}.pgx-sp.s1{top:14px;right:18px}.pgx-sp.s2{top:44px;right:48px;font-size:9px;color:#a9c27a;animation-delay:1s}.pgx-sp.s3{top:16px;left:18px;font-size:10px;color:#c9a8ee;animation-delay:1.8s}
+.pgx-head{display:flex;align-items:center;justify-content:center;gap:10px}
+.pgx-badge{flex:none;width:44px;height:44px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#fde3e9 60%,#eaf1dc);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 0 3px #fff,0 0 0 5px #f0c9d4,0 6px 14px -6px rgba(168,80,106,.5)}
+.pgx-badge>span{display:inline-block;animation:spxbob 3s ease-in-out infinite}
+.pgx-ht{text-align:left}.pgx-ht h2{margin:0;font-size:19px;line-height:1.1;color:rgb(var(--c-a8506a))}
+.pgx-ht small{display:block;margin-top:2px;font:italic 600 11px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+.pgx-card .gy-row button,.pgx-card #garden-years>*{border-radius:99px!important}
+.pgx-frame{position:relative;padding:6px;border-radius:22px;background:#fff;box-shadow:0 0 0 2px #f6e3e7,0 10px 20px -14px rgba(62,74,61,.6)}
+.pgx-frame #garden-scene{border-radius:16px;overflow:hidden}
+.pgx-tape{position:absolute;top:-7px;z-index:2;width:58px;height:16px;opacity:.9;background:repeating-linear-gradient(45deg,#f7b6cc 0 6px,#fff 6px 9px);border-radius:3px}
+.pgx-tape.l{left:14px;transform:rotate(-8deg)}.pgx-tape.r{right:14px;transform:rotate(7deg);background:repeating-linear-gradient(45deg,#cfe3b1 0 6px,#fff 6px 9px)}
+.pgx-cap{display:inline-block;margin:10px auto 0;padding:5px 14px;border-radius:16px;background:#fff;border:1.5px solid #f0d0d8;font:700 11px/1.35 Montserrat,sans-serif;color:rgb(var(--c-a8506a))}
+.pgx-cap:empty{display:none}
+.pgx-card #garden-legend{gap:4px 5px!important;margin-top:8px!important}
+.pgx-card #garden-legend span{padding:2px 8px;border-radius:99px;background:#ffffffc7;border:1px solid #f6e3e7}
+.pgx-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pgx-st{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:18px;text-align:left;background:#fff;border:1.5px solid #f0dcdc;box-shadow:0 4px 10px -8px rgba(168,80,106,.6)}
+.pgx-st>i{flex:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:15px;background:#fff8e1;box-shadow:0 0 0 2px #f0d9a0}
+.pgx-st.p>i{background:#f3e8ff;box-shadow:0 0 0 2px #e0c8f7}
+.pgx-st>span{min-width:0;display:flex;flex-direction:column}
+.pgx-st small{font:800 8.5px Montserrat,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:rgb(var(--c-6b705c))}
+.pgx-st b{font:900 14px/1.2 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));overflow-wrap:anywhere}
+.pgx-st b strong{font-weight:900}.pgx-st b em{font:600 10px Montserrat,sans-serif;color:rgb(var(--c-6b705c));font-style:normal}
+.pgx-prog{display:flex;flex-direction:column;align-items:center;gap:6px}
+.pgx-bar{width:100%;height:16px;border-radius:99px;background:#f6e3e7;border:2px solid #fff;box-shadow:0 0 0 1.5px #f0d0d8;overflow:visible;position:relative}
+.pgx-bar #progress-fill{position:relative;overflow:visible!important;min-width:16px;border-radius:99px;background:repeating-linear-gradient(45deg,#b5c78a 0 9px,#a3b878 9px 18px)!important}
+.pgx-bar #progress-fill::after{border-radius:99px;overflow:hidden}
+.pgx-sprout{position:absolute;right:-9px;top:50%;transform:translateY(-58%);font-style:normal;font-size:17px;filter:drop-shadow(0 2px 0 #fff);animation:spxbob 2.6s ease-in-out infinite}
+.pgx-card #progress-percent-text{margin:0;padding:2px 12px;border-radius:99px;background:#f6f9ee;border:1.5px solid #cfdbb0;font:800 9.5px Montserrat,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#4f5d2c}
+.pgx-goal{position:relative;display:flex;align-items:center;justify-content:center;gap:14px;padding:10px 14px;border-radius:20px;background:linear-gradient(135deg,#fff,#fdeef0);border:1.5px dashed #f0c9d4}
+.pgx-ring{position:relative;flex:none;width:64px;height:64px}.pgx-ring svg{display:block}.pgx-gem{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:20px;pointer-events:none}
+.pgx-gk{font:800 9.5px Montserrat,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:rgb(var(--c-a8506a))}
+.pgx-gv{font:900 18px/1.2 'Playfair Display',serif;color:rgb(var(--c-3e4a3d))}
+.pgx-card #goal-msg{font:italic 600 11px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+@media(max-width:400px){.pgx-stats{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.pgx-sp,.pgx-badge>span,.pgx-sprout{animation:none}}
+</style>
+
+<style id="dnf-css">
+#abandoned-list details.dnfp{padding:0!important;overflow:hidden}
+#abandoned-list .dnfp>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer}
+#abandoned-list .dnfp>summary::-webkit-details-marker{display:none}
+#abandoned-list .dnfp .dnf-ic{flex:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;background:rgba(255,255,255,.18);box-shadow:0 0 12px rgba(233,220,255,.4)}
+#abandoned-list .dnfp h4{margin:0!important;font:800 14px 'Playfair Display',serif!important;color:#f6e9ff}
+#abandoned-list .dnfp summary small{flex:1;min-width:0;font:700 10px Montserrat,sans-serif;color:#e2d6f5;opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#abandoned-list .dnfp .dnf-chev{margin-left:auto;flex:none;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:11px;color:#f6e9ff;background:rgba(255,255,255,.15);transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+#abandoned-list .dnfp[open] .dnf-chev{transform:rotate(180deg)}
+#abandoned-list .dnf-body{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:4px 16px 10px}
+#abandoned-list .dnf-pie{position:relative;flex:none;width:118px;height:118px;border-radius:50%;box-shadow:0 0 0 4px rgba(255,255,255,.22),0 10px 24px -10px rgba(10,5,30,.8);animation:dnfspin .8s cubic-bezier(.3,1.3,.5,1)}
+#abandoned-list .dnf-pie>span{position:absolute;inset:26%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4a3f6b,#2b2850);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f6e9ff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.15)}
+#abandoned-list .dnf-pie b{font:900 18px/1 'Playfair Display',serif}
+#abandoned-list .dnf-pie small{font:700 8px Montserrat,sans-serif;letter-spacing:.06em;text-transform:uppercase;opacity:.8}
+@keyframes dnfspin{from{transform:rotate(-120deg) scale(.7);opacity:0}}
+#abandoned-list .dnf-leg{flex:1;min-width:170px;margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px}
+#abandoned-list .dnf-leg li{display:flex;align-items:center;gap:8px;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.1);font:700 11px Montserrat,sans-serif;color:#f6e9ff}
+#abandoned-list .dnf-leg li i{flex:none;width:11px;height:11px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.35)}
+#abandoned-list .dnf-leg li span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#abandoned-list .dnf-leg li em{flex:none;font-style:normal;font-size:10px;opacity:.85}
+#abandoned-list .dnf-yrs{padding:0 16px 12px;font:600 10.5px Montserrat,sans-serif;color:#e2d6f5;opacity:.9;display:flex;flex-wrap:wrap;gap:4px 14px}
+#abandoned-list .dnf-empty{margin:0;padding:0 16px 12px;font:italic 600 11.5px 'Playfair Display',serif;color:#e2d6f5}
+@media (prefers-reduced-motion:reduce){#abandoned-list .dnf-pie{animation:none}}
+</style>
+
+<style id="ymx-css">
+/* ===== 📊 Year in Review + 🌙 Monthly Recap: extra cute ===== */
+.ymx-top{flex:none}
+.ymx-h{display:flex;align-items:center;gap:10px;margin:0}
+.ymx-h>span:last-child{display:flex;flex-direction:column;min-width:0}
+.ymx-h b{font:800 18px/1.1 'Playfair Display',serif;color:rgb(var(--c-a8506a))}
+.ymx-h small{font:italic 600 11px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+.ymx-badge{flex:none;width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:21px;background:radial-gradient(circle at 35% 30%,#fff,#fde3e9 60%,#eaf1dc);box-shadow:0 0 0 3px #fff,0 0 0 5px #f0c9d4,0 6px 14px -6px rgba(168,80,106,.5)}
+.ymx-badge.m{background:radial-gradient(circle at 35% 30%,#fff,#efe7fb 60%,#fde3e9);box-shadow:0 0 0 3px #fff,0 0 0 5px #e0c8f7,0 6px 14px -6px rgba(122,95,176,.5)}
+.ymx-badge>span{display:inline-block;animation:spxbob 3s ease-in-out infinite}
+#tab-content-month .ymx-top button[onclick^="shiftMonth"]{width:28px;height:28px;padding:0!important;display:inline-flex;align-items:center;justify-content:center;border:2px solid #f0d0d8!important;border-radius:50%!important;background:#fff!important;font:800 13px Montserrat,sans-serif!important;color:rgb(var(--c-a8506a))!important}
+:is(#year-content,#month-content) .wr-hero{border:2px solid #fff!important;border-radius:26px!important;padding:20px 20px 22px!important;box-shadow:0 0 0 2px #f4c9d2,0 14px 28px -16px rgba(168,80,106,.6)!important}
+#year-content .wr-hero{background:radial-gradient(rgba(255,255,255,.55) 1.2px,transparent 1.6px) 0 0/16px 16px,linear-gradient(135deg,#fde3e9 0%,#f7ecdc 45%,#dfe9c6 100%)!important}
+:is(#year-content,#month-content) .wr-hero::before{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(rgba(255,255,255,.5) 1.2px,transparent 1.6px) 0 0/16px 16px;border-radius:inherit}
+:is(#year-content,#month-content) .wr-hero::after{content:'✦';position:absolute;right:22px;top:16px;font-size:16px;color:#fff;text-shadow:0 0 8px #f4a6bd;animation:spxtw 2.8s ease-in-out infinite}
+:is(#year-content,#month-content) .wr-hero h2{font-size:32px!important;text-shadow:2px 2px 0 #fff}
+:is(#year-content,#month-content) .wr-pills span{padding:4px 12px!important;border:1.5px solid #fff!important;background:#ffffffd9!important;box-shadow:0 3px 8px -5px rgba(168,80,106,.6);font:800 11px Montserrat,sans-serif!important;color:rgb(var(--c-a8506a))!important}
+:is(#year-content,#month-content) .wr-pills span:nth-child(4n+2){color:#4f5d2c!important}:is(#year-content,#month-content) .wr-pills span:nth-child(4n+3){color:#8a5a12!important}:is(#year-content,#month-content) .wr-pills span:nth-child(4n+4){color:#6b21a8!important}
+#year-content .wr-nav{gap:2px!important;padding:4px!important;border-radius:99px;background:#fff;border:2px solid #f0d0d8;align-self:flex-start;max-width:100%}
+#year-content .wr-nav button{border:0!important;background:transparent!important;font:800 11.5px Montserrat,sans-serif!important;color:rgb(var(--c-6b705c))!important;padding:7px 14px!important}
+#year-content .wr-nav button:hover{background:#fdeef0!important;color:rgb(var(--c-a8506a))!important;transform:none!important}
+#year-content .wr-nav button.on{background:linear-gradient(135deg,#f4b6c2,#e8a0b4)!important;color:#fff!important;box-shadow:0 4px 10px -5px rgba(168,80,106,.8)!important}
+:is(#year-content,#month-content) .wr-sec{position:relative;border:2px solid #f0dcdc!important;border-radius:24px!important;padding:16px!important;background:radial-gradient(#f6e3e7 1px,transparent 1.4px) 0 0/16px 16px,linear-gradient(160deg,#fff,#fffafa 60%,#fbf7ff)!important;box-shadow:0 10px 22px -18px rgba(168,80,106,.7)!important}
+:is(#year-content,#month-content) .wr-sec:hover{border-color:#e8b4c2!important}
+:is(#year-content,#month-content) .wr-sec>h4{display:flex!important;align-items:center;gap:8px;margin:0 0 12px!important;font:800 15px 'Playfair Display',serif!important;color:rgb(var(--c-a8506a))!important}
+:is(#year-content,#month-content) .wr-sec>h4::before{content:'';flex:none;width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,#f4b6c2,#e8a0b4);box-shadow:0 0 0 3px #fdeef0}
+:is(#year-content,#month-content) .wr-sec>h4::after{border-top:2.5px dotted #f0c9d4!important}
+:is(#year-content,#month-content) .wr-sec:nth-of-type(4n+2)>h4::before{background:linear-gradient(135deg,#b5c78a,#8a9a5b);box-shadow:0 0 0 3px #eef2e2}
+:is(#year-content,#month-content) .wr-sec:nth-of-type(4n+3)>h4::before{background:linear-gradient(135deg,#f3d9a4,#e0b463);box-shadow:0 0 0 3px #fff8e1}
+:is(#year-content,#month-content) .wr-sec:nth-of-type(4n+4)>h4::before{background:linear-gradient(135deg,#d9c4f2,#9a7bc4);box-shadow:0 0 0 3px #f3e8ff}
+:is(#year-content,#month-content) .wr-t{border-width:2px!important;border-color:#fff!important;border-radius:20px!important;box-shadow:0 0 0 2px var(--tb,#f4c9d2),0 8px 14px -10px rgba(168,80,106,.7)}
+:is(#year-content,#month-content) .wr-t.t0{--tb:#f4c9d2}:is(#year-content,#month-content) .wr-t.t1{--tb:#cfdbb0}:is(#year-content,#month-content) .wr-t.t2{--tb:#f3dbb2}:is(#year-content,#month-content) .wr-t.t3{--tb:#d9cff0}
+:is(#year-content,#month-content) .wr-t b{font-size:21px!important;color:#e9799f!important}
+:is(#year-content,#month-content) .wr-t em{font-size:24px!important;filter:drop-shadow(0 2px 0 #fff)}
+#year-content .wr-boy{border:2px solid #f0d9a0!important;border-radius:24px!important;padding:14px 16px!important;background:radial-gradient(#f6e7c4 1px,transparent 1.4px) 0 0/16px 16px,linear-gradient(135deg,#fffdf3,#fdeef0)!important;box-shadow:0 10px 22px -16px rgba(212,169,74,.8)}
+#year-content .wr-boy::before{font-size:26px!important;filter:drop-shadow(0 2px 0 #fff)}
+:is(#year-content,#month-content) .wr-cv{border-radius:3px 8px 8px 3px!important;box-shadow:inset 4px 0 0 rgba(0,0,0,.12),0 8px 14px -6px rgba(62,74,61,.5)!important}
+#year-content .wr-boy b{font-size:18px!important;color:rgb(var(--c-a8506a))!important}
+#year-content .wr-pod .st{border-radius:14px 14px 0 0!important;border:2px solid #fff;border-bottom:0;box-shadow:inset 0 4px 0 rgba(255,255,255,.5)}
+#year-content .wr-pod .cv{border-radius:3px 7px 7px 3px!important;box-shadow:inset 3px 0 0 rgba(0,0,0,.12),0 8px 12px -6px rgba(62,74,61,.5)!important;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+#year-content .wr-pod .cv:hover{transform:translateY(-6px) rotate(-3deg)}
+:is(#year-content,#month-content) .wr-sup>div{border-radius:18px!important;background:#fff!important;border:1.5px solid #f0dcdc;box-shadow:0 4px 10px -8px rgba(168,80,106,.6);padding:9px 12px!important}
+:is(#year-content,#month-content) .wr-sup>div:nth-child(4n+1){background:#fdeef0!important}:is(#year-content,#month-content) .wr-sup>div:nth-child(4n+2){background:#f6f9ee!important}:is(#year-content,#month-content) .wr-sup>div:nth-child(4n+3){background:#fff8e1!important}:is(#year-content,#month-content) .wr-sup>div:nth-child(4n+4){background:#f8f2fe!important}
+:is(#year-content,#month-content) .wr-sup em{width:34px;height:34px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;box-shadow:0 0 0 2px #f6e3e7;font-size:18px!important}
+:is(#year-content,#month-content) .wr-bd>div{border-radius:20px!important;border:2px solid #fff!important;box-shadow:0 0 0 2px #f0d9a0,0 6px 12px -8px rgba(212,169,74,.8)!important;transition:transform .2s cubic-bezier(.3,1.6,.5,1)}
+:is(#year-content,#month-content) .wr-bd>div:hover{transform:translateY(-3px) rotate(-3deg)}
+:is(#year-content,#month-content) .wr-bars>div>i,:is(#year-content,#month-content) .wr-bars .mx i{border-radius:12px 12px 4px 4px!important}
+:is(#year-content,#month-content) .wr-cloud span{border-width:1.5px!important;font:800 10.5px Montserrat,sans-serif!important;padding:3px 11px!important}
+:is(#year-content,#month-content) .hm-cell{border-radius:5px!important}
+#month-content .cal-c{border-radius:14px!important}
+#month-content .cal-c:hover{transform:translateY(-2px) rotate(-3deg)}
+@media (prefers-reduced-motion:reduce){.ymx-badge>span,:is(#year-content,#month-content) .wr-hero::after{animation:none}}
 </style>
 
 <style id="hero-fix-css">
