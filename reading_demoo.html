@@ -4164,9 +4164,10 @@ window.SAFE = SAFE;
 
     // --- display helpers ---
     function chipsHTML(b) {
-        const c = (arr, cls, pre) => SAFE.vis(arr).map(t => `<span class="${cls} rounded-full px-1.5 py-px text-[9px] leading-tight font-semibold">${pre}${esc(t)}</span>`).join('');
-        const h = c(b.tags, 'bg-[rgb(var(--c-8a9a5b)/0.2)] text-[rgb(var(--c-3e4a3d))]', TAXO.PRE.tags) + c(b.warnings, 'bg-amber-100 text-amber-800', TAXO.PRE.warnings) + c(b.vibes, 'bg-purple-100 text-purple-800', TAXO.PRE.vibes);
-        return h ? `<div class="flex flex-wrap gap-x-1 gap-y-0.5 mb-1">${h}</div>` : '';
+        // cute bubbles: green #tags, orange ⚠ warnings, purple ✨ vibes (own CSS, see .bub-*)
+        const c = (arr, k, pre) => SAFE.vis(arr).map(t => `<span class="bub bub-${k}" title="${esc(t)}">${pre}${esc(t)}</span>`).join('');
+        const h = c(b.tags, 'tags', '#') + c(b.warnings, 'warnings', '⚠️ ') + c(b.vibes, 'vibes', '✨ ');
+        return h ? `<div class="bub-row">${h}</div>` : '';
     }
     function extraLines(b) {
         const sel = `<select onchange="setStatus(${bookRef(books[b.originalIndex])}, this.value)" class="text-[10px] font-semibold bg-white/70 border border-[rgb(var(--c-e8c4c4))] rounded px-1 py-0.5 outline-none cursor-pointer mb-1" title="Reading status">${STATUSES.map(([v, l]) => `<option value="${v}" ${(b.status || '') === v ? 'selected' : ''}>${l}</option>`).join('')}</select>`;
@@ -5191,6 +5192,14 @@ window.SAFE = SAFE;
 .cp button:hover{background:#fff;transform:rotate(90deg)}
 .cp-tags{background:rgb(var(--c-eef2e2));border-color:rgb(var(--c-cfdbb0));color:rgb(var(--c-4f5d2c))}.cp-warnings{background:rgb(var(--c-fff3d6));border-color:rgb(var(--c-f0d9a0));color:rgb(var(--c-8a5a12))}.cp-vibes{background:rgb(var(--c-f3e8ff));border-color:rgb(var(--c-e0c8f7));color:rgb(var(--c-6b21a8))}
 @keyframes cp-pop{from{transform:scale(.6);opacity:0}}
+/* ---- tag / warning / vibe bubbles on book cards (TBR list, Finished, Graveyard…) ---- */
+.bub-row{display:flex!important;flex-wrap:wrap;gap:4px;margin:3px 0 5px}
+.bub{display:inline-flex!important;align-items:center;gap:2px;max-width:100%;padding:2px 9px!important;border-radius:99px!important;border:1.5px solid;font:700 10px/1.35 Montserrat,sans-serif!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 1.5px 0 var(--bub-sh);transition:transform .15s}
+.bub:hover{transform:translateY(-1px) scale(1.04)}
+.bub-tags{background:rgb(var(--c-eef2e2))!important;border-color:rgb(var(--c-cfdbb0))!important;color:rgb(var(--c-4f5d2c))!important;--bub-sh:rgb(var(--c-cfdbb0))}
+.bub-warnings{background:#ffeedd!important;border-color:#f6c99a!important;color:#a5521b!important;--bub-sh:#f6c99a}
+.bub-vibes{background:rgb(var(--c-f3e8ff))!important;border-color:rgb(var(--c-e0c8f7))!important;color:rgb(var(--c-6b21a8))!important;--bub-sh:rgb(var(--c-e0c8f7))}
+@media (prefers-reduced-motion:reduce){.bub{transition:none}}
 .sg-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:6px}.sg-wrap:empty{display:none}
 .sg-cap{font:italic 500 10px 'Playfair Display',serif;color:rgb(var(--c-6b705c));margin-right:2px}
 .sg-pill,.sg-more{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:99px;border:1px dashed rgb(var(--c-e8c4c4));background:#fff;color:rgb(var(--c-6b705c));cursor:pointer;transition:transform .15s,background .15s,border-color .15s,color .15s}
