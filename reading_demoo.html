@@ -14128,9 +14128,38 @@ s.G{background:#f2b84b}s.A{background:#fff;outline:2px dashed rgb(var(--c-e8a0b4
 @keyframes pgpop{from{opacity:0;transform:translateY(14px) scale(.92)}}@keyframes pgfade{from{opacity:0}}
 @keyframes pgbob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-4px) rotate(4deg)}}
 @keyframes pgtw{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:.85;transform:scale(1.15)}}
+#pg-ov .pg-r .pg-go:disabled{opacity:.5;cursor:default;transform:none;box-shadow:none}
+#pg-ov .pg-sub2{display:flex;flex-wrap:wrap;gap:2px;margin-top:9px;padding:3px;border-radius:99px;background:#fff;border:2px solid rgb(var(--c-f0d0d8));align-self:flex-start;max-width:100%}
+#pg-ov .pg-sub2 button{padding:5px 11px;border-radius:99px;font:800 10.5px Montserrat,sans-serif;color:rgb(var(--c-6b705c));background:none;border:0;cursor:pointer;transition:background .15s,color .15s}
+#pg-ov .pg-sub2 button:hover{background:#fdeef0;color:rgb(var(--c-a8506a))}
+#pg-ov .pg-sub2 button.on{background:linear-gradient(135deg,rgb(var(--c-e8a0b4)),rgb(var(--c-d98aa0)));color:#fff}
+#pg-ov label.pg-o:not(:has(input:checked)) .pg-btw{display:none}
+#pg-ov .pg-btw{display:flex;flex-direction:column;gap:5px;margin-top:9px;padding:10px;border-radius:16px;border:2px dashed #e8b4c2;background:#fffafa}
+#pg-ov .pg-btw[hidden]{display:none}
+#pg-ov .pg-bl{font:800 10px Montserrat,sans-serif;letter-spacing:.05em;text-transform:uppercase;color:rgb(var(--c-a8506a));margin-top:2px}
+#pg-ov .pg-btw .pg-bp{margin-top:0}
+#pg-ov small.pg-btw-n{color:rgb(var(--c-4f5d2c));font-weight:700;font-size:11px}
+#pg-ov small.pg-btw-n:empty{display:none}
+#pg-ov .pg-bp{position:relative;margin-top:9px}
+#pg-ov .pg-bp-ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:12px;pointer-events:none;opacity:.75}
+#pg-ov label.pg-o input.pg-bp-in{position:static;opacity:1;pointer-events:auto}
+#pg-ov .pg-bp-in{display:block;width:100%;height:38px;padding:0 14px 0 34px;border:2px solid rgb(var(--c-f0d0d8));border-radius:99px;background:#fff;font:600 12px Montserrat,sans-serif;color:rgb(var(--c-3e4a3d));outline:0;cursor:text;text-overflow:ellipsis}
+#pg-ov .pg-bp-in::placeholder{color:#b896a2;font-style:italic;font-weight:500}
+#pg-ov .pg-bp-in:focus{border-color:rgb(var(--c-e8a0b4));box-shadow:0 0 0 4px rgb(var(--c-f4c9d2)/.35)}
+#pg-ov .pg-bp.has .pg-bp-in{border-color:rgb(var(--c-cfdbb0));background:#f8fbf1;font-weight:700}
+#pg-ov .pg-bp-pop{position:relative;z-index:5;margin-top:6px;max-height:210px;overflow-y:auto;padding:5px;border-radius:16px;background:#fff;border:2px solid rgb(var(--c-f0d0d8));box-shadow:0 12px 24px -14px rgba(168,80,106,.6);display:flex;flex-direction:column;gap:2px}
+#pg-ov .pg-bp-pop[hidden]{display:none}
+#pg-ov .pg-bp-it{display:flex;align-items:center;gap:9px;width:100%;padding:6px 9px;border-radius:11px;text-align:left;background:none;border:0;cursor:pointer;color:rgb(var(--c-3e4a3d))}
+#pg-ov .pg-bp-it:hover,#pg-ov .pg-bp-it.kb{background:#fdeef0}
+#pg-ov .pg-bp-it.on{background:linear-gradient(135deg,#fdeef0,#eef2e2)}
+#pg-ov .pg-bp-no{flex:none;min-width:34px;padding:2px 6px;border-radius:99px;background:#fff8e1;border:1.5px solid #f0d9a0;color:#8a5a12;font:800 9.5px Montserrat,sans-serif;text-align:center}
+#pg-ov .pg-bp-t{min-width:0;display:flex;flex-direction:column}
+#pg-ov .pg-bp-t b{font:700 12px/1.25 Montserrat,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#pg-ov .pg-bp-t small{font:600 10px Montserrat,sans-serif;color:rgb(var(--c-6b705c));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#pg-ov .pg-bp-more{margin:4px 8px;font:italic 600 10.5px Montserrat,sans-serif;color:rgb(var(--c-a88a96))}
 @media (prefers-reduced-motion:reduce){#pg-ov,#pg-ov .pg-c,#pg-ov .pg-em,#pg-ov .pg-sp{animation:none}}`; document.head.appendChild(st2); })();
     const inPlanB = b => isProg(b) && !b.read && b.status !== 'abandoned', startedB = b => b.minutesRead > 0 || b.pagesRead > 0 || b.status === 'rereading';
-    function placeProgrammed(list, mode, afterId) {
+    function placeProgrammed(list, mode, afterId, endId) {
         const L = new Set(list); list.forEach(b => set(b, true));
         const rest = books.filter(b => !L.has(b)), P = [], U = [];
         rest.forEach((b, i) => { if (inPlanB(b)) { P.push(i); if (!startedB(b)) U.push(i); } });
@@ -14139,6 +14168,13 @@ s.G{background:#f2b84b}s.A{background:#fff;outline:2px dashed rgb(var(--c-e8a0b4
         const put = (at, arr) => { (ins[at] = ins[at] || []).push(...arr); };
         if (mode === 'next') put(U.length ? U[0] : P.length ? P[P.length - 1] + 1 : fb, list);
         else if (mode === 'after') { const i = rest.findIndex(b => String(b.id) === String(afterId)); put(i >= 0 ? i + 1 : (P.length ? P[P.length - 1] + 1 : fb), list); }
+        else if (mode === 'between') {   // evenly in the stretch of the plan between a start book and an end book
+            let a = rest.findIndex(b => String(b.id) === String(afterId)), z = rest.findIndex(b => String(b.id) === String(endId));
+            if (a > z) { const t = a; a = z; z = t; }
+            const G = P.filter(j => j > a && j <= z);   // insert right before each planned book after the start, up to and including the end book
+            if (a < 0 || z < 0 || !G.length) put(a >= 0 ? a + 1 : (P.length ? P[P.length - 1] + 1 : fb), list);
+            else list.forEach((b, i) => put(G[Math.min(G.length - 1, Math.floor((i + 0.5) * G.length / list.length))], [b]));
+        }
         else if (mode === 'spread' && U.length) list.forEach((b, i) => put(U[Math.min(U.length - 1, Math.floor(i * U.length / list.length))], [b]));
         else put(P.length ? P[P.length - 1] + 1 : fb, list);   // at the end of my plan
         const out = []; rest.forEach((b, j) => { if (ins[j]) out.push(...ins[j]); out.push(b); }); if (ins[rest.length]) out.push(...ins[rest.length]);
@@ -14147,26 +14183,83 @@ s.G{background:#f2b84b}s.A{background:#fff;outline:2px dashed rgb(var(--c-e8a0b4
     function programDialog(all0, done) {
         const list = all0.filter(b => !isProg(b)), n = list.length;
         if (!n) { try { window.__toast({ mode: 'cz', body: '🌷 Everything shown is already programmed' }); } catch (e) {} return; }
-        const cand = books.filter(b => inPlanB(b) && !startedB(b)).slice(0, 400), bn = k => `${k} book${k === 1 ? '' : 's'}`;
+        const sel = new Set(list), plan = books.filter(b => inPlanB(b) && !sel.has(b)), bn = k => `${k} book${k === 1 ? '' : 's'}`;
+        const pos = new Map(plan.map((b, i) => [String(b.id), i + 1]));
+        const pick = { af: '', st: plan.length ? String(plan[0].id) : '', en: plan.length ? String(plan[plan.length - 1].id) : '' };
+        const T = b => b.title.length > 60 ? b.title.slice(0, 59) + '…' : b.title;
+        const bp = (k, ph) => `<div class="pg-bp" data-k="${k}"><span class="pg-bp-ic">🔍</span><input type="text" class="pg-bp-in" placeholder="${ph}" autocomplete="off" spellcheck="false" aria-label="${ph}"><div class="pg-bp-pop" hidden></div></div>`;
         const d = document.createElement('div'); d.id = 'pg-ov';
         d.innerHTML = `<div class="pg-c" role="dialog" aria-modal="true"><span class="pg-sp" style="top:14px;left:18px">✨</span><span class="pg-sp" style="top:30px;right:22px;animation-delay:.8s">🌸</span><span class="pg-sp" style="top:70px;left:44px;animation-delay:1.4s;font-size:10px">✦</span>
 <div class="pg-hd"><span class="pg-em">🌷</span><h3>Program ${bn(n)}</h3><p class="pg-sub">When do you want to read ${n === 1 ? 'it' : 'them'}? Pick where ${n === 1 ? 'it goes' : 'they go'} in your plan 🌿</p></div>
 <div class="pg-opts">
 <label class="pg-o"><input type="radio" name="pg" value="next" checked><i class="pg-ic">🎀</i><span class="pg-tx"><b>Next up</b><small>Right after what I'm already reading</small></span><i class="pg-ck"></i></label>
 <label class="pg-o"><input type="radio" name="pg" value="end"><i class="pg-ic">🌙</i><span class="pg-tx"><b>At the end of my plan</b><small>After everything that's already programmed</small></span><i class="pg-ck"></i></label>
-<label class="pg-o"><input type="radio" name="pg" value="spread"><i class="pg-ic">🌼</i><span class="pg-tx"><b>Spread through my plan</b><small>Evenly between the books I already have planned</small></span><i class="pg-ck"></i></label>
-<label class="pg-o"${cand.length ? '' : ' hidden'}><input type="radio" name="pg" value="after"><i class="pg-ic">📖</i><span class="pg-tx"><b>After a book I pick</b><small>Choose the book they should follow</small><select id="pg-af">${cand.map(b => `<option value="${E(b.id)}">${E(b.title.length > 50 ? b.title.slice(0, 49) + '…' : b.title)}</option>`).join('')}</select></span><i class="pg-ck"></i></label>
+<label class="pg-o" data-o="spread"><input type="radio" name="pg" value="spread"><i class="pg-ic">🌼</i><span class="pg-tx"><b>Spread evenly</b><small>Sprinkled evenly between books I already have planned</small>
+${plan.length > 1 ? `<span class="pg-sub2" role="radiogroup" aria-label="Spread across"><button type="button" data-sp="all" class="on">🌍 Across my whole plan</button><button type="button" data-sp="between">🌈 Between two books</button></span>
+<span class="pg-btw" hidden><span class="pg-bl">🌱 Start after</span>${bp('st', 'Search for the start book…')}<span class="pg-bl">🏁 End before</span>${bp('en', 'Search for the end book…')}<small class="pg-btw-n"></small></span>` : ''}</span><i class="pg-ck"></i></label>
+<label class="pg-o" data-o="after"${plan.length ? '' : ' hidden'}><input type="radio" name="pg" value="after"><i class="pg-ic">📖</i><span class="pg-tx"><b>After a book I pick</b><small>Search your plan for the book they should follow</small>${bp('af', 'Search your planned books…')}</span><i class="pg-ck"></i></label>
 </div>
 <div class="pg-r"><button type="button" id="pg-x">Not now</button><button type="button" class="pg-go" id="pg-ok">🌷 Program ${bn(n)}</button></div></div>`;
         document.body.appendChild(d);
-        const close = () => d.remove(); d.onclick = e => { if (e.target === d) close(); }; d.querySelector('#pg-x').onclick = close;
-        const pickAfter = () => { const r = d.querySelector('input[value="after"]'); if (r) r.checked = true; };
-        if (d.querySelector('#pg-af')) { d.querySelector('#pg-af').addEventListener('focus', pickAfter); d.querySelector('#pg-af').addEventListener('change', pickAfter); }
-        d.addEventListener('click', e => { if (e.target.closest('#pg-ov .pg-tx .cz-btn')) pickAfter(); });   // the cute dropdown button sits where the hidden <select> was
-        d.querySelector('#pg-ok').onclick = () => {
-            const mode = d.querySelector('input[name="pg"]:checked').value, af = d.querySelector('#pg-af') ? d.querySelector('#pg-af').value : '';
-            close(); placeProgrammed(list, mode, af); touch(); if (done) done();
-            let when = ''; try { const pl = planFinishInfo(), ds = list.map(b => pl.get(books.indexOf(b))).filter(Boolean).sort((a, z) => a - z), f = x => x.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); if (ds.length) when = ` · finishing ${ds.length > 1 ? 'between ' + f(ds[0]) + ' and ' + f(ds[ds.length - 1]) : 'around ' + f(ds[0])}`; } catch (e) {}
+        const $d = q => d.querySelector(q), radio = v => { const r = $d(`input[name="pg"][value="${v}"]`); if (r) r.checked = true; sync(); };
+        let spMode = 'all';
+        const close = () => { d.remove(); document.removeEventListener('keydown', esc, true); };
+        const esc = e => { if (e.key === 'Escape') { if (d.querySelector('.pg-bp-pop:not([hidden])')) { d.querySelectorAll('.pg-bp-pop').forEach(p => { p.hidden = true; }); e.stopPropagation(); return; } close(); } };
+        document.addEventListener('keydown', esc, true);
+        d.onclick = e => { if (e.target === d) close(); }; $d('#pg-x').onclick = close;
+
+        // ---- searchable book pickers ----
+        function fill(k) { const w = $d(`.pg-bp[data-k="${k}"]`); if (!w) return; const b = plan.find(x => String(x.id) === pick[k]); w.querySelector('.pg-bp-in').value = b ? T(b) : ''; w.classList.toggle('has', !!b); }
+        function show(k, qv) {
+            const w = $d(`.pg-bp[data-k="${k}"]`), pop = w.querySelector('.pg-bp-pop'), qq = (qv || '').toLowerCase().trim();
+            const hits = plan.filter(b => !qq || [b.title, authorText(b), b.seriesName].join(' ').toLowerCase().includes(qq)), shown = hits.slice(0, 80);
+            pop.innerHTML = shown.length ? shown.map(b => `<button type="button" class="pg-bp-it${String(b.id) === pick[k] ? ' on' : ''}" data-id="${E(b.id)}"><span class="pg-bp-no">#${pos.get(String(b.id))}</span><span class="pg-bp-t"><b>${E(T(b))}</b>${authorText(b) ? `<small>by ${E(authorText(b))}${b.duration ? ' · ' + E(formatTime(b.duration)) : ''}</small>` : b.duration ? `<small>${E(formatTime(b.duration))}</small>` : ''}</span></button>`).join('') + (hits.length > shown.length ? `<p class="pg-bp-more">${hits.length - shown.length} more… keep typing to narrow it down</p>` : '')
+                : '<p class="pg-bp-more">No planned book matches that 🍄</p>';
+            d.querySelectorAll('.pg-bp-pop').forEach(p => { if (p !== pop) p.hidden = true; });
+            pop.hidden = false;
+            const on = pop.querySelector('.on'); if (on && !qq) on.scrollIntoView({ block: 'nearest' });
+        }
+        d.querySelectorAll('.pg-bp').forEach(w => {
+            const k = w.dataset.k, inp = w.querySelector('.pg-bp-in'), owner = k === 'af' ? 'after' : 'spread';
+            inp.addEventListener('focus', () => { radio(owner); if (k !== 'af') setSp('between'); inp.select(); show(k, ''); });
+            inp.addEventListener('input', () => show(k, inp.value));
+            inp.addEventListener('keydown', e => {
+                const pop = w.querySelector('.pg-bp-pop'), its = [...pop.querySelectorAll('.pg-bp-it')]; let i = its.indexOf(pop.querySelector('.pg-bp-it.kb'));
+                if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (pop.hidden) show(k, inp.value); i = Math.max(0, Math.min(its.length - 1, i + (e.key === 'ArrowDown' ? 1 : -1))); its.forEach(x => x.classList.remove('kb')); if (its[i]) { its[i].classList.add('kb'); its[i].scrollIntoView({ block: 'nearest' }); } }
+                else if (e.key === 'Enter') { e.preventDefault(); const t = its[i >= 0 ? i : 0]; if (t) t.click(); }
+            });
+            inp.addEventListener('blur', () => setTimeout(() => { if (!w.contains(document.activeElement)) { w.querySelector('.pg-bp-pop').hidden = true; fill(k); } }, 150));
+            w.querySelector('.pg-bp-pop').addEventListener('mousedown', e => e.preventDefault());   // keep focus while clicking a result
+            w.querySelector('.pg-bp-pop').addEventListener('click', e => {
+                const it = e.target.closest('.pg-bp-it'); if (!it) return; e.preventDefault();
+                pick[k] = it.dataset.id; w.querySelector('.pg-bp-pop').hidden = true; fill(k); inp.blur(); sync();
+            });
+        });
+        // ---- spread: whole plan / between two books ----
+        function setSp(v) { spMode = v; d.querySelectorAll('.pg-sub2 button').forEach(b => { b.classList.toggle('on', b.dataset.sp === v); b.setAttribute('aria-pressed', b.dataset.sp === v ? 'true' : 'false'); }); const bw = $d('.pg-btw'); if (bw) bw.hidden = v !== 'between'; sync(); }
+        d.querySelectorAll('.pg-sub2 button').forEach(b => b.addEventListener('click', e => { e.preventDefault(); radio('spread'); setSp(b.dataset.sp); }));
+        d.querySelectorAll('.pg-o').forEach(l => l.addEventListener('click', e => { if (e.target.closest('.pg-bp,.pg-sub2')) e.preventDefault(); const r = l.querySelector('input[type=radio]'); if (r && !r.checked) { r.checked = true; sync(); } }));
+        function sync() {
+            const mode = ($d('input[name="pg"]:checked') || {}).value, ok = $d('#pg-ok'), note = $d('.pg-btw-n');
+            let good = true, msg = '';
+            if (mode === 'after') good = !!pick.af;
+            if (mode === 'spread' && spMode === 'between') {
+                const a = pos.get(pick.st), z = pos.get(pick.en);
+                if (!a || !z) { good = false; msg = 'Pick a start and an end book 🌿'; }
+                else if (a === z) { good = false; msg = 'Pick two different books 🌿'; }
+                else { const gap = Math.abs(z - a); msg = `✨ ${bn(n)} sprinkled across the ${gap} book${gap === 1 ? '' : 's'} from #${Math.min(a, z)} to #${Math.max(a, z)}`; }
+            }
+            if (note) note.textContent = msg;
+            ok.disabled = !good;
+        }
+        ['st', 'en'].forEach(fill); sync();
+
+        $d('#pg-ok').onclick = () => {
+            let mode = $d('input[name="pg"]:checked').value, a = '', z = '';
+            if (mode === 'after') a = pick.af;
+            if (mode === 'spread' && spMode === 'between') { mode = 'between'; a = pick.st; z = pick.en; }
+            close(); placeProgrammed(list, mode, a, z); touch(); if (done) done();
+            let when = ''; try { const pl = planFinishInfo(), ds = list.map(b => pl.get(books.indexOf(b))).filter(Boolean).sort((x, y) => x - y), f = x => x.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); if (ds.length) when = ` · finishing ${ds.length > 1 ? 'between ' + f(ds[0]) + ' and ' + f(ds[ds.length - 1]) : 'around ' + f(ds[0])}`; } catch (e) {}
             try { window.__toast({ mode: 'cz', body: `🌷 ${bn(n)} programmed${when}`, action: { label: 'Undo', onClick: () => { if (window.globalUndo) window.globalUndo(); } } }); } catch (e) {}
         };
     }
