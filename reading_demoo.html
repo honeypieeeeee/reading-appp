@@ -810,21 +810,58 @@ html[data-theme=cocoa]{--c-322323:52 34 37;--c-3c2828:62 38 42;--c-3e4a3d:78 68 
         </div>
 
         <!-- Reading Streak -->
-        <div class="card flex flex-col gap-3">
-            <h2 class="font-serif text-sm font-bold text-[rgb(var(--c-3e4a3d))] flex items-center gap-2"><span>🔥</span> Reading Streak</h2>
-            <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center gap-3">
-                    <div id="streak-flower" class="text-4xl">🌱</div>
-                    <div>
-                        <div class="font-serif text-2xl font-bold text-[rgb(var(--c-3e4a3d))] leading-none"><span id="streak-count">0</span> <span class="text-xs font-medium text-[rgb(var(--c-6b705c))]">day streak</span></div>
-                        <div class="text-[10px] text-[rgb(var(--c-6b705c))] mt-1">Best: <strong id="streak-best" class="text-[rgb(var(--c-3e4a3d))]">0</strong> days</div>
-                    </div>
-                </div>
-                <button id="checkin-btn" onclick="toggleCheckIn(todayKey())" class="px-3 py-2 rounded-lg text-xs font-bold shadow-sm transition whitespace-nowrap"></button>
+        <div class="card rsx-card flex flex-col">
+            <i class="rsx-sp s1" aria-hidden="true">✦</i><i class="rsx-sp s2" aria-hidden="true">♡</i>
+            <div class="rsx-head"><h2 class="font-serif text-sm font-bold text-[rgb(var(--c-3e4a3d))] flex items-center gap-2"><span>🔥</span> Reading Streak</h2><span class="rsx-best" title="Your longest streak">🏆 best <b id="streak-best">0</b> <span id="rsx-best-u">days</span></span></div>
+            <div class="rsx-main">
+                <div class="rsx-ring" id="rsx-ring" style="--p:0" title="Progress to your next streak bloom"><span id="streak-flower">🌱</span></div>
+                <div class="rsx-num"><div class="rsx-big"><span id="streak-count">0</span><small id="rsx-unit">day streak</small></div><p id="rsx-next"></p></div>
+                <button id="checkin-btn" onclick="toggleCheckIn(todayKey())" class="rsx-btn"></button>
             </div>
-            <div id="streak-week" class="grid grid-cols-7 gap-1"></div>
-            <p id="streak-msg" class="text-[11px] italic font-serif text-[rgb(var(--c-6b705c))] text-center"></p>
+            <div id="streak-week" class="rsx-week"></div>
+            <p id="streak-msg" class="rsx-msg"></p>
         </div>
+        <style>
+/* ===== Reading Streak card ===== */
+.rsx-card{position:relative;overflow:hidden;gap:12px!important;background:radial-gradient(#f6dfe4 1px,transparent 1.4px) 0 0/16px 16px,linear-gradient(160deg,#fff 0%,#fff6f8 55%,#f6f9ee 100%)!important;border:2px solid #f0d0d8!important;border-radius:24px!important}
+.rsx-sp{position:absolute;font-style:normal;font-size:11px;color:#e8a0b4;opacity:.6;pointer-events:none;animation:rsxtw 2.8s ease-in-out infinite}.rsx-sp.s1{top:12px;right:110px}.rsx-sp.s2{bottom:12px;left:18px;font-size:9px;animation-delay:1.3s}
+@keyframes rsxtw{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.85;transform:scale(1.15)}}
+.rsx-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.rsx-best{flex:none;padding:3px 10px;border-radius:99px;background:#fff8e1;border:1.5px solid #f0d9a0;font:800 10px Montserrat,sans-serif;color:#8a5a12;white-space:nowrap}
+.rsx-best b{font-weight:900}
+.rsx-main{display:flex;align-items:center;gap:12px}
+.rsx-ring{--p:0;flex:none;position:relative;width:62px;height:62px;border-radius:50%;background:conic-gradient(#e8a0b4 calc(var(--p)*1%),#f6e3e7 0);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 14px -8px rgba(168,80,106,.6)}
+.rsx-ring::before{content:'';position:absolute;inset:5px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#fdeef0)}
+.rsx-ring>#streak-flower{position:relative;font-size:28px;line-height:1}
+.rsx-num{flex:1;min-width:0}
+.rsx-big{display:flex;align-items:baseline;gap:6px;line-height:1}
+.rsx-big>#streak-count{font:900 30px/1 'Playfair Display',serif;color:#e9799f;text-shadow:2px 2px 0 #fff}
+.rsx-big>small{font:700 11.5px Montserrat,sans-serif;color:rgb(var(--c-6b705c))}
+#rsx-next{margin:5px 0 0;font:italic 600 11px/1.35 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+#rsx-next b{font-style:normal;color:rgb(var(--c-a8506a))}
+.rsx-btn{flex:none;position:relative;overflow:hidden;height:36px;padding:0 15px;border-radius:99px;border:0;font:800 11.5px Montserrat,sans-serif;white-space:nowrap;color:#fff;background:linear-gradient(135deg,#f4b6c2,#e8a0b4);text-shadow:0 1px 1px rgba(168,80,106,.45);box-shadow:0 8px 16px -8px rgba(168,80,106,.75);transition:transform .15s,box-shadow .15s}
+.rsx-btn:hover{transform:translateY(-1px) scale(1.03)}
+.rsx-btn::after{content:'';position:absolute;top:0;bottom:0;left:0;width:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:rsxshine 3.4s ease-in-out infinite}
+@keyframes rsxshine{0%{transform:translateX(-120%)}60%,100%{transform:translateX(420%)}}
+.rsx-btn.done{background:linear-gradient(135deg,#b5c78a,#8a9a5b);text-shadow:0 1px 1px rgba(0,0,0,.15);box-shadow:0 8px 16px -8px rgba(95,110,58,.75)}
+.rsx-btn.done::after{display:none}
+.rsx-week{position:relative;display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:8px 6px 6px;border-radius:18px;background:#ffffffc7;border:1.5px solid #f6e3e7}
+.rsx-week::before{content:'';position:absolute;left:9%;right:9%;top:calc(50% + 8px);border-top:2.5px dotted #ecc6d1;pointer-events:none}
+.rsx-d{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;padding:0;background:none;border:0;cursor:pointer}
+.rsx-d:disabled{cursor:default}
+.rsx-d>small{font:800 9.5px Montserrat,sans-serif;letter-spacing:.04em;color:rgb(var(--c-6b705c))}
+.rsx-d>i{position:relative;z-index:1;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:14px;background:#fff;border:2px dotted #e8c4cf;transition:transform .2s cubic-bezier(.3,1.6,.5,1),box-shadow .15s}
+.rsx-d:not(:disabled):hover>i{transform:scale(1.14) rotate(-6deg)}
+.rsx-d.on>i{border:2px solid #fff;background:linear-gradient(135deg,#fde3e9,#eaf1dc);box-shadow:0 0 0 2px #e8a0b4,0 5px 10px -5px rgba(168,80,106,.7)}
+.rsx-d.today>small{color:rgb(var(--c-a8506a))}
+.rsx-d.today:not(.on)>i{border:2px dashed #e8a0b4;animation:rsxpulse 2s ease-in-out infinite}
+.rsx-d.today::after{content:'today';position:absolute;bottom:-12px;font:800 7.5px Montserrat,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:rgb(var(--c-a8506a))}
+.rsx-d.fut>small{opacity:.45}.rsx-d.fut>i{opacity:.45;border-style:solid;border-color:#f3e6ea}
+@keyframes rsxpulse{0%,100%{box-shadow:0 0 0 0 rgba(232,160,180,.45)}50%{box-shadow:0 0 0 5px rgba(232,160,180,0)}}
+.rsx-week:has(.today){padding-bottom:16px}
+.rsx-msg{margin:0;padding:6px 12px;border-radius:99px;background:#fdeef0;border:1.5px dashed #f0c9d4;font:italic 600 11px/1.4 'Playfair Display',serif;color:rgb(var(--c-a8506a));text-align:center}
+@media (prefers-reduced-motion:reduce){.rsx-sp,.rsx-btn::after,.rsx-d.today>i{animation:none}}
+        </style>
 
         <style>
 .ins-card{background:rgba(255,255,255,.7);border:1px solid rgb(var(--c-e8c4c4));border-radius:14px;padding:12px}
@@ -2990,12 +3027,20 @@ function authorLinks(b) { return authorsOf(b).map(n => `<button type="button" da
 
         document.getElementById('streak-count').innerText = current;
         document.getElementById('streak-best').innerText = best;
+        { const u = document.getElementById('rsx-best-u'); if (u) u.innerText = best === 1 ? 'day' : 'days'; const su = document.getElementById('rsx-unit'); if (su) su.innerText = current === 1 ? 'day streak' : 'day streak'; }
         document.getElementById('streak-flower').innerText =
             current >= 30 ? '🌳' : current >= 14 ? '🌸' : current >= 7 ? '🌻' : current >= 3 ? '🌼' : current >= 1 ? '🌷' : '🌱';
+        // ring = progress to the next bloom (3 · 7 · 14 · 30 · 60 · 100 days)
+        { const MS = [3, 7, 14, 30, 60, 100], nx = MS.find(m => m > current), pv = [0, ...MS].filter(m => m <= current).pop() || 0;
+          const ring = document.getElementById('rsx-ring'), nt = document.getElementById('rsx-next');
+          if (ring) ring.style.setProperty('--p', nx ? Math.round((current - pv) / (nx - pv) * 100) : 100);
+          const NB = { 3: '🌼', 7: '🌻', 14: '🌸', 30: '🌳', 60: '🌳', 100: '🌳' };
+          if (nt) nt.innerHTML = nx ? `${NB[nx]} blooms in <b>${nx - current} day${nx - current === 1 ? '' : 's'}</b>` : 'in full bloom 🌳✨'; }
 
         const btn = document.getElementById('checkin-btn');
         btn.innerText = doneToday ? 'Checked in ✓' : 'Check in 🌸';
-        btn.className = `px-3 py-2 rounded-lg text-xs font-bold shadow-sm transition whitespace-nowrap ${doneToday ? 'bg-[rgb(var(--c-8a9a5b))] text-white' : 'bg-[rgb(var(--c-e8c4c4))] hover:bg-[rgb(var(--c-dcb2b2))] text-[rgb(var(--c-3e4a3d))]'}`;
+        btn.className = 'rsx-btn' + (doneToday ? ' done' : '');
+        btn.title = doneToday ? 'Tap to undo today\u2019s check-in' : 'Mark today as a reading day';
 
         // This calendar week, Monday to Sunday (tap any day up to today to add or remove a check-in)
         const week = document.getElementById('streak-week');
@@ -3007,12 +3052,11 @@ function authorLinks(b) { return authorsOf(b).map(n => `<button type="button" da
             const key = dateKey(d);
             const on = checkIns.has(key);
             const cell = document.createElement('button');
-            cell.className = 'flex flex-col items-center gap-0.5';
-            cell.title = key;
-            if (future) { cell.disabled = true; cell.style.opacity = '.4'; cell.style.cursor = 'default'; } else cell.onclick = () => toggleCheckIn(key);
-            cell.innerHTML = `
-                <span class="text-[9px] uppercase font-bold text-[rgb(var(--c-6b705c))]">${'SMTWTFS'[d.getDay()]}</span>
-                <span class="w-7 h-7 rounded-full flex items-center justify-center text-sm border ${on ? 'bg-[rgb(var(--c-8a9a5b)/0.2)] border-[rgb(var(--c-8a9a5b))]' : 'bg-white/70 border-[rgb(var(--c-e8c4c4))]'} ${i === 0 ? 'ring-2 ring-[rgb(var(--c-e8c4c4))]' : ''}">${on ? '🌸' : ''}</span>`;
+            cell.type = 'button';
+            cell.className = 'rsx-d' + (on ? ' on' : '') + (i === 0 ? ' today' : '') + (future ? ' fut' : '');
+            cell.title = d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) + (future ? '' : on ? ' · read ✓ (tap to undo)' : ' · tap to mark as read');
+            if (future) cell.disabled = true; else cell.onclick = () => toggleCheckIn(key);
+            cell.innerHTML = `<small>${'SMTWTFS'[d.getDay()]}</small><i>${on ? '🌸' : ''}</i>`;
             week.appendChild(cell);
         }
 
@@ -10136,9 +10180,9 @@ function wDraw(cv,y){const s=wst(y),x=cv.getContext('2d');cv.width=1080;cv.heigh
  [[92,96,20,'#ffb3cb'],[990,110,16,'#ffd36e'],[60,300,13,'#c9a8ee'],[1018,300,15,'#a9cf7e']].forEach(([a,b,r,c])=>spark(a,b,r,c));heart(160,190,14,'#ff9dbb99');heart(930,205,12,'#ff9dbb99');
  // cover shelf card: shrinks to fit the covers, and the shelf + stats sit centred in the space under the title
  const f=books.filter(b=>b.read&&yr(b)===y).sort((a,b)=>String(a.finishedAt).localeCompare(String(b.finishedAt)));
- const PX=66,PW=948,IW=PW-88,IHmax=880,MAX=140,more=f.length>MAX?f.length-(MAX-1):0,list=more?f.slice(0,MAX-1):f,N=list.length+(more?1:0);
+ const PX=66,PW=948,IW=PW-88,STH=150*2+18+24+84,GAP=36,top=318,room=1858-top,IHmax=room-STH-GAP-112,MAX=140,more=f.length>MAX?f.length-(MAX-1):0,list=more?f.slice(0,MAX-1):f,N=list.length+(more?1:0);
  let L=null;if(N){for(let c=2;c<=14;c++){const gp=c<=6?24:c<=9?17:11,cw=(IW-gp*(c-1))/c,ch=cw*1.5,rows=Math.ceil(N/c),th=rows*ch+gp*(rows-1);const k=th>IHmax?IHmax/th:1,w=cw*k;if(!L||w>L.w+.5)L={c,gp:gp*k,w,h:ch*k,rows}}L.gw=L.c*L.w+(L.c-1)*L.gp;L.gh=L.rows*L.h+(L.rows-1)*L.gp}
- const IH=L?Math.max(L.gh,300):360,PH=IH+112,STH=196*2+22+30+96,GAP=40,top=318,room=1866-top,PY=top+Math.max(0,(room-(PH+GAP+STH))/2),SY=PY+PH+GAP;
+ const IH=L?Math.max(L.gh,300):360,PH=IH+112,PY=top+Math.max(0,(room-(PH+GAP+STH))/2),SY=PY+PH+GAP;
  x.fillStyle='#e8a0b433';rr(PX+6,PY+12,PW,PH,48);x.fill();x.fillStyle='#fffdfb';rr(PX,PY,PW,PH,48);x.fill();x.strokeStyle='#f6d3dd';x.lineWidth=5;x.stroke();
  const tape=(tx,ty,rot,c)=>{x.save();x.translate(tx,ty);x.rotate(rot);x.fillStyle=c;x.fillRect(-62,-18,124,36);x.fillStyle='#ffffff55';for(let k=-56;k<62;k+=16)x.fillRect(k,-18,6,36);x.restore()};
  tape(PX+80,PY+4,-.18,'#f7b6ccd9');tape(PX+PW-80,PY+4,.16,'#cfe3b1d9');
@@ -10160,20 +10204,20 @@ function wDraw(cv,y){const s=wst(y),x=cv.getContext('2d');cv.width=1080;cv.heigh
  }
  // stats: 2 × 2 big cute pills
  const ST=[['📚',s.n.toLocaleString(),s.n===1?'book':'books','#ffeef3','#e98aac'],['🔥',s.best.toLocaleString(),s.best===1?'day streak':'day streak','#fff1e0','#e59a4f'],['⏳',s.mins.toLocaleString(),'minutes','#efe7fb','#9a7bc4'],['📄',s.pages.toLocaleString(),'pages','#eef6e0','#7a9a4e']];
- ST.forEach(([em,v,l,bg,ac],i)=>{const sx=66+(i%2)*484,sy=SY+Math.floor(i/2)*218,sw=464,sh=196;
-  x.fillStyle=ac+'40';rr(sx+4,sy+10,sw,sh,56);x.fill();x.fillStyle=bg;rr(sx,sy,sw,sh,56);x.fill();x.strokeStyle=ac+'99';x.lineWidth=4;x.setLineDash([2,10]);x.stroke();x.setLineDash([]);
-  x.fillStyle='#fff';x.beginPath();x.arc(sx+96,sy+sh/2,62,0,7);x.fill();x.strokeStyle=ac+'77';x.lineWidth=5;x.stroke();
-  x.textAlign='center';x.textBaseline='middle';x.font='66px serif';x.fillStyle='#000';x.fillText(em,sx+96,sy+sh/2+5);x.textBaseline='alphabetic';
-  x.textAlign='left';x.fillStyle='#3e4a3d';let fs=86;x.font='900 '+fs+'px '+SER;while(x.measureText(v).width>sw-200&&fs>40){fs-=4;x.font='900 '+fs+'px '+SER}x.fillText(v,sx+182,sy+114);
-  x.fillStyle=ac;x.font='800 28px '+SANS;x.fillText(l.toUpperCase(),sx+184,sy+156)});
+ ST.forEach(([em,v,l,bg,ac],i)=>{const sx=66+(i%2)*484,sy=SY+Math.floor(i/2)*168,sw=464,sh=150;
+  x.fillStyle=ac+'40';rr(sx+4,sy+8,sw,sh,46);x.fill();x.fillStyle=bg;rr(sx,sy,sw,sh,46);x.fill();x.strokeStyle=ac+'99';x.lineWidth=4;x.setLineDash([2,10]);x.stroke();x.setLineDash([]);
+  x.fillStyle='#fff';x.beginPath();x.arc(sx+80,sy+sh/2,48,0,7);x.fill();x.strokeStyle=ac+'77';x.lineWidth=4;x.stroke();
+  x.textAlign='center';x.textBaseline='middle';x.font='50px serif';x.fillStyle='#000';x.fillText(em,sx+80,sy+sh/2+4);x.textBaseline='alphabetic';
+  x.textAlign='left';x.fillStyle='#3e4a3d';let fs=66;x.font='900 '+fs+'px '+SER;while(x.measureText(v).width>sw-170&&fs>34){fs-=4;x.font='900 '+fs+'px '+SER}x.fillText(v,sx+148,sy+86);
+  x.fillStyle=ac;x.font='800 23px '+SANS;x.fillText(l.toUpperCase(),sx+150,sy+122)});
  // two little ribbons: top-rated book and best month
  const RB=[['⭐','top rated',s.top&&+s.top.rating?s.top.title:'—','#fff8e1','#d9a62e'],['🌙','best month',s.mo&&s.mo!=='—'?s.mo+(s.avg&&s.avg!=='—'?' · ★ '+s.avg+' avg':''):'—','#fdeef0','#d98aa0']];
- const RY=SY+218*2+30-22;
- RB.forEach(([em,l,v,bg,ac],i)=>{const rx=66+i*484,rw=464,rh=96;
+ const RY=SY+168*2+24-18;
+ RB.forEach(([em,l,v,bg,ac],i)=>{const rx=66+i*484,rw=464,rh=84;
   x.fillStyle=bg;rr(rx,RY,rw,rh,48);x.fill();x.strokeStyle=ac+'aa';x.lineWidth=3;x.stroke();
-  x.textAlign='center';x.textBaseline='middle';x.font='40px serif';x.fillStyle='#000';x.fillText(em,rx+52,RY+rh/2+3);x.textBaseline='alphabetic';
-  x.textAlign='left';x.fillStyle=ac;x.font='800 21px '+SANS;x.fillText(l.toUpperCase(),rx+96,RY+38);
-  x.fillStyle='#3e4a3d';x.font='italic 700 32px '+SER;x.fillText(fitT(v,rw-120),rx+96,RY+76)});
+  x.textAlign='center';x.textBaseline='middle';x.font='36px serif';x.fillStyle='#000';x.fillText(em,rx+48,RY+rh/2+3);x.textBaseline='alphabetic';
+  x.textAlign='left';x.fillStyle=ac;x.font='800 19px '+SANS;x.fillText(l.toUpperCase(),rx+90,RY+33);
+  x.fillStyle='#3e4a3d';x.font='italic 700 29px '+SER;x.fillText(fitT(v,rw-116),rx+90,RY+66)});
  if(!wDraw.f&&document.fonts&&document.fonts.load){wDraw.f=1;Promise.all([document.fonts.load("900 40px 'Playfair Display'"),document.fonts.load('700 40px Caveat'),document.fonts.load('800 24px Montserrat')]).then(redraw).catch(()=>{})}}
 $('qb-w').onclick=()=>{const ys=[...new Set(books.filter(b=>b.read&&yr(b)).map(yr))].sort((a,b)=>b-a);if(!ys.length)ys.push(new Date().getFullYear());const o=modal(`<h3>🎁 Your Wrapped</h3><select id="w-y" class="p-1 border border-[rgb(var(--c-e8c4c4))] rounded-lg mb-2">${ys.map(y=>`<option>${y}</option>`).join('')}</select><canvas id="w-c" style="display:block;width:100%;max-width:440px;margin:0 auto;border-radius:18px;box-shadow:0 10px 26px -12px rgba(168,80,106,.55)"></canvas><div class="flex justify-between mt-3"><button class="xb" id="w-s">💾 Save as image</button><button class="xb p" id="w-x">Close</button></div>`),cv=o.querySelector('#w-c'),go=()=>wDraw(cv,+o.querySelector('#w-y').value);go();o.querySelector('#w-y').onchange=go;o.querySelector('#w-s').onclick=()=>dl(cv,'wrapped-'+o.querySelector('#w-y').value+'.png');o.querySelector('#w-x').onclick=()=>o.remove()};
 })();
