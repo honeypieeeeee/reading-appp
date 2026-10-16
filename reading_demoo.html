@@ -16027,7 +16027,7 @@ p.wpx-title{display:flex!important;align-items:center;gap:12px;margin:0 0 12px!i
 </style>
 
 <style id="dnf-css">
-#abandoned-list .dnfp{padding:0!important;overflow:hidden}
+#abandoned-list .dnfp{padding:0!important;overflow:hidden;flex-shrink:0}   /* #abandoned-list is a flex column: without this the tall tombstone grid squashes the box to 2px */
 #abandoned-list .dnf-hd{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;text-align:left;background:none;border:0;cursor:pointer;color:inherit}
 #abandoned-list .dnf-hd:focus-visible{outline:2px solid rgba(233,220,255,.7);outline-offset:-2px;border-radius:20px}
 #abandoned-list .dnfp:not(.open)>.dnf-in{display:none}
