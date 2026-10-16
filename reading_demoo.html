@@ -5575,6 +5575,50 @@ body{padding-left:62px}
     // ===================== YEAR: "Reading Wrapped" =====================
     window.yrGo = s => { yrSec = s; renderYear(); };
     window.yrCur = () => yrSec;
+
+    // ---- 🌈 rainbow shelf: real spines on wooden planks, sorted by colour or date, with a hover card ----
+    let rsSort = 'hue'; try { if (localStorage.getItem('enchantedRainbowSort') === 'date') rsSort = 'date'; } catch (e) {}
+    window.rsSetSort = m => { rsSort = m; try { localStorage.setItem('enchantedRainbowSort', m); } catch (e) {} renderYear(); };
+    const rsHex = c => { let h = String(c || '').replace('#', ''); if (h.length === 3 || h.length === 4) h = h.split('').map(x => x + x).join(''); const n = parseInt(h.slice(0, 6), 16); return /^[0-9a-f]{6}/i.test(h) && !isNaN(n) ? [n >> 16 & 255, n >> 8 & 255, n & 255] : null; };
+    const rsHsl = ([r, g, b]) => { r /= 255; g /= 255; b /= 255; const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn; if (!d) return [0, 0, l]; const s = d / (1 - Math.abs(2 * l - 1)); let h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; h = (h * 60 + 360) % 360; return [h, s, l]; };
+    const rainbowShelf = done => {
+        const byDate = (a, z) => (a.finishedAt || '') < (z.finishedAt || '') ? -1 : (a.finishedAt || '') > (z.finishedAt || '') ? 1 : 0;
+        const col = b => rsHex(b.coverColor) ? b.coverColor : '#a3b18a';
+        let sp = done.slice().sort(byDate).slice(-150);
+        if (rsSort === 'hue') {
+            const key = b => { const [h, s, l] = rsHsl(rsHex(col(b))); return s < 0.12 ? 1000 + (1 - l) : h; };   // greys & neutrals sit at the end, light → dark
+            sp.sort((a, z) => key(a) - key(z) || byDate(a, z));
+        }
+        if (!sp.length) return '<p class="text-xs italic text-[rgb(var(--c-6b705c))]">No finished books yet 🌱</p>';
+        const spines = sp.map((b, i) => {
+            const c = col(b), [r, g, bl] = rsHex(c), lum = (0.299 * r + 0.587 * g + 0.114 * bl) / 255;
+            const w = Math.round(Math.max(14, Math.min(32, 10 + (b.totalPages || 220) / 32))), h = 74 + hs(b.title) % 32;
+            const ink = lum > 0.62 ? 'rgb(var(--c-3e4a3d))' : '#fff', fav = b.favorite ? ' fav' : '';
+            return `<button type="button" class="rs-sp${fav}" aria-label="${esc(b.title)}" onclick="openReviewModal(${bookRef(b)})"
+                data-t="${esc(b.title)}" data-a="${esc(authorText(b) || '')}" data-r="${b.rating ? starStr(b.rating) + ' ' + fmtRating(b.rating) : ''}" data-d="${b.finishedAt ? fmtKey(b.finishedAt) : ''}" data-p="${b.totalPages || ''}" data-c="${c}"
+                style="--c:${c};--ink:${ink};width:${w}px;height:${h}px;margin-top:${108 - h}px;animation-delay:${Math.min(i, 60) * 12}ms"><span>${esc(b.title)}</span></button>`;
+        }).join('');
+        const tg = (m, l) => `<button type="button" class="${rsSort === m ? 'on' : ''}" onclick="rsSetSort('${m}')">${l}</button>`;
+        return `<div class="rs-top"><span>${sp.length} spine${sp.length === 1 ? '' : 's'}${done.length > sp.length ? ` · latest ${sp.length} of ${done.length}` : ''}</span><span class="rs-tg">${tg('hue', '🌈 By colour')}${tg('date', '🗓 By date')}</span></div>
+            <div class="rs-shelf"><i class="rs-bookend"></i>${spines}<i class="rs-bookend r"></i></div>
+            <p class="text-[10px] text-[rgb(var(--c-6b705c))] mt-1.5">One spine per finished book · thicker = more pages · 🎀 ribbon = favourite · hover a spine to see the book, tap to open it.</p>`;
+    };
+    (() => {   // one floating hover card shared by every spine (never clipped by scroll boxes)
+        const tip = document.createElement('div'); tip.id = 'rs-tip'; tip.setAttribute('role', 'tooltip'); tip.hidden = true; document.body.appendChild(tip);
+        const show = sp => {
+            const d = sp.dataset;
+            tip.innerHTML = `<i style="background:${d.c}"></i><div><b>${d.t}</b>${d.a ? `<small>${d.a}</small>` : ''}${d.r ? `<em>${d.r}</em>` : ''}${d.d || d.p ? `<small>${d.d ? '✓ ' + d.d : ''}${d.d && d.p ? ' · ' : ''}${d.p ? d.p + ' pages' : ''}</small>` : ''}</div>`;
+            tip.hidden = false;
+            const r = sp.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
+            let x = r.left + r.width / 2 - tw / 2, y = r.top - th - 18;
+            x = Math.max(8, Math.min(innerWidth - tw - 8, x)); const below = y < 8; if (below) y = r.bottom + 10; tip.classList.toggle('below', below);
+            tip.style.left = x + 'px'; tip.style.top = y + 'px'; tip.style.setProperty('--ax', (r.left + r.width / 2 - x) + 'px');
+        };
+        const hide = () => { tip.hidden = true; };
+        document.addEventListener('mouseover', e => { const sp = e.target.closest && e.target.closest('.rs-sp'); if (sp) show(sp); else if (!tip.hidden) hide(); });
+        document.addEventListener('focusin', e => { const sp = e.target.closest && e.target.closest('.rs-sp'); if (sp) show(sp); else hide(); });
+        document.addEventListener('scroll', hide, true); addEventListener('blur', hide); document.addEventListener('click', hide, true);
+    })();
     renderYear = function () {
         const sel = $('year-select'), thisYear = String(new Date().getFullYear()), years = new Set([thisYear]);
         books.forEach(b => { if (b.finishedAt && b.read && b.status !== 'abandoned') years.add(b.finishedAt.slice(0, 4)); });
@@ -5616,7 +5660,7 @@ body{padding-left:62px}
         } else if (yrSec === 'bk') {
             const grp = y === 'all' ? tally(done.map(b => (b.finishedAt || '').slice(0, 4)).filter(Boolean)).sort((a, z) => a[0] - z[0]).map(([k, v]) => [k.slice(2), v]) : MONTHS.map((m, i) => [m.slice(0, 3), done.filter(b => (b.finishedAt || '').slice(5, 7) === String(i + 1).padStart(2, '0')).length]);
             const mx = Math.max(0, ...grp.map(g => g[1])), sp = done.slice().sort((a, z) => (a.finishedAt || '') < (z.finishedAt || '') ? -1 : 1).slice(0, 150);
-            body = SEC(y === 'all' ? '📊 Books per year' : '📊 Books per month', bars(grp.map(g => [g[0], g[1], g[1] === mx && mx > 0]))) + SEC('🌈 Your rainbow shelf', sp.length ? `<div class="wr-shelf">${sp.map(b => `<button title="${esc(b.title)}" onclick="openReviewModal(${bookRef(b)})" style="background:${/^#/.test(b.coverColor || '') ? b.coverColor : 'rgb(var(--c-a3b18a))'};width:${Math.max(9, Math.min(26, 8 + (b.totalPages || 200) / 40))}px;height:${58 + hs(b.title) % 42}px"></button>`).join('')}</div><p class="text-[10px] text-[rgb(var(--c-6b705c))] mt-1.5">One spine per finished book, tap to open it.</p>` : '<p class="text-xs italic text-[rgb(var(--c-6b705c))]">No finished books yet 🌱</p>')
+            body = SEC(y === 'all' ? '📊 Books per year' : '📊 Books per month', bars(grp.map(g => [g[0], g[1], g[1] === mx && mx > 0]))) + SEC('🌈 Your rainbow shelf', rainbowShelf(done))
                 + SEC('🏷️ Tropes & vibes', (cloud(tags.slice(0, 20), '', TAXO.PRE.tags) || '<p class="text-xs italic text-[rgb(var(--c-6b705c))]">Add tags to your books to see them here.</p>') + (vibes.length ? `<div class="mt-2">${cloud(vibes.slice(0, 12), 'p', TAXO.PRE.vibes)}</div>` : ''))
                 + (fan.length ? SEC('🏰 Fandoms', fan.slice(0, 6).map(([k, v]) => `<div class="wr-row"><b>${esc(k)}</b><div><i style="width:${v / fan[0][1] * 100}%"></i></div><span>${v}</span></div>`).join('')) : '');
         } else if (yrSec === 'hb') {
@@ -5788,6 +5832,37 @@ body{padding-left:62px}
 .wr-anim .wr-sup div{animation:x-up .45s ease backwards}
 .wr-anim .wr-cloud span{animation:x-pop .45s cubic-bezier(.3,1.5,.5,1) backwards}
 .wr-anim .wr-shelf button{animation:x-drop .55s cubic-bezier(.3,1.4,.5,1) backwards}
+/* ---- 🌈 rainbow shelf ---- */
+.rs-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin:-2px 0 8px;font:700 10px Montserrat,sans-serif;color:rgb(var(--c-6b705c))}
+.rs-tg{display:inline-flex;padding:2px;border-radius:99px;background:rgb(var(--c-eef2e2));border:1px solid rgb(var(--c-e8c4c4))}
+.rs-tg button{font:800 10px Montserrat,sans-serif;padding:3px 10px;border-radius:99px;color:rgb(var(--c-6b705c));transition:background .2s,color .2s}
+.rs-tg button.on{background:#fff;color:rgb(var(--c-a8506a));box-shadow:0 2px 6px rgb(var(--c-e8a0b4)/0.3)}
+.rs-shelf{display:flex;flex-wrap:wrap;align-items:flex-end;gap:0 3px;padding:6px 12px 0;border-radius:12px;
+  background:repeating-linear-gradient(to bottom,transparent 0 108px,rgb(var(--c-c9a173)) 108px 116px,#a8804f 116px 118px,transparent 118px 124px),linear-gradient(rgb(var(--c-c9a173)/0.08),rgb(var(--c-c9a173)/0.2));
+  box-shadow:inset 0 0 0 1px rgb(var(--c-e8c4c4)),inset 0 10px 16px -10px #a8804f59}
+.rs-sp{position:relative;flex:none;margin-bottom:16px;padding:6px 0;border-radius:3px 3px 1px 1px;cursor:pointer;overflow:hidden;
+  background:linear-gradient(90deg,#0002 0,#fff3 22%,transparent 45%,#0000001a 100%),var(--c);
+  box-shadow:inset 0 5px 0 -2px #fff5,inset 0 -6px 0 -3px #0002,0 1px 0 #0002;
+  transition:transform .28s cubic-bezier(.3,1.5,.5,1),box-shadow .28s,filter .2s}
+.rs-sp::before,.rs-sp::after{content:'';position:absolute;left:0;right:0;height:2px;background:var(--ink);opacity:.35}
+.rs-sp::before{top:9px}.rs-sp::after{bottom:9px}
+.rs-sp>span{display:block;height:100%;writing-mode:vertical-rl;transform:rotate(180deg);margin:0 auto;padding:6px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:700 9px/1 'Playfair Display',serif;letter-spacing:.02em;color:var(--ink);opacity:.92;pointer-events:none}
+.rs-sp[style*="width:14px"]>span,.rs-sp[style*="width:15px"]>span{font-size:8px}
+.rs-sp.fav>span{padding-bottom:16px}
+.rs-sp.fav::after{bottom:auto;top:0;left:auto;right:2px;width:5px;height:16px;opacity:1;background:rgb(var(--c-e8a0b4));clip-path:polygon(0 0,100% 0,100% 100%,50% 75%,0 100%)}
+.rs-sp:hover,.rs-sp:focus-visible{transform:translateY(-10px) rotate(-3deg);z-index:3;outline:0;filter:saturate(1.15) brightness(1.04);box-shadow:0 12px 14px rgb(var(--c-3e4a3d)/0.25),inset 0 5px 0 -2px #fff5}
+.rs-bookend{flex:none;width:10px;height:62px;margin-bottom:16px;border-radius:10px 2px 0 0;background:linear-gradient(90deg,#a8804f,rgb(var(--c-c9a173)));box-shadow:0 1px 0 #0002}
+.rs-bookend.r{border-radius:2px 10px 0 0;margin-left:auto}
+.wr-anim .rs-sp{animation:x-drop .55s cubic-bezier(.3,1.4,.5,1) backwards}
+#rs-tip{position:fixed;z-index:9999;display:flex;gap:9px;align-items:flex-start;max-width:240px;padding:8px 11px;border-radius:12px;background:#fffdfb;border:1.5px solid rgb(var(--c-e8c4c4));box-shadow:0 10px 24px rgb(var(--c-3e4a3d)/0.22);pointer-events:none;animation:rsTip .16s ease-out}
+#rs-tip[hidden]{display:none}
+#rs-tip::after{content:'';position:absolute;bottom:-7px;left:var(--ax,50%);width:12px;height:12px;margin-left:-6px;background:#fffdfb;border-right:1.5px solid rgb(var(--c-e8c4c4));border-bottom:1.5px solid rgb(var(--c-e8c4c4));transform:rotate(45deg)}
+#rs-tip.below::after{bottom:auto;top:-7px;transform:rotate(225deg)}
+#rs-tip>i{flex:none;width:10px;height:38px;border-radius:2px;box-shadow:inset -2px 0 3px #0002}
+#rs-tip b{display:block;font:800 12.5px/1.2 'Playfair Display',serif;color:rgb(var(--c-3e4a3d))}
+#rs-tip small{display:block;margin-top:2px;font:600 10px Montserrat,sans-serif;color:rgb(var(--c-6b705c))}
+#rs-tip em{display:block;margin-top:2px;font:800 10px Montserrat,sans-serif;font-style:normal;color:rgb(var(--c-8a5a12))}
+@keyframes rsTip{from{opacity:0;transform:translateY(4px)}}
 .wr-anim .cal-c:not(.void){animation:x-pop .45s cubic-bezier(.3,1.5,.5,1) backwards}
 .wr-anim .cal-c.td{animation:x-pop .45s cubic-bezier(.3,1.5,.5,1) backwards,x-ring 2.2s ease-out .6s infinite}
 .wr-anim .wr-pod .st{transform-origin:bottom;animation:x-grow-y .75s cubic-bezier(.3,1.3,.5,1) backwards}
