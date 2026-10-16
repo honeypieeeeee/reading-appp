@@ -4165,9 +4165,15 @@ window.SAFE = SAFE;
     // --- display helpers ---
     function chipsHTML(b) {
         // cute bubbles: green #tags, orange ⚠ warnings, purple ✨ vibes (own CSS, see .bub-*)
-        const c = (arr, k, pre) => SAFE.vis(arr).map(t => `<span class="bub bub-${k}" title="${esc(t)}">${pre}${esc(t)}</span>`).join('');
+        //  (styles are written inline too, so no other stylesheet / missing Tailwind can ever flatten them into plain text)
+        const BUB = {
+            tags: ['#eef2e2', '#cfdbb0', '#4f5d2c'],
+            warnings: ['#ffeedd', '#f6c99a', '#a5521b'],
+            vibes: ['#f3e8ff', '#e0c8f7', '#6b21a8']
+        };
+        const c = (arr, k, pre) => SAFE.vis(arr).map(t => { const [bg, bd, fg] = BUB[k]; return `<span class="bub bub-${k}" title="${esc(t)}" style="display:inline-flex;align-items:center;gap:3px;max-width:100%;box-sizing:border-box;margin:0;padding:2px 9px;border-radius:999px;border:1px solid ${bd};background:${bg};color:${fg};box-shadow:0 1.5px 0 ${bd};font:700 10px/1.4 Montserrat,sans-serif;letter-spacing:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle">${pre}${esc(t)}</span>`; }).join('');
         const h = c(b.tags, 'tags', '#') + c(b.warnings, 'warnings', '⚠️ ') + c(b.vibes, 'vibes', '✨ ');
-        return h ? `<div class="bub-row">${h}</div>` : '';
+        return h ? `<div class="bub-row" style="display:flex;flex-wrap:wrap;gap:4px;margin:3px 0 5px;line-height:1">${h}</div>` : '';
     }
     function extraLines(b) {
         const sel = `<select onchange="setStatus(${bookRef(books[b.originalIndex])}, this.value)" class="text-[10px] font-semibold bg-white/70 border border-[rgb(var(--c-e8c4c4))] rounded px-1 py-0.5 outline-none cursor-pointer mb-1" title="Reading status">${STATUSES.map(([v, l]) => `<option value="${v}" ${(b.status || '') === v ? 'selected' : ''}>${l}</option>`).join('')}</select>`;
@@ -5196,9 +5202,9 @@ window.SAFE = SAFE;
 .bub-row{display:flex!important;flex-wrap:wrap;gap:4px;margin:3px 0 5px}
 .bub{display:inline-flex!important;align-items:center;gap:2px;max-width:100%;padding:2px 9px!important;border-radius:99px!important;border:1.5px solid;font:700 10px/1.35 Montserrat,sans-serif!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 1.5px 0 var(--bub-sh);transition:transform .15s}
 .bub:hover{transform:translateY(-1px) scale(1.04)}
-.bub-tags{background:rgb(var(--c-eef2e2))!important;border-color:rgb(var(--c-cfdbb0))!important;color:rgb(var(--c-4f5d2c))!important;--bub-sh:rgb(var(--c-cfdbb0))}
+.bub-tags{background:#eef2e2!important;border-color:#cfdbb0!important;color:#4f5d2c!important;--bub-sh:#cfdbb0}
 .bub-warnings{background:#ffeedd!important;border-color:#f6c99a!important;color:#a5521b!important;--bub-sh:#f6c99a}
-.bub-vibes{background:rgb(var(--c-f3e8ff))!important;border-color:rgb(var(--c-e0c8f7))!important;color:rgb(var(--c-6b21a8))!important;--bub-sh:rgb(var(--c-e0c8f7))}
+.bub-vibes{background:#f3e8ff!important;border-color:#e0c8f7!important;color:#6b21a8!important;--bub-sh:#e0c8f7}
 @media (prefers-reduced-motion:reduce){.bub{transition:none}}
 .sg-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:6px}.sg-wrap:empty{display:none}
 .sg-cap{font:italic 500 10px 'Playfair Display',serif;color:rgb(var(--c-6b705c));margin-right:2px}
@@ -7662,7 +7668,14 @@ renderBackupNudge(); renderRes();
 .qe-card h3{font:700 17px 'Playfair Display',serif}.qe-card>div>p,.qe-sub{font-size:11px;color:rgb(var(--c-6b705c));margin:2px 0 8px}.qe-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}.qe-bar input[type=text]{flex:1;min-width:140px;padding:6px 10px;font-size:12px;border:1px solid rgb(var(--c-e8c4c4));border-radius:8px;outline:0}.qe-bar label{font-size:11px;display:flex;gap:5px;align-items:center}
 .qe-btn{font-size:11px;font-weight:700;padding:6px 12px;border-radius:99px;background:#fff;border:1px solid rgb(var(--c-e8c4c4));color:rgb(var(--c-3e4a3d))}.qe-btn.pri{background:rgb(var(--c-8a9a5b));border-color:rgb(var(--c-8a9a5b));color:#fff}.qe-btn:disabled{opacity:.5}.qe-scroll{overflow-y:auto;flex:1;min-height:120px;max-height:56vh;display:flex;flex-direction:column;gap:6px;padding-right:4px}.qe-foot{display:flex;justify-content:space-between;gap:8px;margin-top:10px}
 .qe-r{display:flex;gap:10px;align-items:center;padding:7px 10px;border:1px solid rgb(var(--c-f0dede));border-radius:10px;cursor:pointer;background:rgb(var(--c-fffafa))}.qe-t{font:600 12px 'Playfair Display',serif;flex:1;min-width:0}.qe-m{font-size:10px;color:rgb(var(--c-b76e82));white-space:nowrap}
-.qe-c{border:1px solid rgb(var(--c-e8c4c4));border-radius:14px;padding:10px 12px;background:rgb(var(--c-fffafa))}.qe-ct{font:700 13px 'Playfair Display',serif;margin-bottom:6px}.qe-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 10px}.qe-g label{font-size:10px;font-weight:700;color:rgb(var(--c-6b705c));display:flex;flex-direction:column;gap:2px}.qe-g input{font-size:12px;font-weight:500;padding:5px 8px;border:1px solid rgb(var(--c-e8c4c4));border-radius:8px;outline:0;background:#fff;color:rgb(var(--c-3e4a3d))}`;
+.qe-c{border:1px solid rgb(var(--c-e8c4c4));border-radius:14px;padding:10px 12px;background:rgb(var(--c-fffafa))}.qe-ct{font:700 13px 'Playfair Display',serif;margin-bottom:6px}.qe-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 10px}.qe-g label{font-size:10px;font-weight:700;color:rgb(var(--c-6b705c));display:flex;flex-direction:column;gap:2px}.qe-g input{font-size:12px;font-weight:500;padding:5px 8px;border:1px solid rgb(var(--c-e8c4c4));border-radius:8px;outline:0;background:#fff;color:rgb(var(--c-3e4a3d))}
+.qe-tl-ta{width:100%;padding:10px 12px;font:500 12px/1.5 Montserrat,sans-serif;border:2px dashed rgb(var(--c-e8b4c2));border-radius:14px;background:rgb(var(--c-fffafa));color:rgb(var(--c-3e4a3d));outline:0;resize:vertical}.qe-tl-ta:focus{border-color:rgb(var(--c-e8a0b4));background:#fff}
+.qe-tl-r{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid rgb(var(--c-f0dede));border-radius:12px;background:rgb(var(--c-fffafa))}.qe-tl-r.miss{border-style:dashed;background:#fff}.qe-tl-r>input{margin-top:3px}
+.qe-tl-b{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}.qe-tl-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.qe-tl-h b{font:700 12.5px 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));min-width:0;overflow-wrap:anywhere}
+.qe-tl-m{flex:none;font:800 10px Montserrat,sans-serif;color:rgb(var(--c-4f5d2c));background:rgb(var(--c-eef2e2));border:1px solid rgb(var(--c-cfdbb0));border-radius:99px;padding:1px 8px}
+.qe-card .qe-tl-b .qe-tl-sel{width:100%!important;height:auto!important;min-height:0!important;font:600 11px Montserrat,sans-serif!important;padding:4px 10px!important;border:1px solid rgb(var(--c-e8c4c4))!important;border-radius:99px!important;background-color:#fff!important;color:rgb(var(--c-3e4a3d))!important;outline:0}
+.qe-card .qe-tl-b .cz-btn{display:flex!important;align-items:center;justify-content:space-between;gap:6px;text-align:left}.qe-card .qe-tl-b .cz-lbl{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qe-tl-n{font-size:10.5px;color:rgb(var(--c-6b705c))}.qe-tl-n.ok{color:rgb(var(--c-4f5d2c))}.qe-tl-n.bad{color:rgb(var(--c-b25a5a));font-weight:700}`;
     document.head.appendChild(st);
 
     // ---- Graveyard: the "?" was the year for books with no finish date ----
@@ -7696,7 +7709,7 @@ renderBackupNudge(); renderRes();
     window.qeClose = () => $('qe-modal').classList.add('hidden');
     function qeStep1() {
         $('qe-body').innerHTML = `<h3>🪄 Quick Enchant</h3><p>Tick the scrolls you want to fill in, then add their details all in one go.</p>
-        <div class="qe-bar"><input type="text" id="qe-q" placeholder="Search scrolls…" value="${E(q)}" oninput="qeQ(this.value)"><label><input type="checkbox" ${onlyMissing ? 'checked' : ''} onchange="qeMiss(this.checked)"> only scrolls missing info</label><button type="button" class="qe-btn" onclick="qeAll()">Select all shown</button><button type="button" class="qe-btn" onclick="qeNone()">Clear</button><button type="button" class="qe-btn" onclick="qeClearGuess()" title="Remove page counts the app guessed from the reading time, only on the scrolls you ticked">🧹 Clear guessed pages</button></div>
+        <div class="qe-bar"><input type="text" id="qe-q" placeholder="Search scrolls…" value="${E(q)}" oninput="qeQ(this.value)"><label><input type="checkbox" ${onlyMissing ? 'checked' : ''} onchange="qeMiss(this.checked)"> only scrolls missing info</label><button type="button" class="qe-btn" onclick="qeAll()">Select all shown</button><button type="button" class="qe-btn" onclick="qeNone()">Clear</button><button type="button" class="qe-btn" onclick="qeTimes()" title="Paste a list like “- [ ] Spite (10h)” and only the reading times get rewritten">⏳ Paste reading times</button><button type="button" class="qe-btn" onclick="qeClearGuess()" title="Remove page counts the app guessed from the reading time, only on the scrolls you ticked">🧹 Clear guessed pages</button></div>
         <div class="qe-scroll" id="qe-list"></div><div class="qe-foot"><button type="button" class="qe-btn" onclick="qeClose()">Close</button><button type="button" class="qe-btn pri" id="qe-next" onclick="qeStep2()"></button></div>`;
         qeList();
     }
@@ -7718,6 +7731,72 @@ renderBackupNudge(); renderRes();
     window.qeTog = (i, v) => { v ? sel.add(i) : sel.delete(i); $('qe-next').textContent = `Edit ${sel.size} selected →`; $('qe-next').disabled = !sel.size; };
     window.qeAll = () => { shown().forEach(o => sel.add(o.i)); qeList(); };
     window.qeNone = () => { sel.clear(); qeList(); };
+
+    // ---- ⏳ Paste a list of reading times ("- [ ] Title (5h 30m)") and only rewrite each book's time ----
+    let TL = [];   // [{ t: title from the list, m: minutes, i: book index or -1, on }]
+    const tnorm = s => String(s || '').toLowerCase().replace(/&/g, ' and ').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, ' ').trim();
+    function tlParse(text) {
+        const out = [];
+        String(text || '').split(/\r?\n/).forEach(raw => {
+            let s = raw.replace(/^\s*(?:[-*+•]\s*)?(?:\[[ xX]?\]\s*)?(?:\d+[.)]\s+)?/, '').trim();
+            if (!s) return;
+            let m = s.match(/^(.*\S)\s*\(([^()]*)\)\s*$/) || s.match(/^(.*\S)\s+[-–—:|]\s*([\d:hm\s]+)$/i);
+            if (!m) return;
+            const mins = parseDuration(m[2].replace(/\s+/g, ' ').trim());
+            if (mins && m[1].trim()) out.push({ t: m[1].trim(), m: mins });
+        });
+        return out;
+    }
+    function tlMatch(rows) {
+        const L = backlog(), used = new Set();
+        rows.forEach(r => {
+            const n = tnorm(r.t), free = L.filter(o => !used.has(o.i));
+            const pick = free.find(o => tnorm(o.b.title) === n)
+                || free.find(o => tnorm(o.b.title).replace(/^(the|a|an) /, '') === n.replace(/^(the|a|an) /, ''))
+                || (n.length >= 4 ? free.find(o => (' ' + tnorm(o.b.title) + ' ').includes(' ' + n + ' ')) : null);
+            r.i = pick ? pick.i : -1;
+            if (pick) used.add(pick.i);
+            const b = pick && pick.b;
+            r.on = !!b && b.duration !== r.m && r.m >= (b.minutesRead || 0);
+        });
+        return rows;
+    }
+    window.qeTimes = () => {
+        $('qe-body').innerHTML = `<h3>⏳ Paste reading times</h3><p>Paste your list, one book per line, like <b>- [ ] Spite (10h)</b> or <b>House Rules (5h 45m)</b>. I'll find each book in your TBR and only rewrite its reading time. Nothing else changes 🌿</p>
+        <textarea id="qe-tl-text" rows="10" class="qe-tl-ta" placeholder="- [ ] Spite (10h)&#10;- [ ] House Rules (5h 45m)&#10;- [ ] Aphrodisiac Experiment (45m)"></textarea>
+        <div class="qe-foot"><button type="button" class="qe-btn" onclick="qeStep1()">← Back</button><button type="button" class="qe-btn pri" onclick="qeTimesRead()">Find my books →</button></div>`;
+        setTimeout(() => { const t = $('qe-tl-text'); if (t) t.focus(); }, 30);
+    };
+    window.qeTimesRead = () => {
+        TL = tlMatch(tlParse($('qe-tl-text').value));
+        if (!TL.length) { alert('I couldn\u2019t read any lines 🌿 Each line needs a title and a time in brackets, like: Spite (10h)'); return; }
+        qeTimesPreview();
+    };
+    function qeTimesPreview() {
+        const L = backlog().slice().sort((a, z) => a.b.title.localeCompare(z.b.title));
+        const opts = cur => `<option value="-1">— not in my TBR / skip —</option>` + L.map(o => `<option value="${o.i}" ${o.i === cur ? 'selected' : ''}>${E(o.b.title)}${o.b.duration ? ' · ' + E(formatTime(o.b.duration)) : ''}</option>`).join('');
+        const found = TL.filter(r => r.i >= 0).length, on = TL.filter(r => r.on && r.i >= 0).length;
+        $('qe-body').innerHTML = `<h3>⏳ Check the new times</h3><p>Found <b>${found}</b> of ${TL.length} books. Ticked rows get the new time, nothing else is touched. Use the dropdown if I picked the wrong book (or none).</p>
+        <div class="qe-scroll">${TL.map((r, n) => {
+            const b = r.i >= 0 ? books[r.i] : null, same = b && b.duration === r.m, low = b && r.m < (b.minutesRead || 0);
+            const note = !b ? '<span class="qe-tl-n bad">not found</span>' : same ? '<span class="qe-tl-n">already this time ✓</span>' : low ? `<span class="qe-tl-n bad">you\u2019ve already read ${E(formatTime(b.minutesRead))}</span>` : `<span class="qe-tl-n ok">${E(b.duration ? formatTime(b.duration) : 'no time')} → <b>${E(formatTime(r.m))}</b></span>`;
+            return `<div class="qe-tl-r${b ? '' : ' miss'}"><input type="checkbox" ${r.on && b ? 'checked' : ''} ${b ? '' : 'disabled'} onchange="qeTlOn(${n},this.checked)"><div class="qe-tl-b"><div class="qe-tl-h"><b>${E(r.t)}</b><span class="qe-tl-m">${E(formatTime(r.m))}</span></div><select class="qe-tl-sel" aria-label="Which book in your TBR" onchange="qeTlPick(${n},this.value)">${opts(r.i)}</select>${note}</div></div>`;
+        }).join('')}</div>
+        <div class="qe-foot"><button type="button" class="qe-btn" onclick="qeTimes()">← Paste again</button><button type="button" class="qe-btn pri" id="qe-tl-go" onclick="qeTimesApply()" ${on ? '' : 'disabled'}>Update ${on} time${on === 1 ? '' : 's'} ✨</button></div>`;
+    }
+    window.qeTlOn = (n, v) => { if (TL[n]) TL[n].on = v; qeTimesPreview(); };
+    window.qeTlPick = (n, v) => { const r = TL[n]; if (!r) return; r.i = +v; const b = r.i >= 0 ? books[r.i] : null; r.on = !!b && b.duration !== r.m && r.m >= (b.minutesRead || 0); qeTimesPreview(); };
+    window.qeTimesApply = () => {
+        let n = 0;
+        TL.forEach(r => {
+            const b = r.on && r.i >= 0 ? books[r.i] : null; if (!b || b.duration === r.m) return;
+            b.duration = r.m; b.durationStr = formatTime(r.m); n++;
+        });
+        TL = [];
+        saveBooks(); renderBooks(); qeClose();
+        const m = $('add-book-msg'); if (m) { m.style.color = 'rgb(var(--c-8a9a5b))'; m.innerText = `⏳ Updated the reading time of ${n} scroll${n === 1 ? '' : 's'}!`; setTimeout(() => { m.innerText = ''; }, 3500); }
+    };
+
     window.qeStep2 = () => {
         const inp = (f, label, v, extra) => `<label>${label}<input data-f="${f}" value="${E(v)}" ${extra || ''}></label>`;
         $('qe-body').innerHTML = `<h3>🪄 Quick Enchant · ${sel.size} scroll${sel.size === 1 ? '' : 's'}</h3><p>Boxes you leave alone keep what’s already there. Time can be 5h 30m, 5:30 or just minutes. Separate several pairings with commas. Pages stay empty unless you type them.</p>
