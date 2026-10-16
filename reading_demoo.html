@@ -6615,13 +6615,6 @@ Hooks.on('switchTab', {
         if (t === 'soundtrack') renderSoundtrack();
     }
 });
-const _ry = renderYear;
-renderYear = function () {
-    _ry();
-    if (!window.yrCur || yrCur() !== 'hb') return;   // Insights live in the Habits section only
-    const yr = document.getElementById('year-select').value || 'all';
-    document.getElementById('year-content').insertAdjacentHTML('beforeend', '<h3 class="font-serif font-bold text-[rgb(var(--c-3e4a3d))] text-sm mt-1">Insights</h3>' + paceChart(yr));
-};
 AppEvents.on('books:rendered', () => renderRes());
 const mkey = d => (d || '').slice(0, 7);
 const mlabel = k => MONTHS[+k.slice(5) - 1].slice(0, 3) + " '" + k.slice(2, 4);
@@ -11271,7 +11264,7 @@ body.no-mini .tourx-mini,body.no-mini .tourx-minirow{display:none!important}
     [['#year-select', '#year-content'], 'year', `Year in Review 📊 (1/5)`, 'Stats', `<p>Pick a year at the top. The header is your <b>Reading Wrapped</b>: books finished, time, pages and streak, with a little title for the kind of reader you are. Four sub-pages sit underneath: <b>🌟 Highlights, 📚 Bookshelf, ⏱️ Habits, 💗 Taste</b>.</p>`, null, year('hi')],
     [yrBody, null, `Year: Highlights 🌟 (2/5)`, 'Stats', `<ul><li><b>Reading goal</b> for the year (set how many books)</li><li>💞 <b>Ship of the year</b></li><li>🎀 <b>Superlatives</b> – longest, fastest, highest rated…</li><li><b>Rating distribution</b> and <b>speed over time</b> charts</li><li>🎖️ <b>Badges</b> you have earned</li></ul>`, null, year('hi')],
     [yrBody, null, `Year: Bookshelf 📚 (3/5)`, 'Stats', `<ul><li><b>Books per month</b> chart</li><li>🌈 <b>Your rainbow shelf</b> – finished books lined up by cover colour</li><li>🏷️ <b>Tropes &amp; vibes</b> you read most (pie charts beside the clouds)</li></ul>`, null, year('bk')],
-    [yrBody, null, `Year: Habits ⏱️ (4/5)`, 'Stats', `<ul><li>🗓️ <b>Reading heatmap</b> – one square per day</li><li>🧸 <b>Habit stickers</b>: days read, best streak, minutes, sessions, pages, pages per hour, pace vs. listed time, average per book, days to finish</li><li><b>Pace forecast</b> – a dotted line to where your current pace lands this year</li></ul>`, null, year('hb')],
+    [yrBody, null, `Year: Habits ⏱️ (4/5)`, 'Stats', `<ul><li>🗓️ <b>Reading heatmap</b> – one square per day</li><li>🧸 <b>Habit stickers</b>: days read, best streak, minutes, sessions, pages, pages per hour, pace vs. listed time, average per book, days to finish</li></ul>`, null, year('hb')],
     [yrBody, null, `Year: Taste 💗 (5/5)`, 'Stats', `<ul><li>🍰 <b>Your taste profile</b></li><li>✨ <b>What you love in a book</b> – your average per rating category</li><li>💫 <b>How your books made you feel</b> and mood weather</li><li>👑 <b>Character Hall of Fame</b></li><li>🔬 <b>Ratings by trope, vibe &amp; warning</b> – which tags score best for you</li></ul>`, null, year('ta')],
     ],
     'month': [
