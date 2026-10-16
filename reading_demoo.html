@@ -919,6 +919,9 @@ html[data-theme=cocoa]{--c-322323:52 34 37;--c-3c2828:62 38 42;--c-3e4a3d:78 68 
                 <button onclick="switchTab('lib')" id="tab-btn-lib" class="tab-btn inactive pb-2 px-1 font-serif font-bold text-sm sm:text-base transition flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap">
                     <span>📚</span> Library
                 </button>
+                <button onclick="switchTab('future')" id="tab-btn-future" class="tab-btn inactive pb-2 px-1 font-serif font-bold text-sm sm:text-base transition flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap">
+                    <span>🔮</span> Future Chapters
+                </button>
                 <button onclick="switchTab('now')" id="tab-btn-now" class="tab-btn inactive pb-2 px-1 font-serif font-bold text-sm sm:text-base transition flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap">
                     <span>📖</span> Reading Now (<span id="tab-count-now">0</span>)
                 </button>
@@ -4000,7 +4003,7 @@ window.SAFE = SAFE;
     // ===== New features =====
     const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     // A book is "programmed" for the current year unless it sits in the Library tab only (b.vault), or was programmed for an earlier year.
-    const isProg = b => !b.vault && !(b.planYear && b.planYear < new Date().getFullYear());
+    const isProg = b => !b.vault;   // your plan can run over several years, so being programmed no longer expires at New Year
     const inPlanAll = b => !b.read && b.status !== 'onhold' && (b.status !== 'abandoned' || !!b.gyPlan);
     const inPlan = b => inPlanAll(b) && isProg(b);
     const inNow = b => inPlanAll(b) && b.status !== 'abandoned';   // graveyard books visiting the plan are never "reading now"
@@ -10110,47 +10113,64 @@ $('qb-b').onclick=()=>{const o=modal('');o.firstChild.classList.add('bgc');const
 function wst(y){const f=books.filter(b=>b.read&&yr(b)===y),cnt=(a)=>{const m={};a.forEach(k=>{if(k)m[k]=(m[k]||0)+1});return Object.entries(m).sort((a,b)=>b[1]-a[1])[0]},top=[...f].sort((a,b)=>(+b.rating||0)-(+a.rating||0))[0],
  ks=[...checkIns].filter(k=>k.startsWith(y+'-')).sort();let best=0,cur=0,prev=null;ks.forEach(k=>{const d=new Date(k);cur=prev&&(d-prev)/864e5===1?cur+1:1;best=Math.max(best,cur);prev=d});
  const mo=cnt(f.map(b=>String(b.finishedAt).slice(5,7))),M=['','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],rated=f.filter(b=>+b.rating>0);
- return{n:f.length,pages:f.reduce((s,b)=>s+(+b.totalPages||0),0),hrs:Math.round(f.reduce((s,b)=>s+(+b.actualMinutes||+b.minutesRead||0),0)/60),top,au:cnt(f.map(b=>authorText(b))),vibe:cnt(f.flatMap(b=>SAFE.vis(b.vibes||b.tags))),mo:mo?M[+mo[0]]:'—',avg:rated.length?(rated.reduce((s,b)=>s+b.rating,0)/rated.length).toFixed(1):'—',best}}
+ return{n:f.length,pages:f.reduce((s,b)=>s+(+b.totalPages||0),0),hrs:Math.round(f.reduce((s,b)=>s+(+b.actualMinutes||+b.minutesRead||0),0)/60),mins:Math.round(f.reduce((s,b)=>s+(+b.actualMinutes||+b.minutesRead||0),0)),top,au:cnt(f.map(b=>authorText(b))),vibe:cnt(f.flatMap(b=>SAFE.vis(b.vibes||b.tags))),mo:mo?M[+mo[0]]:'—',avg:rated.length?(rated.reduce((s,b)=>s+b.rating,0)/rated.length).toFixed(1):'—',best}}
+// cover images for the Wrapped grid: loaded once, then the card redraws itself as they arrive
+const wImg=new Map();
+function wCover(src,redraw){if(!src)return null;let e=wImg.get(src);if(e)return e.ok?e.im:null;const im=new Image();e={im,ok:false};wImg.set(src,e);if(!/^(data|blob):/.test(src)){im.crossOrigin='anonymous';im.referrerPolicy='no-referrer'}im.onload=()=>{e.ok=true;redraw()};im.onerror=()=>{wImg.set(src,{im:null,ok:false,bad:1})};im.src=src;return null}
 function wDraw(cv,y){const s=wst(y),x=cv.getContext('2d');cv.width=1080;cv.height=1920;
  const SER="'Playfair Display',Georgia,serif",HAND="Caveat,'Comic Sans MS',cursive",SANS="Montserrat,Arial,sans-serif";
+ let q=0;const redraw=()=>{if(q)return;q=requestAnimationFrame(()=>{q=0;if(cv.isConnected)wDraw(cv,y)})};
  const spark=(px,py,r,c)=>{x.fillStyle=c;x.beginPath();x.moveTo(px,py-r);x.quadraticCurveTo(px,py,px+r,py);x.quadraticCurveTo(px,py,px,py+r);x.quadraticCurveTo(px,py,px-r,py);x.quadraticCurveTo(px,py,px,py-r);x.fill()};
- const cloud=(px,py,k,c)=>{x.fillStyle=c;x.beginPath();[[0,0,40],[45,-18,50],[100,0,42],[50,12,46]].forEach(([a,b,r])=>{x.moveTo(px+a*k+r*k,py+b*k);x.arc(px+a*k,py+b*k,r*k,0,7)});x.fill()};
  const heart=(px,py,r,c)=>{x.fillStyle=c;x.beginPath();x.moveTo(px,py+r*.9);x.bezierCurveTo(px-r*1.6,py-r*.2,px-r*.7,py-r*1.3,px,py-r*.4);x.bezierCurveTo(px+r*.7,py-r*1.3,px+r*1.6,py-r*.2,px,py+r*.9);x.fill()};
- const g=x.createLinearGradient(0,0,0,1920);g.addColorStop(0,'#ffe1ec');g.addColorStop(.5,'#fff3dc');g.addColorStop(1,'#dcefd0');x.fillStyle=g;x.fillRect(0,0,1080,1920);
- for(let i=0;i<46;i++){x.fillStyle='#ffffffaa';x.beginPath();x.arc(hs(i+'x')%1080,hs(i+'y')%1920,3+hs(i)%7,0,7);x.fill()}
- cloud(70,150,1,'#ffffffcc');cloud(780,70,.8,'#ffffffcc');cloud(860,1780,.9,'#ffffffaa');cloud(40,1790,.7,'#ffffffaa');
- [[110,560,22,'#ffb3cb'],[980,480,18,'#ffd36e'],[960,1000,16,'#c9a8ee'],[120,1500,20,'#ffd36e'],[540,520,14,'#a9cf7e']].forEach(([a,b,r,c])=>spark(a,b,r,c));
- heart(80,300,18,'#ff9dbb88');heart(1000,720,16,'#ff9dbb88');
- x.strokeStyle='#f2a8c3';x.lineWidth=8;x.lineCap='round';x.setLineDash([1,20]);x.beginPath();x.roundRect(34,34,1012,1852,64);x.stroke();x.setLineDash([]);
- // kawaii book mascot
- x.save();x.translate(850,250);x.rotate(.08);
- x.fillStyle='#0000000f';x.beginPath();x.ellipse(0,168,110,18,0,0,7);x.fill();
- x.fillStyle='#fffaf0';x.beginPath();x.roundRect(-92,-112,196,262,30);x.fill();x.strokeStyle='#f1dfc6';x.lineWidth=4;x.stroke();
- x.fillStyle='#f6a9c2';x.beginPath();x.roundRect(-108,-130,204,262,34);x.fill();
- x.fillStyle='#ec8bad';x.beginPath();x.roundRect(-108,-130,36,262,[34,0,0,34]);x.fill();
- x.fillStyle='#ffd6e6';x.beginPath();x.roundRect(-52,-100,128,10,5);x.fill();
- x.fillStyle='#3e4a3d';[[-34,-8],[38,-8]].forEach(([a,b])=>{x.beginPath();x.ellipse(a,b,12,17,0,0,7);x.fill()});
- x.fillStyle='#fff';[[-30,-15],[42,-15]].forEach(([a,b])=>{x.beginPath();x.arc(a,b,5,0,7);x.fill()});
- x.fillStyle='#ff7fa8aa';[[-56,26],[60,26]].forEach(([a,b])=>{x.beginPath();x.ellipse(a,b,17,10,0,0,7);x.fill()});
- x.strokeStyle='#3e4a3d';x.lineWidth=5;x.beginPath();x.arc(2,22,13,.15*Math.PI,.85*Math.PI);x.stroke();
- x.fillStyle='#f6a9c2';[[-118,40],[106,40]].forEach(([a,b])=>{x.beginPath();x.arc(a,b,16,0,7);x.fill()});
- x.fillStyle='#ec8bad';[[-44,138],[36,138]].forEach(([a,b])=>{x.beginPath();x.ellipse(a,b,26,15,0,0,7);x.fill()});
- x.fillStyle='#ffd36e';x.beginPath();x.moveTo(60,-130);x.lineTo(30,-168);x.lineTo(30,-108);x.closePath();x.fill();x.beginPath();x.moveTo(60,-130);x.lineTo(104,-168);x.lineTo(104,-108);x.closePath();x.fill();x.beginPath();x.arc(60,-130,13,0,7);x.fill();
- x.restore();
- // title sticker
- x.textAlign='left';x.fillStyle='#b76e82';x.font='700 56px '+HAND;x.fillText('✿ my reading year ✿',80,140);
- x.lineJoin='round';x.lineWidth=22;x.strokeStyle='#ffffff';x.font='900 200px '+SER;x.strokeText(y,70,340);x.fillStyle='#e9799f';x.fillText(y,70,340);
- x.font='700 130px '+HAND;x.lineWidth=18;x.strokeText('Wrapped',84,468);x.fillStyle='#7a9a4e';x.fillText('Wrapped',84,468);
+ const rr=(a,b,w,h,r)=>{x.beginPath();x.roundRect(a,b,w,h,r)};
  const fitT=(t,w)=>{t=String(t);let o=t;while(x.measureText(o).width>w&&o.length>3){t=t.slice(0,-2);o=t+'…'}return o};
- const C=[['#ffeef3','#e98aac'],['#eef6e0','#8a9a5b'],['#fff6d9','#d9a62e'],['#efe7fb','#9a7bc4']];
- const row=(i,em,l,v)=>{const py=545+i*(160+22),[bg,ac]=C[i%4];x.fillStyle=ac+'33';x.beginPath();x.roundRect(64,py+8,952,160,48);x.fill();x.fillStyle=bg;x.beginPath();x.roundRect(60,py,952,160,48);x.fill();x.strokeStyle=ac+'88';x.lineWidth=4;x.setLineDash([2,10]);x.stroke();x.setLineDash([]);
-  x.fillStyle='#fff';x.beginPath();x.arc(148,py+80,50,0,7);x.fill();x.strokeStyle=ac+'66';x.lineWidth=4;x.stroke();
-  x.textAlign='center';x.textBaseline='middle';x.font='54px serif';x.fillStyle='#000';x.fillText(em,148,py+84);x.textBaseline='alphabetic';x.textAlign='left';
-  x.fillStyle=ac;x.font='800 24px '+SANS;x.fillText(l.toUpperCase(),228,py+54);x.fillStyle='#3e4a3d';x.font='800 52px '+SER;x.fillText(fitT(v,760),228,py+120)};
- row(0,'📚','Books finished',s.n+(s.n==1?' book':' books'));row(1,'⏱️','Pages & hours',s.pages.toLocaleString()+' pages · '+s.hrs+'h');row(2,'⭐','Top rated',s.top?s.top.title:'—');row(3,'✍️','Favourite author',s.au?s.au[0]+' ×'+s.au[1]:'—');row(4,'🔮','Your vibe',s.vibe?s.vibe[0]:'—');row(5,'🌙','Best month · avg ★',s.mo+' · '+s.avg);row(6,'🔥','Longest streak',s.best+' day'+(s.best==1?'':'s'));
- x.textAlign='center';x.fillStyle='#b76e82';x.font='700 46px '+HAND;x.fillText('🌿 enchanted reading tracker 🌿',540,1872);
- if(!wDraw.f&&document.fonts&&document.fonts.load){wDraw.f=1;Promise.all([document.fonts.load("900 40px 'Playfair Display'"),document.fonts.load('700 40px Caveat'),document.fonts.load('800 24px Montserrat')]).then(()=>wDraw(cv,y)).catch(()=>{})}}
-$('qb-w').onclick=()=>{const ys=[...new Set(books.filter(b=>b.read&&yr(b)).map(yr))].sort((a,b)=>b-a);if(!ys.length)ys.push(new Date().getFullYear());const o=modal(`<h3>🎁 Your Wrapped</h3><select id="w-y" class="p-1 border border-[rgb(var(--c-e8c4c4))] rounded-lg mb-2">${ys.map(y=>`<option>${y}</option>`).join('')}</select><canvas id="w-c" style="width:100%;border-radius:16px"></canvas><div class="flex justify-between mt-3"><button class="xb" id="w-s">💾 Save as image</button><button class="xb p" id="w-x">Close</button></div>`),cv=o.querySelector('#w-c'),go=()=>wDraw(cv,+o.querySelector('#w-y').value);go();o.querySelector('#w-y').onchange=go;o.querySelector('#w-s').onclick=()=>dl(cv,'wrapped-'+o.querySelector('#w-y').value+'.png');o.querySelector('#w-x').onclick=()=>o.remove()};
+ // background: pastel sky + polka dots + dotted frame
+ const g=x.createLinearGradient(0,0,0,1920);g.addColorStop(0,'#ffe3ee');g.addColorStop(.55,'#fff5e4');g.addColorStop(1,'#e3f0d6');x.fillStyle=g;x.fillRect(0,0,1080,1920);
+ x.fillStyle='#ffffff8c';for(let i=0;i<34;i++)for(let j=0;j<60;j++){if((i+j)%2)continue;x.beginPath();x.arc(16+i*32,16+j*32,2.4,0,7);x.fill()}
+ x.strokeStyle='#f2a8c3';x.lineWidth=8;x.lineCap='round';x.setLineDash([1,20]);rr(30,30,1020,1860,64);x.stroke();x.setLineDash([]);
+ // header
+ x.textAlign='center';x.fillStyle='#b76e82';x.font='700 50px '+HAND;x.fillText('✿ my reading year ✿',540,128);
+ x.lineJoin='round';x.font='900 150px '+SER;const yw=x.measureText(String(y)).width;x.font='700 116px '+HAND;const ww=x.measureText('Wrapped').width;const hx=540-(yw+26+ww)/2;
+ x.textAlign='left';x.font='900 150px '+SER;x.lineWidth=20;x.strokeStyle='#fff';x.strokeText(y,hx,262);x.fillStyle='#e9799f';x.fillText(y,hx,262);
+ x.font='700 116px '+HAND;x.lineWidth=16;x.strokeText('Wrapped',hx+yw+26,258);x.fillStyle='#7a9a4e';x.fillText('Wrapped',hx+yw+26,258);
+ [[92,96,20,'#ffb3cb'],[990,110,16,'#ffd36e'],[60,300,13,'#c9a8ee'],[1018,300,15,'#a9cf7e']].forEach(([a,b,r,c])=>spark(a,b,r,c));heart(160,190,14,'#ff9dbb99');heart(930,205,12,'#ff9dbb99');
+ // cover shelf card: shrinks to fit the covers, and the shelf + stats sit centred in the space under the title
+ const f=books.filter(b=>b.read&&yr(b)===y).sort((a,b)=>String(a.finishedAt).localeCompare(String(b.finishedAt)));
+ const PX=66,PW=948,IW=PW-88,IHmax=1030,MAX=140,more=f.length>MAX?f.length-(MAX-1):0,list=more?f.slice(0,MAX-1):f,N=list.length+(more?1:0);
+ let L=null;if(N){for(let c=2;c<=14;c++){const gp=c<=6?24:c<=9?17:11,cw=(IW-gp*(c-1))/c,ch=cw*1.5,rows=Math.ceil(N/c),th=rows*ch+gp*(rows-1);const k=th>IHmax?IHmax/th:1,w=cw*k;if(!L||w>L.w+.5)L={c,gp:gp*k,w,h:ch*k,rows}}L.gw=L.c*L.w+(L.c-1)*L.gp;L.gh=L.rows*L.h+(L.rows-1)*L.gp}
+ const IH=L?Math.max(L.gh,300):360,PH=IH+112,STH=330,GAP=44,top=318,room=1800-top,PY=top+Math.max(0,(room-(PH+GAP+STH))/2),SY=PY+PH+GAP;
+ x.fillStyle='#e8a0b433';rr(PX+6,PY+12,PW,PH,48);x.fill();x.fillStyle='#fffdfb';rr(PX,PY,PW,PH,48);x.fill();x.strokeStyle='#f6d3dd';x.lineWidth=5;x.stroke();
+ const tape=(tx,ty,rot,c)=>{x.save();x.translate(tx,ty);x.rotate(rot);x.fillStyle=c;x.fillRect(-62,-18,124,36);x.fillStyle='#ffffff55';for(let k=-56;k<62;k+=16)x.fillRect(k,-18,6,36);x.restore()};
+ tape(PX+80,PY+4,-.18,'#f7b6ccd9');tape(PX+PW-80,PY+4,.16,'#cfe3b1d9');
+ const IX=PX+44,IY=PY+60;
+ if(!L){x.textAlign='center';x.font='70px serif';x.fillText('📖',540,IY+IH/2-30);x.fillStyle='#b76e82';x.font='700 54px '+HAND;x.fillText('your shelf is waiting for its first book',540,IY+IH/2+60)}
+ else{
+  const{c,gp,w,h,gw,gh}=L,ox=IX+(IW-gw)/2,oy=IY+(IH-gh)/2,R=Math.max(6,w*.09);
+  list.forEach((b,i)=>{const cx=ox+(i%c)*(w+gp),cy=oy+Math.floor(i/c)*(h+gp),tilt=((hs(b.id||b.title)%7)-3)*.004;
+   x.save();x.translate(cx+w/2,cy+h/2);x.rotate(tilt);x.translate(-w/2,-h/2);
+   x.fillStyle='#3e4a3d2e';rr(3,6,w,h,R);x.fill();
+   x.save();rr(0,0,w,h,R);x.clip();const im=wCover(b.cover,redraw);
+   if(im){const k=Math.max(w/im.width,h/im.height),dw=im.width*k,dh=im.height*k;x.drawImage(im,(w-dw)/2,(h-dh)/2,dw,dh)}
+   else{x.fillStyle=b.coverColor||'#e8dcc4';x.fillRect(0,0,w,h);x.fillStyle='#00000018';x.fillRect(0,0,Math.max(4,w*.08),h);x.fillStyle='#ffffffd9';rr(w*.14,h*.3,w*.74,h*.34,R*.6);x.fill();
+    if(w>60){x.fillStyle='#3e4a3d';x.textAlign='center';x.textBaseline='middle';const fs=Math.max(10,Math.min(22,w*.13));x.font='800 '+fs+'px '+SER;const words=String(b.title).split(/\s+/),ln=[];let cur='';words.forEach(wd=>{const t=cur?cur+' '+wd:wd;if(x.measureText(t).width>w*.66&&cur){ln.push(cur);cur=wd}else cur=t});if(cur)ln.push(cur);const LL=ln.slice(0,3);LL.forEach((t,j)=>x.fillText(fitT(t,w*.66),w*.51,h*.47+(j-(LL.length-1)/2)*fs*1.15));x.textBaseline='alphabetic'}}
+   x.restore();x.strokeStyle='#ffffffcc';x.lineWidth=Math.max(2,w*.025);rr(0,0,w,h,R);x.stroke();
+   if(b.favorite&&w>50){heart(w-w*.16,w*.16,Math.max(7,w*.07),'#ff7fa8')}
+   x.restore()});
+  if(more){const i=list.length,cx=ox+(i%c)*(w+gp),cy=oy+Math.floor(i/c)*(h+gp);x.fillStyle='#fdeef0';rr(cx,cy,w,h,R);x.fill();x.strokeStyle='#f0c9d4';x.lineWidth=3;x.setLineDash([4,6]);x.stroke();x.setLineDash([]);x.fillStyle='#b76e82';x.textAlign='center';x.font='800 '+Math.max(14,w*.2)+'px '+SANS;x.fillText('+'+more,cx+w/2,cy+h/2+w*.07)}
+ }
+ // stats: 2 × 2 cute pills
+ const ST=[['📚',s.n.toLocaleString(),s.n===1?'book':'books','#ffeef3','#e98aac'],['🔥',s.best.toLocaleString(),s.best===1?'day streak':'day streak','#fff1e0','#e59a4f'],['⏳',s.mins.toLocaleString(),'minutes','#efe7fb','#9a7bc4'],['📄',s.pages.toLocaleString(),'pages','#eef6e0','#7a9a4e']];
+ ST.forEach(([em,v,l,bg,ac],i)=>{const sx=66+(i%2)*484,sy=SY+Math.floor(i/2)*176,sw=464,sh=154;
+  x.fillStyle=ac+'40';rr(sx+4,sy+9,sw,sh,46);x.fill();x.fillStyle=bg;rr(sx,sy,sw,sh,46);x.fill();x.strokeStyle=ac+'99';x.lineWidth=4;x.setLineDash([2,10]);x.stroke();x.setLineDash([]);
+  x.fillStyle='#fff';x.beginPath();x.arc(sx+80,sy+sh/2,50,0,7);x.fill();x.strokeStyle=ac+'77';x.lineWidth=4;x.stroke();
+  x.textAlign='center';x.textBaseline='middle';x.font='52px serif';x.fillStyle='#000';x.fillText(em,sx+80,sy+sh/2+4);x.textBaseline='alphabetic';
+  x.textAlign='left';x.fillStyle='#3e4a3d';let fs=66;x.font='900 '+fs+'px '+SER;while(x.measureText(v).width>sw-170&&fs>34){fs-=4;x.font='900 '+fs+'px '+SER}x.fillText(v,sx+150,sy+88);
+  x.fillStyle=ac;x.font='800 24px '+SANS;x.fillText(l.toUpperCase(),sx+152,sy+124)});
+ // little extra line + footer
+ x.textAlign='center';x.fillStyle='#6b705c';x.font='italic 600 30px '+SER;const ex=[s.top&&+s.top.rating?'⭐ top: '+s.top.title:'',s.mo&&s.mo!=='—'?'🌙 best month: '+s.mo:''].filter(Boolean).join('   ·   ');if(ex)x.fillText(fitT(ex,940),540,1832);
+ x.fillStyle='#b76e82';x.textAlign='left';x.font='700 38px '+HAND;x.fillText('🌿 enchanted reading',72,1880);x.textAlign='right';x.font='800 28px '+SER;x.fillStyle='#7a6a70';x.fillText(y+' Year in Review',1008,1878);
+ if(!wDraw.f&&document.fonts&&document.fonts.load){wDraw.f=1;Promise.all([document.fonts.load("900 40px 'Playfair Display'"),document.fonts.load('700 40px Caveat'),document.fonts.load('800 24px Montserrat')]).then(redraw).catch(()=>{})}}
+$('qb-w').onclick=()=>{const ys=[...new Set(books.filter(b=>b.read&&yr(b)).map(yr))].sort((a,b)=>b-a);if(!ys.length)ys.push(new Date().getFullYear());const o=modal(`<h3>🎁 Your Wrapped</h3><select id="w-y" class="p-1 border border-[rgb(var(--c-e8c4c4))] rounded-lg mb-2">${ys.map(y=>`<option>${y}</option>`).join('')}</select><canvas id="w-c" style="display:block;width:100%;max-width:440px;margin:0 auto;border-radius:18px;box-shadow:0 10px 26px -12px rgba(168,80,106,.55)"></canvas><div class="flex justify-between mt-3"><button class="xb" id="w-s">💾 Save as image</button><button class="xb p" id="w-x">Close</button></div>`),cv=o.querySelector('#w-c'),go=()=>wDraw(cv,+o.querySelector('#w-y').value);go();o.querySelector('#w-y').onchange=go;o.querySelector('#w-s').onclick=()=>dl(cv,'wrapped-'+o.querySelector('#w-y').value+'.png');o.querySelector('#w-x').onclick=()=>o.remove()};
 })();
 </script>
 
@@ -13978,7 +13998,7 @@ s.G{background:#f2b84b}s.A{background:#fff;outline:2px dashed rgb(var(--c-e8a0b4
     document.head.appendChild(st);
 
     const host = $('tab-content-favorites').parentNode;
-    host.insertAdjacentHTML('beforeend', `<div id="tab-content-lib" class="hidden flex-1 flex flex-col overflow-y-auto scroll-container pr-1"><div class="lb-hero"><span class="lb-hero-em">📚</span><div class="lb-hero-t"><b>Library</b><small>Every unread book you own, waiting for its turn 🌿 Only the ones in your <span class="lb-y"></span> plan show up in your TBR and Weekly Path.</small></div></div>
+    host.insertAdjacentHTML('beforeend', `<div id="tab-content-lib" class="hidden flex-1 flex flex-col overflow-y-auto scroll-container pr-1"><div class="lb-hero"><span class="lb-hero-em">📚</span><div class="lb-hero-t"><b>Library</b><small>Every unread book you own, waiting for its turn 🌿 Only the ones in your plan show up in your TBR and Weekly Path. Peek at 🔮 Future Chapters to see when each one lands.</small></div></div>
 <div class="lb-stats" id="lb-stats"></div><div class="lb-prog" id="lb-prog"></div>
 <div class="lb-bar"><input id="lb-q" class="lb-in" placeholder="🔍 Search your library…" oninput="libQ(this.value)"><button type="button" class="lb-pill" data-f="all">🌸 All</button><button type="button" class="lb-pill" data-f="yes">🌷 In plan</button><button type="button" class="lb-pill" data-f="no">🫧 Library only</button></div>
 <div class="lb-bar"><button type="button" id="lb-ftoggle" class="lb-pill" aria-expanded="true">🎀 Filters &amp; sort <span id="lb-farrow">▾</span></button><span id="lb-fcount" style="font:800 10px Montserrat,sans-serif;color:rgb(var(--c-a8506a))"></span><button type="button" id="lb-clear" class="lb-pill" hidden>✕ Clear filters</button>
@@ -13986,7 +14006,6 @@ s.G{background:#f2b84b}s.A{background:#fff;outline:2px dashed rgb(var(--c-e8a0b4
 <div id="lb-filters"><div class="lb-bar lb-ctl"><select id="lb-sort" class="lb-sel lb-sortsel" style="flex:1 1 150px" title="Sort by"><option value="manual">My order</option><option value="title">Title</option><option value="author">Author</option><option value="time">Reading time</option><option value="pages">Pages</option><option value="rating">Rating</option><option value="added">Date added</option><option value="year">Year published</option></select><button type="button" id="lb-dir" class="lb-pill" title="Switch between ascending and descending"></button></div><div class="lb-bar"><select id="lb-fandom" data-fk="fandom" class="lb-sel"></select><select id="lb-pairing" data-fk="pairing" class="lb-sel"></select></div>
 <div class="lb-bar"><select id="lb-status" data-fk="status" class="lb-sel"><option value="">All statuses</option><option value="none">📖 Regular</option><option value="onhold">⏸️ On hold</option><option value="rereading">🔁 Rereading</option></select><select id="lb-tags" data-fk="tags" class="lb-sel"></select><select id="lb-warnings" data-fk="warnings" class="lb-sel"></select><select id="lb-vibes" data-fk="vibes" class="lb-sel"></select><select id="lb-chars" data-fk="chars" class="lb-sel"></select></div></div>
 <div class="lb-bar" id="lb-bulk"></div><div class="lb-pager" id="lb-pg-top"></div><div id="lib-content" data-view="list" class="flex-none"></div><div class="lb-pager" id="lb-pg-bot"></div></div>`);
-    document.querySelector('#tab-content-lib .lb-y').textContent = yr();
     { const ty = $('tbr-yr'); if (ty) ty.textContent = yr(); }
 
     const unread = () => books.filter(b => !b.read && b.status !== 'abandoned');
@@ -14054,7 +14073,7 @@ s.G{background:#f2b84b}s.A{background:#fff;outline:2px dashed rgb(var(--c-e8a0b4
     // TBR button: take a scroll out of the plan and park it at the very end of the Library
     window.sendToLibrary = async function (i) {
         const b = books[i]; if (!b || b.read || b.status === 'abandoned') return;
-        if ((b.minutesRead > 0 || b.pagesRead > 0) && typeof cuteConfirm === 'function' && !await cuteConfirm(`Take “${b.title}” out of your ${yr()} plan?\nYou already started it, so it will leave your Weekly Path until you program it again. It goes to the end of your Library.`, { title: 'Send to the Library?', ok: 'Send it', danger: false })) return;
+        if ((b.minutesRead > 0 || b.pagesRead > 0) && typeof cuteConfirm === 'function' && !await cuteConfirm(`Take “${b.title}” out of your plan?\nYou already started it, so it will leave your Weekly Path until you program it again. It goes to the end of your Library.`, { title: 'Send to the Library?', ok: 'Send it', danger: false })) return;
         const at = books.indexOf(b); if (at < 0) return;
         books.splice(at, 1); books.push(b);   // last in line
         set(b, false);
@@ -14086,7 +14105,7 @@ s.G{background:#f2b84b}s.A{background:#fff;outline:2px dashed rgb(var(--c-e8a0b4
 .lb-selbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;width:100%}`; document.head.appendChild(st3); })();
     function paintBulk() {
         const bar = $('lb-bulk'); if (!bar) return; const { all, vis, inN } = ctx;
-        const sum = `${inN} of ${all.length} unread books are programmed for ${yr()}${vis.length !== all.length ? ` \u00B7 ${vis.length} shown` : ''}`;
+        const sum = `${inN} of ${all.length} unread books are in your plan${vis.length !== all.length ? ` \u00B7 ${vis.length} shown` : ''}`;
         if (!selMode) { bar.innerHTML = `<span class="lb-sum" style="margin:0;flex:1">${sum}</span>` + (vis.length ? `<button type="button" class="lb-pill" data-sel="on">\u2611 Select multiple</button>` : ''); return; }
         const n = all.filter(b => sel.has(String(b.id))).length, z = n ? '' : ' disabled';
         bar.innerHTML = `<div class="lb-selbar"><span class="lb-sum" style="margin:0;flex:1 1 100%">\u2611 <b>${n}</b> selected \u00B7 tap books to pick them</span>`
@@ -14269,7 +14288,7 @@ ${plan.length > 1 ? `<span class="pg-sub2" role="radiogroup" aria-label="Spread 
     function cardHTML0(b, plan, cut, cutTxt) {
         const prog = isProg(b), id = E(b.id);
         const fd = prog && plan ? plan.get(books.indexOf(b)) : null, over = prog && plan && (!fd || fd > cut), on = prog && !over;
-        const label = over ? '🌫️ After ' + cutTxt + ' · not in plan' : on ? '🌷 In ' + yr() + ' plan' : '＋ Program for ' + yr();
+        const label = over ? '🌫️ After ' + cutTxt + ' · not in plan' : on ? '🌷 In my plan' : '＋ Add to my plan';
         const tg = (txt) => `<button type="button" class="lb-tg${on ? ' on' : ''}" data-id="${id}">${txt}</button>`;
         const dur = typeof formatTime === 'function' && b.duration ? formatTime(b.duration) : '';
         const cover = (inner) => `<div class="lb-sw" data-open="${id}" style="${cv(b)}" title="Open details">${b.cover ? '' : inner}</div>`;
@@ -14317,8 +14336,8 @@ ${plan.length > 1 ? `<span class="pg-sub2" role="radiogroup" aria-label="Spread 
         });
         { const left = all.reduce((t, b) => t + Math.max(0, (b.duration || 0) - (b.minutesRead || 0)), 0), pc = all.length ? Math.round(inN / all.length * 100) : 0;
           const stats = $('lb-stats'), prog = $('lb-prog');
-          if (stats) stats.innerHTML = `<span class="lb-st">📚 ${all.length} unread</span><span class="lb-st g">🌷 ${inN} in ${yr()} plan</span><span class="lb-st">🫧 ${all.length - inN} waiting</span>` + (left ? `<span class="lb-st g">⏳ ${typeof formatTime === 'function' ? formatTime(left) : left + 'm'} of reading</span>` : '');
-          if (prog) { prog.innerHTML = `<i style="width:${pc}%"></i>`; prog.title = pc + '% of your library is planned for ' + yr(); } }
+          if (stats) stats.innerHTML = `<span class="lb-st">📚 ${all.length} unread</span><span class="lb-st g">🌷 ${inN} in your plan</span><span class="lb-st">🫧 ${all.length - inN} waiting</span>` + (left ? `<span class="lb-st g">⏳ ${typeof formatTime === 'function' ? formatTime(left) : left + 'm'} of reading</span>` : '');
+          if (prog) { prog.innerHTML = `<i style="width:${pc}%"></i>`; prog.title = pc + '% of your library is in your plan'; } }
         document.querySelectorAll('#tab-content-lib .vw-seg[data-k="lib"] button').forEach(b => b.classList.toggle('on', b.dataset.v === view));
         $('lb-sort').value = sort;
         { const bt = $('lb-dir'); if (bt) { bt.textContent = (sortDir === 'desc' ? '↓ ' : '↑ ') + DIRS[sort][sortDir === 'desc' ? 1 : 0]; bt.setAttribute('aria-label', 'Order: ' + DIRS[sort][sortDir === 'desc' ? 1 : 0]); } }
@@ -14350,7 +14369,7 @@ ${plan.length > 1 ? `<span class="pg-sub2" role="radiogroup" aria-label="Spread 
             if (a === 'lib') {
                 refreshPlan(); const list = chosen.filter(isProg);
                 if (!list.length) { try { window.__toast({ mode: 'cz', body: '\uD83E\uDEE7 The books you picked are already Library only' }); } catch (e2) {} return; }
-                if (list.length > 20 && !confirm(`Move ${list.length} books out of your ${yr()} plan?`)) return;
+                if (list.length > 20 && !confirm(`Move ${list.length} books out of your plan?`)) return;
                 list.forEach(b => set(b, false)); exitSel(); touch(); return;
             }
             return;
@@ -14363,7 +14382,7 @@ ${plan.length > 1 ? `<span class="pg-sub2" role="radiogroup" aria-label="Spread 
         if (e.target.closest('#lb-clear')) { Object.keys(F).forEach(k => { F[k] = ''; }); page = 0; render(); return; }
         const sg = e.target.closest('.vw-seg[data-k="lib"] button'); if (sg) { view = sg.dataset.v; LSset('enchantedLibView', view); page = 0; render(); return; }
         const op = e.target.closest('[data-open]'); if (op) { const b = books.find(x => String(x.id) === op.dataset.open); if (b && typeof openReviewModal === 'function') openReviewModal(books.indexOf(b)); return; }
-        const bk = e.target.closest('[data-bulk]'); if (bk) { refreshPlan(); const on = bk.dataset.bulk === '1', list = visible(); if (on) { programDialog(sorted(list)); return; } if (!on && list.length > 20 && !confirm(`Move ${list.length} books out of your ${yr()} plan?`)) return; list.forEach(b => set(b, on)); touch(); return; }
+        const bk = e.target.closest('[data-bulk]'); if (bk) { refreshPlan(); const on = bk.dataset.bulk === '1', list = visible(); if (on) { programDialog(sorted(list)); return; } if (!on && list.length > 20 && !confirm(`Move ${list.length} books out of your plan?`)) return; list.forEach(b => set(b, on)); touch(); return; }
         const t = e.target.closest('.lb-tg'); if (t) { const b = books.find(x => String(x.id) === t.dataset.id); if (b) { set(b, !isProg(b)); touch(); } }
     });
     root.addEventListener('change', e => {
@@ -15627,5 +15646,124 @@ p.wpx-title{display:flex!important;align-items:center;gap:12px;margin:0 0 12px!i
 })();
 </script>
 
+
+<style id="fc-css">
+/* ===== 🌠 Future Chapters: every programmed book, year by year and month by month ===== */
+#tab-content-future{gap:0}
+.fcx-hero{position:relative;overflow:hidden;display:flex;flex:none;align-items:center;gap:14px;padding:14px 16px;margin:2px 0 12px;border-radius:22px;background:linear-gradient(135deg,#efe7fb,#fde3e9 50%,#fff1dc);border:2px solid #fff;box-shadow:0 8px 20px -12px rgba(168,80,106,.5)}
+.fcx-badge{flex:none;width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:25px;box-shadow:0 0 0 2px #e0c8f7,0 5px 12px -4px rgba(122,95,176,.45)}
+.fcx-badge>span{display:inline-block;animation:fcxbob 2.8s ease-in-out infinite}
+.fcx-tx{flex:1;min-width:0}.fcx-tx>b{display:block;font:800 20px/1.1 'Playfair Display',serif;color:rgb(var(--c-a8506a))}
+.fcx-tx>p{margin:3px 0 0;font:italic 600 11.5px/1.45 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+.fcx-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.fcx-chip{padding:3px 11px;border-radius:99px;background:#fff;border:1.5px solid #f0d0d8;font:800 10px Montserrat,sans-serif;color:rgb(var(--c-a8506a));white-space:nowrap}
+.fcx-chip.g{border-color:#cfdbb0;color:#4f5d2c}.fcx-chip.p{border-color:#e0c8f7;color:#6b21a8;background:#faf5ff}.fcx-chip.y{border-color:#f0d9a0;color:#8a5a12;background:#fff8e1}
+.fcx-sp{position:absolute;font-style:normal;font-size:12px;color:#c9a8ee;opacity:.7;pointer-events:none;animation:fcxtw 2.8s ease-in-out infinite}.fcx-sp.s1{top:9px;right:18px}.fcx-sp.s2{bottom:10px;right:52px;animation-delay:1s;color:#f4a6bd}.fcx-sp.s3{top:16px;right:92px;font-size:9px;animation-delay:1.8s}
+@keyframes fcxbob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-3px) rotate(6deg)}}
+@keyframes fcxtw{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.9;transform:scale(1.15)}}
+.fcx-jump{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px;flex:none}
+.fcx-jump button{padding:6px 14px;border-radius:99px;background:#fff;border:2px solid #f0d0d8;font:800 11.5px Montserrat,sans-serif;color:rgb(var(--c-a8506a));transition:transform .15s,box-shadow .15s}
+.fcx-jump button:hover{transform:translateY(-1px);box-shadow:0 6px 12px -6px rgba(168,80,106,.5)}
+.fcx-jump button small{font-weight:700;color:rgb(var(--c-6b705c));margin-left:4px}
+.fcx-year{position:relative;margin:0 0 16px;border-radius:26px;border:2px solid #f0dcdc;background:radial-gradient(#f6dfe4 1px,transparent 1.4px) 0 0/16px 16px,linear-gradient(160deg,#fff,#fffafa 60%,#fbf7ff);box-shadow:0 10px 22px -18px rgba(168,80,106,.6);overflow:hidden;scroll-margin-top:10px}
+.fcx-yh{display:flex;align-items:center;gap:12px;width:100%;padding:12px 16px;text-align:left;background:linear-gradient(90deg,#fdeef0,#fff 70%);border:0;border-bottom:2px dotted #f0d6d6;cursor:pointer}
+.fcx-year:not(.open) .fcx-yh{border-bottom-color:transparent}
+.fcx-yn{font:900 28px/1 'Playfair Display',serif;color:#e9799f;text-shadow:2px 2px 0 #fff}
+.fcx-ys{flex:1;min-width:0;display:flex;flex-wrap:wrap;gap:5px}
+.fcx-yc{flex:none;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;border:2px solid #f0d0d8;color:#d98aa0;font-size:12px;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+.fcx-year.open .fcx-yc{transform:rotate(180deg)}
+.fcx-yb{display:none;padding:6px 14px 14px}
+.fcx-year.open .fcx-yb{display:block}
+.fcx-m{position:relative;padding:12px 0 4px 26px}
+.fcx-m::before{content:'';position:absolute;left:9px;top:0;bottom:0;border-left:2.5px dotted #ecc6d1}
+.fcx-m:first-child::before{top:22px}.fcx-m:last-child::before{bottom:auto;height:24px}
+.fcx-mh{position:relative;display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin-bottom:9px}
+.fcx-mh::before{content:attr(data-em);position:absolute;left:-31px;top:-4px;width:26px;height:26px;border-radius:50%;background:#fff;border:2px solid #f0c9d4;display:flex;align-items:center;justify-content:center;font-size:13px;box-shadow:0 3px 8px -4px rgba(168,80,106,.5)}
+.fcx-mh b{font:800 15px 'Playfair Display',serif;color:rgb(var(--c-3e4a3d))}
+.fcx-mh small{font:700 10.5px Montserrat,sans-serif;color:rgb(var(--c-6b705c))}
+.fcx-now{padding:2px 9px;border-radius:99px;background:linear-gradient(135deg,#e8a0b4,#d98aa0);color:#fff;font:800 9.5px Montserrat,sans-serif}
+.fcx-m.cur .fcx-mh::before{background:linear-gradient(135deg,#f7b6cc,#e8a0b4);border-color:#fff}
+.fcx-shelf{display:flex;flex-wrap:wrap;gap:14px 12px;width:fit-content;max-width:100%;padding:12px 14px 10px;border-radius:18px;background:#ffffffb3;border:1.5px solid #f6e3e7;box-shadow:inset 0 -6px 0 #f6e3e7}
+.fcx-shelf>.fcx-b{width:86px}
+.fcx-b{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;background:none;border:0;padding:0;cursor:pointer;text-align:center}
+.fcx-cv{position:relative;width:100%;max-width:78px;aspect-ratio:2/3;border-radius:3px 8px 8px 3px;background-size:cover;background-position:center;box-shadow:inset 4px 0 0 rgba(0,0,0,.12),0 6px 12px -5px rgba(62,74,61,.45);transform-origin:bottom center;transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
+.fcx-cv>span{position:absolute;inset:16% 10%;display:flex;align-items:center;justify-content:center;padding:4px;border-radius:5px;background:#ffffffd9;font:800 8.5px/1.2 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));overflow:hidden;word-break:break-word}
+.fcx-b:hover .fcx-cv{transform:translateY(-5px) rotate(-2.5deg)}
+.fcx-b:focus-visible{outline:none}.fcx-b:focus-visible .fcx-cv{box-shadow:0 0 0 3px #f4c9d2,0 6px 12px -5px rgba(62,74,61,.45)}
+.fcx-tag{position:absolute;top:-6px;right:-7px;width:20px;height:20px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.fcx-t{width:100%;font:700 10.5px/1.25 Montserrat,sans-serif;color:rgb(var(--c-a8506a));display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.fcx-d{font:700 9.5px Montserrat,sans-serif;color:rgb(var(--c-6b705c));white-space:nowrap}
+.fcx-empty{text-align:center;margin:30px 12px;font:italic 600 13px/1.5 'Playfair Display',serif;color:rgb(var(--c-6b705c))}.fcx-empty span{display:block;font-size:36px;margin-bottom:6px;font-style:normal}
+.fcx-empty button{margin-top:10px;padding:7px 16px;border-radius:99px;border:0;background:linear-gradient(135deg,#e8a0b4,#d98aa0);color:#fff;font:800 11.5px Montserrat,sans-serif;font-style:normal}
+.fcx-later .fcx-yn{color:#9a7bc4;font-size:22px}
+@media(max-width:560px){.fcx-hero{padding:12px}.fcx-tx>b{font-size:18px}.fcx-sp{display:none}.fcx-yb{padding:4px 8px 12px}.fcx-shelf{gap:12px 8px;padding:8px 10px}.fcx-shelf>.fcx-b{width:74px}.fcx-yn{font-size:24px}}
+@media (prefers-reduced-motion:reduce){.fcx-badge>span,.fcx-sp{animation:none}.fcx-cv,.fcx-yc{transition:none}.fcx-b:hover .fcx-cv{transform:none}}
+</style>
+<script type="text/plain" data-app id="fc-js">
+(function () {
+    const $ = id => document.getElementById(id), E = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+    const fav = $('tab-content-favorites'); if (!fav) return;
+    const MN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const ME = ['❄️', '💝', '🌱', '🌧️', '🌷', '🍓', '☀️', '🌻', '🍂', '🎃', '🍁', '🎄'];
+    fav.parentNode.insertAdjacentHTML('beforeend', `<div id="tab-content-future" class="hidden flex-1 flex flex-col overflow-y-auto scroll-container pr-1">
+<div class="fcx-hero"><span class="fcx-badge"><span>🔮</span></span><div class="fcx-tx"><b>Future Chapters</b><p>Every book in your plan, year by year and month by month, so you can see exactly when each one lands 🌙</p><div class="fcx-chips" id="fcx-chips"></div></div><i class="fcx-sp s1">✦</i><i class="fcx-sp s2">♡</i><i class="fcx-sp s3">✧</i></div>
+<div class="fcx-jump" id="fcx-jump"></div><div id="fcx-body"></div></div>`);
+    const body = $('fcx-body'), K = 'enchantedFutureClosed';
+    let closed = {}; try { closed = JSON.parse(localStorage.getItem(K)) || {}; } catch (e) {}
+    const left = b => Math.max(0, (+b.duration || 0) - (+b.minutesRead || 0));
+    const ft = m => { try { return formatTime(m); } catch (e) { return Math.round(m / 60) + 'h'; } };
+    const cov = b => { try { return coverStyle(b); } catch (e) { return 'background:' + (b.coverColor || '#e8dcc4'); } };
+    const dd = d => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const started = b => b.minutesRead > 0 || b.pagesRead > 0 || b.status === 'rereading';
+    const tile = o => {
+        const b = o.b, tag = b.status === 'onhold' ? '⏸️' : started(b) ? '📖' : b.favorite ? '💖' : '';
+        return `<button type="button" class="fcx-b" data-i="${o.i}" title="${E(b.title)}${o.d ? ' · finishes ' + E(dd(o.d)) : ''}"><span class="fcx-cv" style="${cov(b)}">${b.cover ? '' : `<span>${E(b.title.length > 40 ? b.title.slice(0, 39) + '…' : b.title)}</span>`}${tag ? `<i class="fcx-tag">${tag}</i>` : ''}</span><span class="fcx-t">${E(b.title)}</span>${o.d ? `<span class="fcx-d">🏁 ${E(dd(o.d))}</span>` : ''}</button>`;
+    };
+    function render() {
+        let fin = null; try { fin = planFinishInfo(); } catch (e) {}
+        const all = books.map((b, i) => ({ b, i })).filter(o => !o.b.read && o.b.status !== 'abandoned' && isProg(o.b));
+        all.forEach(o => { o.d = fin ? fin.get(o.i) || null : null; });
+        const dated = all.filter(o => o.d).sort((a, z) => a.d - z.d || a.i - z.i), later = all.filter(o => !o.d);
+        const Y = new Map();
+        dated.forEach(o => { const y = o.d.getFullYear(), m = o.d.getMonth(); if (!Y.has(y)) Y.set(y, new Map()); const M = Y.get(y); if (!M.has(m)) M.set(m, []); M.get(m).push(o); });
+        const tot = all.reduce((s, o) => s + left(o.b), 0), last = dated.length ? dated[dated.length - 1].d : null;
+        $('fcx-chips').innerHTML = all.length ? `<span class="fcx-chip">📚 ${all.length} book${all.length === 1 ? '' : 's'} planned</span><span class="fcx-chip y">⏳ ${E(ft(tot))} to read</span>${Y.size ? `<span class="fcx-chip p">🗓️ ${Y.size} year${Y.size === 1 ? '' : 's'}</span>` : ''}${last ? `<span class="fcx-chip g">🏰 all done by ${E(last.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }))}</span>` : ''}` : '';
+        $('fcx-jump').innerHTML = Y.size > 1 || (Y.size && later.length) ? [...Y.keys()].map(y => { let n = 0; Y.get(y).forEach(a => { n += a.length; }); return `<button type="button" data-jump="${y}">${y}<small>${n}</small></button>`; }).join('') + (later.length ? `<button type="button" data-jump="later">🌫️ Not on the path yet<small>${later.length}</small></button>` : '') : '';
+        if (!all.length) { body.innerHTML = '<p class="fcx-empty"><span>🌱</span>Nothing is in your plan yet. Program books from your Library and they\u2019ll show up here, month by month.<br><button type="button" data-go="lib">📚 Open my Library</button></p>'; return; }
+        const now = new Date(), cy = now.getFullYear(), cm = now.getMonth();
+        let h = '';
+        Y.forEach((M, y) => {
+            let n = 0, mins = 0; M.forEach(a => { n += a.length; a.forEach(o => { mins += left(o.b); }); });
+            const open = !closed[y];
+            h += `<section class="fcx-year${open ? ' open' : ''}" id="fcx-y-${y}" data-y="${y}"><button type="button" class="fcx-yh" aria-expanded="${open}"><span class="fcx-yn">${y}</span><span class="fcx-ys"><span class="fcx-chip">📚 ${n} book${n === 1 ? '' : 's'}</span><span class="fcx-chip y">⏳ ${E(ft(mins))}</span><span class="fcx-chip p">🌙 ${M.size} month${M.size === 1 ? '' : 's'}</span></span><span class="fcx-yc" aria-hidden="true">▾</span></button><div class="fcx-yb">`;
+            M.forEach((arr, m) => {
+                const cur = y === cy && m === cm, mm = arr.reduce((s, o) => s + left(o.b), 0);
+                h += `<div class="fcx-m${cur ? ' cur' : ''}"><div class="fcx-mh" data-em="${ME[m]}"><b>${MN[m]}</b><small>${arr.length} book${arr.length === 1 ? '' : 's'} · ${E(ft(mm))}</small>${cur ? '<span class="fcx-now">this month</span>' : ''}</div><div class="fcx-shelf">${arr.map(tile).join('')}</div></div>`;
+            });
+            h += '</div></section>';
+        });
+        if (later.length) {
+            const open = !closed.later;
+            h += `<section class="fcx-year fcx-later${open ? ' open' : ''}" id="fcx-y-later" data-y="later"><button type="button" class="fcx-yh" aria-expanded="${open}"><span class="fcx-yn">🌫️ Not on the path yet</span><span class="fcx-ys"><span class="fcx-chip">📚 ${later.length}</span></span><span class="fcx-yc" aria-hidden="true">▾</span></button><div class="fcx-yb"><p class="fcx-mh" style="margin:8px 0 10px"><small>${fin ? 'These are in your plan but the Weekly Path doesn\u2019t reach them yet (on hold, or past your target date).' : 'Set your daily minutes on the Weekly Path and each book gets its finish month 🌿'}</small></p><div class="fcx-shelf">${later.map(tile).join('')}</div></div></section>`;
+        }
+        body.innerHTML = h;
+    }
+    $('tab-content-future').addEventListener('click', e => {
+        const b = e.target.closest('.fcx-b'); if (b) { try { openReviewModal(+b.dataset.i); } catch (x) {} return; }
+        const yh = e.target.closest('.fcx-yh'); if (yh) { const s = yh.parentNode, on = !s.classList.contains('open'); s.classList.toggle('open', on); yh.setAttribute('aria-expanded', on); if (on) delete closed[s.dataset.y]; else closed[s.dataset.y] = 1; try { localStorage.setItem(K, JSON.stringify(closed)); } catch (x) {} return; }
+        const j = e.target.closest('[data-jump]'); if (j) { const s = $('fcx-y-' + j.dataset.jump); if (s) { if (!s.classList.contains('open')) s.querySelector('.fcx-yh').click(); s.scrollIntoView({ behavior: 'smooth', block: 'start' }); } return; }
+        const g = e.target.closest('[data-go]'); if (g) switchTab(g.dataset.go);
+    });
+    const _rb = renderBooks;
+    renderBooks = function () { const r = _rb.apply(this, arguments); try { if (currentTab === 'future') render(); } catch (e) {} return r; };
+    Hooks.on('switchTab', {
+        before() { $('tab-content-future').classList.add('hidden'); },
+        after([t]) {
+            if (t === 'future') { $('tab-content-future').classList.remove('hidden'); currentTab = t; $('tab-content-future').closest('.card').classList.add('sched-fit'); render(); }
+            const nb = $('tab-btn-future'); if (nb) nb.className = 'tab-btn ' + (t === 'future' ? 'active' : 'inactive') + ' pb-2 px-1 font-serif font-bold text-sm sm:text-base transition flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap';
+        }
+    });
+})();
+</script>
 </body>
 </html>
