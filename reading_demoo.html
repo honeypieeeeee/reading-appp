@@ -5206,6 +5206,8 @@ window.SAFE = SAFE;
 .bub-warnings{background:#ffeedd!important;border-color:#f6c99a!important;color:#a5521b!important;--bub-sh:#f6c99a}
 .bub-vibes{background:#f3e8ff!important;border-color:#e0c8f7!important;color:#6b21a8!important;--bub-sh:#e0c8f7}
 @media (prefers-reduced-motion:reduce){.bub{transition:none}}
+/* folded covers on the shelf: no bubbles, just the cover, title, Log and ⋯ (they come back when the card is opened) */
+#book-list[data-view=covers]>[data-bi]:not(.vw-open) .bub-row,#reviews-list[data-view=covers]>div:not(.vw-open) .bub-row{display:none!important}
 .sg-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:6px}.sg-wrap:empty{display:none}
 .sg-cap{font:italic 500 10px 'Playfair Display',serif;color:rgb(var(--c-6b705c));margin-right:2px}
 .sg-pill,.sg-more{font-size:10.5px;font-weight:600;padding:2px 9px;border-radius:99px;border:1px dashed rgb(var(--c-e8c4c4));background:#fff;color:rgb(var(--c-6b705c));cursor:pointer;transition:transform .15s,background .15s,border-color .15s,color .15s}
@@ -7669,13 +7671,62 @@ renderBackupNudge(); renderRes();
 .qe-btn{font-size:11px;font-weight:700;padding:6px 12px;border-radius:99px;background:#fff;border:1px solid rgb(var(--c-e8c4c4));color:rgb(var(--c-3e4a3d))}.qe-btn.pri{background:rgb(var(--c-8a9a5b));border-color:rgb(var(--c-8a9a5b));color:#fff}.qe-btn:disabled{opacity:.5}.qe-scroll{overflow-y:auto;flex:1;min-height:120px;max-height:56vh;display:flex;flex-direction:column;gap:6px;padding-right:4px}.qe-foot{display:flex;justify-content:space-between;gap:8px;margin-top:10px}
 .qe-r{display:flex;gap:10px;align-items:center;padding:7px 10px;border:1px solid rgb(var(--c-f0dede));border-radius:10px;cursor:pointer;background:rgb(var(--c-fffafa))}.qe-t{font:600 12px 'Playfair Display',serif;flex:1;min-width:0}.qe-m{font-size:10px;color:rgb(var(--c-b76e82));white-space:nowrap}
 .qe-c{border:1px solid rgb(var(--c-e8c4c4));border-radius:14px;padding:10px 12px;background:rgb(var(--c-fffafa))}.qe-ct{font:700 13px 'Playfair Display',serif;margin-bottom:6px}.qe-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 10px}.qe-g label{font-size:10px;font-weight:700;color:rgb(var(--c-6b705c));display:flex;flex-direction:column;gap:2px}.qe-g input{font-size:12px;font-weight:500;padding:5px 8px;border:1px solid rgb(var(--c-e8c4c4));border-radius:8px;outline:0;background:#fff;color:rgb(var(--c-3e4a3d))}
-.qe-tl-ta{width:100%;padding:10px 12px;font:500 12px/1.5 Montserrat,sans-serif;border:2px dashed rgb(var(--c-e8b4c2));border-radius:14px;background:rgb(var(--c-fffafa));color:rgb(var(--c-3e4a3d));outline:0;resize:vertical}.qe-tl-ta:focus{border-color:rgb(var(--c-e8a0b4));background:#fff}
-.qe-tl-r{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border:1px solid rgb(var(--c-f0dede));border-radius:12px;background:rgb(var(--c-fffafa))}.qe-tl-r.miss{border-style:dashed;background:#fff}.qe-tl-r>input{margin-top:3px}
-.qe-tl-b{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}.qe-tl-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}.qe-tl-h b{font:700 12.5px 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));min-width:0;overflow-wrap:anywhere}
-.qe-tl-m{flex:none;font:800 10px Montserrat,sans-serif;color:rgb(var(--c-4f5d2c));background:rgb(var(--c-eef2e2));border:1px solid rgb(var(--c-cfdbb0));border-radius:99px;padding:1px 8px}
-.qe-card .qe-tl-b .qe-tl-sel{width:100%!important;height:auto!important;min-height:0!important;font:600 11px Montserrat,sans-serif!important;padding:4px 10px!important;border:1px solid rgb(var(--c-e8c4c4))!important;border-radius:99px!important;background-color:#fff!important;color:rgb(var(--c-3e4a3d))!important;outline:0}
-.qe-card .qe-tl-b .cz-btn{display:flex!important;align-items:center;justify-content:space-between;gap:6px;text-align:left}.qe-card .qe-tl-b .cz-lbl{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.qe-tl-n{font-size:10.5px;color:rgb(var(--c-6b705c))}.qe-tl-n.ok{color:rgb(var(--c-4f5d2c))}.qe-tl-n.bad{color:rgb(var(--c-b25a5a));font-weight:700}`;
+.qe-card:has(.tlx){position:relative;overflow:hidden;width:min(720px,100%);border:2px solid rgb(var(--c-f0d0d8));border-radius:28px;padding:18px 20px 16px;background:radial-gradient(rgb(var(--c-f6dfe4)) 1px,transparent 1.4px) 0 0/16px 16px,linear-gradient(160deg,#fff 0%,rgb(var(--c-fff6f8)) 55%,#f7fbef 100%);box-shadow:0 24px 60px -18px rgb(var(--c-a8506a)/.45),0 0 0 6px rgb(var(--c-fdeef0)/.7)}
+.tlx{display:flex;flex-direction:column;min-height:0;flex:1}
+.tlx-head{position:relative;display:flex;align-items:center;gap:12px;padding:10px 14px;margin:0 0 10px;border-radius:20px;background:linear-gradient(135deg,rgb(var(--c-fde3e9)),rgb(var(--c-f7ecdc)) 55%,rgb(var(--c-eaf1dc)));border:1.5px solid #fff;box-shadow:0 6px 16px -10px rgb(var(--c-a8506a)/.5)}
+.tlx-badge{flex:none;width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:23px;box-shadow:0 0 0 2px rgb(var(--c-f0c9d4)),0 5px 12px -4px rgb(var(--c-a8506a)/.45)}
+.tlx-badge>span{display:inline-block;animation:tlxbob 2.6s ease-in-out infinite}
+.tlx-tx{min-width:0}.tlx .tlx-tx h3{margin:0;font:800 19px/1.15 'Playfair Display',serif!important;color:rgb(var(--c-a8506a))}
+.tlx .tlx-tx p{margin:3px 0 0!important;font:italic 600 11.5px/1.4 'Playfair Display',serif!important;color:rgb(var(--c-6b705c))!important}
+.tlx-sp{position:absolute;font-style:normal;font-size:12px;color:rgb(var(--c-e8a0b4));opacity:.75;pointer-events:none;animation:tlxtw 2.8s ease-in-out infinite}.tlx-sp.s1{top:7px;right:16px}.tlx-sp.s2{bottom:7px;right:48px;animation-delay:.9s}.tlx-sp.s3{top:12px;right:80px;font-size:10px;animation-delay:1.7s}
+@keyframes tlxbob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-3px) rotate(6deg)}}
+@keyframes tlxtw{0%,100%{opacity:.25;transform:scale(.8)}50%{opacity:.9;transform:scale(1.15)}}
+.tlx-steps{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.tlx-steps span{padding:3px 11px;border-radius:99px;background:#fff;border:1.5px solid rgb(var(--c-f0d0d8));font:800 10px Montserrat,sans-serif;color:rgb(var(--c-a8506a));white-space:nowrap}
+.tlx-steps span:nth-child(2){border-color:rgb(var(--c-cfdbb0));color:rgb(var(--c-4f5d2c))}.tlx-steps span:nth-child(3){border-color:rgb(var(--c-f0d9a0));color:rgb(var(--c-8a5a12));background:rgb(var(--c-fff8e1))}.tlx-steps span:nth-child(4){border-color:rgb(var(--c-e0c8f7));color:rgb(var(--c-6b21a8));background:#faf5ff}
+.tlx-paper{position:relative;border-radius:18px;border:2px solid rgb(var(--c-f0d0d8));background:#fff;box-shadow:0 8px 18px -14px rgb(var(--c-a8506a)/.6);overflow:hidden}
+.tlx-paper::before{content:'';position:absolute;top:0;bottom:0;left:30px;width:2px;background:rgb(var(--c-f4c9d2));pointer-events:none}
+.tlx-paper textarea{display:block;width:100%;min-height:210px;max-height:44vh;resize:vertical;border:0;outline:0;padding:6px 14px 6px 42px;font:600 12.5px/26px Montserrat,sans-serif;color:rgb(var(--c-3e4a3d));background:repeating-linear-gradient(to bottom,transparent 0 25px,#f6e3e7 25px 26px) 0 6px/100% 26px local,#fffdfb}
+.tlx-paper textarea::placeholder{color:#c4a6b0;font-style:italic;font-weight:500}
+.tlx-paper:focus-within{border-color:rgb(var(--c-e8a0b4));box-shadow:0 0 0 4px rgb(var(--c-f4c9d2)/.35)}
+.tlx-hint{margin:8px 2px 0;font:600 11px Montserrat,sans-serif;color:rgb(var(--c-6b705c))}.tlx-hint.on{color:rgb(var(--c-a8506a))}
+.tlx-foot{align-items:center;margin-top:12px!important}
+.tlx-btn{height:36px;padding:0 16px;border-radius:99px;background:#fff;border:2px solid rgb(var(--c-f0d0d8));font:800 11.5px Montserrat,sans-serif;color:rgb(var(--c-a8506a));transition:transform .15s,box-shadow .15s}
+.tlx-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 12px -6px rgb(var(--c-a8506a)/.5)}
+.tlx-btn.pri{position:relative;overflow:hidden;border:0;color:#fff;background:linear-gradient(135deg,rgb(var(--c-e8a0b4)),rgb(var(--c-d98aa0)));text-shadow:0 1px 1px rgb(var(--c-a8506a)/.45);box-shadow:0 8px 16px -8px rgb(var(--c-a8506a)/.7)}
+.tlx-btn.pri::after{content:'';position:absolute;top:0;bottom:0;left:0;width:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:tlxshine 3.4s ease-in-out infinite}
+@keyframes tlxshine{0%{transform:translateX(-120%)}60%,100%{transform:translateX(420%)}}
+.tlx-btn:disabled{opacity:.5;cursor:default}
+.tlx-sum{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.tlx-sum span{padding:3px 11px;border-radius:99px;background:#fff;border:1.5px solid rgb(var(--c-f0d0d8));font:800 10px Montserrat,sans-serif;color:rgb(var(--c-6b705c))}
+.tlx-sum .g{border-color:rgb(var(--c-cfdbb0));color:rgb(var(--c-4f5d2c));background:#f6f9ee}.tlx-sum .p{color:rgb(var(--c-a8506a));background:rgb(var(--c-fdeef0))}.tlx-sum .y{border-color:rgb(var(--c-f0d9a0));color:rgb(var(--c-8a5a12));background:rgb(var(--c-fff8e1))}
+.tlx-list{gap:8px!important;padding:2px 4px 2px 2px}
+.tlx-r{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:18px;border:2px solid rgb(var(--c-f0dcdc));background:#fff;transition:border-color .15s,box-shadow .15s}
+.tlx-r.on{border-color:rgb(var(--c-cfdbb0));background:linear-gradient(135deg,#fff,#f7fbef);box-shadow:0 6px 14px -12px rgb(var(--c-5f7a3a)/.7)}
+.tlx-r.new{border-style:dashed;border-color:rgb(var(--c-e8b4c2));background:linear-gradient(135deg,#fff,rgb(var(--c-fff6f8)))}.tlx-r.new.on{border-style:solid;border-color:rgb(var(--c-e8a0b4))}
+.tlx-tick{flex:none;position:relative;width:22px;height:22px;margin-top:1px;cursor:pointer}
+.tlx-tick input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.tlx-tick i{position:absolute;inset:0;border-radius:8px;border:2px solid rgb(var(--c-e8b4c2));background:#fff;transition:background .15s,border-color .15s,transform .15s}
+.tlx-tick input:checked+i{background:linear-gradient(135deg,rgb(var(--c-b5c78a)),rgb(var(--c-8a9a5b)));border-color:rgb(var(--c-8a9a5b));transform:rotate(-6deg)}
+.tlx-tick input:checked+i::after{content:'';position:absolute;left:6px;top:2px;width:5px;height:10px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg)}
+.tlx-tick input:focus-visible+i{box-shadow:0 0 0 3px rgb(var(--c-f4c9d2))}
+.tlx-tick.sprout{display:flex;align-items:center;justify-content:center;font-size:15px;cursor:default}
+.tlx-b{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.tlx-h{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.tlx-h b{font:700 13px 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));min-width:0;overflow-wrap:anywhere}
+.tlx-m{flex:none;font:800 10px Montserrat,sans-serif;color:rgb(var(--c-8a5a12));background:rgb(var(--c-fff8e1));border:1.5px solid rgb(var(--c-f0d9a0));border-radius:99px;padding:2px 9px}
+.tlx-n{font:700 10.5px Montserrat,sans-serif;color:rgb(var(--c-6b705c))}.tlx-n.ok{color:rgb(var(--c-4f5d2c))}.tlx-n.ok s{opacity:.55;font-weight:600}.tlx-n.bad{color:rgb(var(--c-b25a5a))}
+.tlx-new{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.tlx-nq{font:italic 600 11px 'Playfair Display',serif;color:rgb(var(--c-a8506a))}
+.tlx-seg{display:inline-flex;gap:2px;padding:2px;border-radius:99px;background:#fff;border:1.5px solid rgb(var(--c-f0d0d8))}
+.tlx-seg button{padding:3px 10px;border-radius:99px;font:800 10px Montserrat,sans-serif;color:rgb(var(--c-6b705c));transition:background .15s,color .15s}
+.tlx-seg button:hover{background:rgb(var(--c-fdeef0));color:rgb(var(--c-a8506a))}
+.tlx-seg button.on{background:linear-gradient(135deg,rgb(var(--c-e8a0b4)),rgb(var(--c-d98aa0)));color:#fff}
+.tlx-seg button:last-child.on{background:#ece6e6;color:rgb(var(--c-6b705c))}
+.qe-card .tlx-b .qe-tl-sel{width:100%!important;height:auto!important;min-height:0!important;font:600 11px Montserrat,sans-serif!important;padding:5px 12px!important;border:1.5px solid rgb(var(--c-f0d0d8))!important;border-radius:99px!important;background-color:rgb(var(--c-fffafa))!important;color:rgb(var(--c-3e4a3d))!important;outline:0}
+.qe-card .tlx-b .cz-btn{display:flex!important;align-items:center;justify-content:space-between;gap:6px;text-align:left}.qe-card .tlx-b .cz-lbl{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@media(max-width:560px){.qe-card:has(.tlx){padding:14px 12px 12px;border-radius:22px}.tlx-sp{display:none}.tlx-paper textarea{padding-left:36px}.tlx-paper::before{left:24px}.tlx-foot .tlx-btn{flex:1}}
+@media (prefers-reduced-motion:reduce){.tlx-badge>span,.tlx-sp,.tlx-btn.pri::after{animation:none}}`;
     document.head.appendChild(st);
 
     // ---- Graveyard: the "?" was the year for books with no finish date ----
@@ -7761,40 +7812,90 @@ renderBackupNudge(); renderRes();
         });
         return rows;
     }
+    let TLraw = '';
+    const tlHead = (emoji, title, sub) => `<div class="tlx-head"><span class="tlx-badge"><span>${emoji}</span></span><div class="tlx-tx"><h3>${title}</h3><p>${sub}</p></div><i class="tlx-sp s1">✦</i><i class="tlx-sp s2">✧</i><i class="tlx-sp s3">♡</i></div>`;
     window.qeTimes = () => {
-        $('qe-body').innerHTML = `<h3>⏳ Paste reading times</h3><p>Paste your list, one book per line, like <b>- [ ] Spite (10h)</b> or <b>House Rules (5h 45m)</b>. I'll find each book in your TBR and only rewrite its reading time. Nothing else changes 🌿</p>
-        <textarea id="qe-tl-text" rows="10" class="qe-tl-ta" placeholder="- [ ] Spite (10h)&#10;- [ ] House Rules (5h 45m)&#10;- [ ] Aphrodisiac Experiment (45m)"></textarea>
-        <div class="qe-foot"><button type="button" class="qe-btn" onclick="qeStep1()">← Back</button><button type="button" class="qe-btn pri" onclick="qeTimesRead()">Find my books →</button></div>`;
+        $('qe-body').innerHTML = `<div class="tlx">${tlHead('⏳', 'Paste reading times', 'Drop in your list and I\u2019ll tuck each time into the right book 🌷')}
+        <div class="tlx-steps"><span>📋 paste your list</span><span>🔍 I find each book</span><span>⏳ only the time changes</span><span>🌱 new ones can be planted</span></div>
+        <div class="tlx-paper"><textarea id="qe-tl-text" rows="10" spellcheck="false" oninput="qeTlCount()" placeholder="- [ ] Spite (10h)&#10;- [ ] House Rules (5h 45m)&#10;- [ ] Aphrodisiac Experiment (45m)">${E(TLraw)}</textarea></div>
+        <div class="tlx-hint" id="qe-tl-count">One book per line, with the time in brackets, like <b>Spite (10h)</b> or <b>House Rules (5h 45m)</b>.</div>
+        <div class="qe-foot tlx-foot"><button type="button" class="tlx-btn" onclick="qeStep1()">← Back</button><button type="button" class="tlx-btn pri" id="qe-tl-find" onclick="qeTimesRead()">Find my books →</button></div></div>`;
+        qeTlCount();
         setTimeout(() => { const t = $('qe-tl-text'); if (t) t.focus(); }, 30);
     };
+    window.qeTlCount = () => {
+        const t = $('qe-tl-text'), c = $('qe-tl-count'); if (!t || !c) return;
+        TLraw = t.value;
+        const n = tlParse(t.value).length;
+        if (n) c.innerHTML = `✨ <b>${n}</b> book${n === 1 ? '' : 's'} spotted, ready when you are!`;
+        else c.innerHTML = 'One book per line, with the time in brackets, like <b>Spite (10h)</b> or <b>House Rules (5h 45m)</b>.';
+        c.classList.toggle('on', !!n);
+        const f = $('qe-tl-find'); if (f) f.disabled = !n;
+    };
     window.qeTimesRead = () => {
-        TL = tlMatch(tlParse($('qe-tl-text').value));
+        TLraw = $('qe-tl-text').value;
+        TL = tlMatch(tlParse(TLraw));
         if (!TL.length) { alert('I couldn\u2019t read any lines 🌿 Each line needs a title and a time in brackets, like: Spite (10h)'); return; }
+        TL.forEach(r => { r.add = r.i < 0 ? 'tbr' : ''; });   // books I can't find get suggested as new TBR scrolls
         qeTimesPreview();
     };
+    const tlCounts = () => {
+        const upd = TL.filter(r => r.i >= 0 && r.on).length, add = TL.filter(r => r.i < 0 && r.add).length;
+        return { upd, add, found: TL.filter(r => r.i >= 0).length, miss: TL.filter(r => r.i < 0).length };
+    };
+    function tlGoLabel() {
+        const { upd, add } = tlCounts(), bits = [];
+        if (upd) bits.push(`update ${upd} time${upd === 1 ? '' : 's'}`);
+        if (add) bits.push(`plant ${add} new`);
+        return bits.length ? bits.join(' & ').replace(/^./, c => c.toUpperCase()) + ' ✨' : 'Nothing to do yet';
+    }
     function qeTimesPreview() {
         const L = backlog().slice().sort((a, z) => a.b.title.localeCompare(z.b.title));
-        const opts = cur => `<option value="-1">— not in my TBR / skip —</option>` + L.map(o => `<option value="${o.i}" ${o.i === cur ? 'selected' : ''}>${E(o.b.title)}${o.b.duration ? ' · ' + E(formatTime(o.b.duration)) : ''}</option>`).join('');
-        const found = TL.filter(r => r.i >= 0).length, on = TL.filter(r => r.on && r.i >= 0).length;
-        $('qe-body').innerHTML = `<h3>⏳ Check the new times</h3><p>Found <b>${found}</b> of ${TL.length} books. Ticked rows get the new time, nothing else is touched. Use the dropdown if I picked the wrong book (or none).</p>
-        <div class="qe-scroll">${TL.map((r, n) => {
-            const b = r.i >= 0 ? books[r.i] : null, same = b && b.duration === r.m, low = b && r.m < (b.minutesRead || 0);
-            const note = !b ? '<span class="qe-tl-n bad">not found</span>' : same ? '<span class="qe-tl-n">already this time ✓</span>' : low ? `<span class="qe-tl-n bad">you\u2019ve already read ${E(formatTime(b.minutesRead))}</span>` : `<span class="qe-tl-n ok">${E(b.duration ? formatTime(b.duration) : 'no time')} → <b>${E(formatTime(r.m))}</b></span>`;
-            return `<div class="qe-tl-r${b ? '' : ' miss'}"><input type="checkbox" ${r.on && b ? 'checked' : ''} ${b ? '' : 'disabled'} onchange="qeTlOn(${n},this.checked)"><div class="qe-tl-b"><div class="qe-tl-h"><b>${E(r.t)}</b><span class="qe-tl-m">${E(formatTime(r.m))}</span></div><select class="qe-tl-sel" aria-label="Which book in your TBR" onchange="qeTlPick(${n},this.value)">${opts(r.i)}</select>${note}</div></div>`;
+        const opts = cur => `<option value="-1">🌱 Not in my TBR or Library</option>` + L.map(o => `<option value="${o.i}" ${o.i === cur ? 'selected' : ''}>${E(o.b.title)}${o.b.duration ? ' · ' + E(formatTime(o.b.duration)) : ''}${o.b.vault ? ' · 📚 library' : ''}</option>`).join('');
+        const k = tlCounts(), same = TL.filter(r => r.i >= 0 && books[r.i] && books[r.i].duration === r.m).length;
+        const st = $('qe-body').querySelector('.qe-scroll'), keep = st ? st.scrollTop : 0;
+        $('qe-body').innerHTML = `<div class="tlx">${tlHead('🔍', 'Check the new times', 'Ticked books get the new time. Nothing else about them changes 🌿')}
+        <div class="tlx-sum"><span class="g">🌷 ${k.found} found</span>${k.miss ? `<span class="p">🌱 ${k.miss} not in your shelves</span>` : ''}${same ? `<span>✓ ${same} already right</span>` : ''}<span class="y">⏳ ${TL.length} in your list</span></div>
+        <div class="qe-scroll tlx-list">${TL.map((r, n) => {
+            const b = r.i >= 0 ? books[r.i] : null, isSame = b && b.duration === r.m, low = b && r.m < (b.minutesRead || 0);
+            let note, cls = 'tlx-r';
+            if (!b) {
+                cls += ' new' + (r.add ? ' on' : '');
+                note = `<div class="tlx-new"><span class="tlx-nq">Not on your TBR or in your Library yet. Add it?</span><span class="tlx-seg">${[['tbr', '🌱 Add to TBR'], ['lib', '📚 Add to Library'], ['', 'Skip']].map(([v, l]) => `<button type="button" class="${r.add === v ? 'on' : ''}" onclick="qeTlAdd(${n},'${v}')">${l}</button>`).join('')}</span></div>`;
+            } else {
+                cls += r.on ? ' on' : '';
+                note = isSame ? '<span class="tlx-n">✓ already this time</span>'
+                    : low ? `<span class="tlx-n bad">⚠️ you\u2019ve already read ${E(formatTime(b.minutesRead))} of it</span>`
+                    : `<span class="tlx-n ok"><s>${E(b.duration ? formatTime(b.duration) : 'no time')}</s> → <b>${E(formatTime(r.m))}</b></span>`;
+            }
+            const tick = b ? `<label class="tlx-tick"><input type="checkbox" ${r.on ? 'checked' : ''} onchange="qeTlOn(${n},this.checked)"><i></i></label>` : `<span class="tlx-tick sprout">🌱</span>`;
+            return `<div class="${cls}">${tick}<div class="tlx-b"><div class="tlx-h"><b>${E(r.t)}</b><span class="tlx-m">⏳ ${E(formatTime(r.m))}</span></div><select class="qe-tl-sel" aria-label="Which book is this?" onchange="qeTlPick(${n},this.value)">${opts(r.i)}</select>${note}</div></div>`;
         }).join('')}</div>
-        <div class="qe-foot"><button type="button" class="qe-btn" onclick="qeTimes()">← Paste again</button><button type="button" class="qe-btn pri" id="qe-tl-go" onclick="qeTimesApply()" ${on ? '' : 'disabled'}>Update ${on} time${on === 1 ? '' : 's'} ✨</button></div>`;
+        <div class="qe-foot tlx-foot"><button type="button" class="tlx-btn" onclick="qeTimes()">← Paste again</button><button type="button" class="tlx-btn pri" id="qe-tl-go" onclick="qeTimesApply()" ${k.upd || k.add ? '' : 'disabled'}>${tlGoLabel()}</button></div></div>`;
+        const ns = $('qe-body').querySelector('.qe-scroll'); if (ns) ns.scrollTop = keep;
     }
     window.qeTlOn = (n, v) => { if (TL[n]) TL[n].on = v; qeTimesPreview(); };
-    window.qeTlPick = (n, v) => { const r = TL[n]; if (!r) return; r.i = +v; const b = r.i >= 0 ? books[r.i] : null; r.on = !!b && b.duration !== r.m && r.m >= (b.minutesRead || 0); qeTimesPreview(); };
+    window.qeTlAdd = (n, v) => { if (TL[n]) TL[n].add = v; qeTimesPreview(); };
+    window.qeTlPick = (n, v) => { const r = TL[n]; if (!r) return; r.i = +v; const b = r.i >= 0 ? books[r.i] : null; r.on = !!b && b.duration !== r.m && r.m >= (b.minutesRead || 0); r.add = b ? '' : 'tbr'; qeTimesPreview(); };
     window.qeTimesApply = () => {
-        let n = 0;
+        let n = 0, added = 0;
         TL.forEach(r => {
-            const b = r.on && r.i >= 0 ? books[r.i] : null; if (!b || b.duration === r.m) return;
+            if (r.i < 0) {
+                if (!r.add) return;
+                const bk = { id: uid(), addedAt: Date.now(), title: r.t, totalPages: 0, durationStr: formatTime(r.m), duration: r.m, minutesRead: 0, read: false, coverColor: getRandomColor(), rating: 0, review: '' };
+                if (r.add === 'lib') bk.vault = true;
+                books.push(bk); added++;
+                return;
+            }
+            const b = r.on ? books[r.i] : null; if (!b || b.duration === r.m) return;
             b.duration = r.m; b.durationStr = formatTime(r.m); n++;
         });
-        TL = [];
-        saveBooks(); renderBooks(); qeClose();
-        const m = $('add-book-msg'); if (m) { m.style.color = 'rgb(var(--c-8a9a5b))'; m.innerText = `⏳ Updated the reading time of ${n} scroll${n === 1 ? '' : 's'}!`; setTimeout(() => { m.innerText = ''; }, 3500); }
+        TL = []; TLraw = '';
+        saveBooks(); try { refreshMetaOptions(); } catch (e) {} renderBooks(); qeClose();
+        const bits = [];
+        if (n) bits.push(`updated ${n} reading time${n === 1 ? '' : 's'}`);
+        if (added) bits.push(`planted ${added} new scroll${added === 1 ? '' : 's'}`);
+        const m = $('add-book-msg'); if (m) { m.style.color = 'rgb(var(--c-8a9a5b))'; m.innerText = bits.length ? `⏳ ${bits.join(' and ').replace(/^./, c => c.toUpperCase())}!` : '⏳ Nothing changed 🌿'; setTimeout(() => { m.innerText = ''; }, 4000); }
     };
 
     window.qeStep2 = () => {
