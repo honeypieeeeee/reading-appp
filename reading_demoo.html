@@ -1040,12 +1040,17 @@ html[data-theme=cocoa]{--c-322323:52 34 37;--c-3c2828:62 38 42;--c-3e4a3d:78 68 
                     </div>
                 </div>
 
+                <div id="ts-box" class="ts-box">
+                <button type="button" id="ts-head" class="ts-head" aria-expanded="false" aria-controls="ts-body"><span class="ts-badge" aria-hidden="true"><span>🕰️</span></span><span class="ts-tx"><b>Reading Rhythm</b><small id="ts-sum">weekday minutes, reading days &amp; your finish line</small></span><span class="ts-chev" aria-hidden="true">▾</span><i class="ts-sp s1" aria-hidden="true">✦</i><i class="ts-sp s2" aria-hidden="true">♡</i></button>
+                <div id="ts-body" class="ts-body">
                 <div id="wk-panel" class="bg-white/50 px-3 py-2 rounded-xl border border-[rgb(var(--c-e8c4c4))] mb-3">
                     <label class="flex items-center gap-2 text-xs font-bold text-[rgb(var(--c-3e4a3d))] cursor-pointer"><input type="checkbox" id="wk-on"> 🗓️ Different minutes for each weekday</label>
                     <div id="wk-grid" class="hidden grid grid-cols-7 gap-1.5 mt-2"></div>
                     <p id="wk-hint" class="hidden text-[10px] text-[rgb(var(--c-6b705c))] mt-1.5">Blank = your usual daily minutes. Type 0 for a day off.</p>
                 </div>
                 <div id="rest-days" class="flex flex-wrap items-center gap-1.5 mb-3"></div>
+                </div>
+                </div>
 
                 <!-- Schedule Pagination Header with Manual Jump -->
                 <div class="flex justify-between items-center mb-3">
@@ -11135,8 +11140,8 @@ body.no-mini .tourx-mini,body.no-mini .tourx-minirow{display:none!important}
     ],
     'schedule': [
     [[up('#start-date', 3)], 'schedule', `The Oracle's Master Settings`, 'Weekly Path', `<p>Tell the app <b>when you start</b>, and either a <b>target date</b> (it works out your daily minutes) or your <b>daily minutes</b> (it works out your finish date and fills it into Target Date for you). Dates use a little pop-up calendar. Press <b>Weave</b> to build the plan from your backlog.</p>`],
-    [['#wk-panel'], null, `Different minutes per weekday`, 'Weekly Path', `<p>Busy Tuesdays? Turn on <b>different minutes for each weekday</b>. Leave a day blank to use your usual minutes, or type <b>0</b> for a day off.</p>`],
-    [['#rest-days'], null, `Rest days`, 'Weekly Path', `<p>Pick the days you do not want to read. They show up as camp-out rest days on your trail and are skipped when the finish date is calculated.</p>`],
+    [[function () { if (window.tsOpen) tsOpen(true); return document.querySelector('#wk-panel'); }], null, `Different minutes per weekday`, 'Weekly Path', `<p>Busy Tuesdays? Turn on <b>different minutes for each weekday</b>. Leave a day blank to use your usual minutes, or type <b>0</b> for a day off.</p>`],
+    [[function () { if (window.tsOpen) tsOpen(true); return document.querySelector('#rest-days'); }], null, `Rest days`, 'Weekly Path', `<p>Pick the days you do not want to read. They show up as camp-out rest days on your trail and are skipped when the finish date is calculated.</p>`],
     [['#schedule-output'], null, `Your reading trail 🗺️`, 'Weekly Path', `<p>A winding trail of days. Each day lists which books to read and for how many minutes, with a 🏁 on the day a book gets finished. You also see your <b>finish line date</b>, reading days vs. rest days, time still to read, and a ribbon of days that turns ✓ when you hit the goal. Page through weeks with <b>Prev / Next</b>.</p>`],
     ],
     'reviews': [
@@ -12141,6 +12146,59 @@ body.shuf-on #book-list[data-view=covers]>[data-bi]:not(.shuf-sel):not(.vw-open)
 #book-list[data-view=grid]>[data-bi] .bk-dots{width:24px;height:24px;border-radius:99px}
 @media (prefers-reduced-motion:reduce){#book-list[data-view=grid]>[data-bi],#book-list[data-view=grid]>[data-bi]>.book-cover{transition:none}#book-list[data-view=grid]>[data-bi]:hover,#book-list[data-view=grid]>[data-bi]:hover>.book-cover{transform:none}}
 </style>
+<style id="ts-css">
+/* ===== Weekly Path · "Reading Rhythm" drawer around weekday minutes, reading days and the plan note ===== */
+#tab-content-schedule .ts-box{flex:none;margin-bottom:12px;border-radius:24px;border:2px solid #f0d0d8;background:radial-gradient(#f6dfe4 1px,transparent 1.4px) 0 0/16px 16px,linear-gradient(135deg,#fff 0%,#fff6f8 55%,#f6f9ee 100%);box-shadow:0 8px 18px -16px rgba(168,80,106,.6);overflow:hidden}
+.ts-head{position:relative;display:flex;align-items:center;gap:12px;width:100%;padding:10px 14px;text-align:left;background:none;border:0;cursor:pointer}
+.ts-head:focus-visible{outline:none;box-shadow:inset 0 0 0 3px rgb(var(--c-f4c9d2))}
+.ts-badge{flex:none;width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 0 0 2px #f0c9d4,0 5px 12px -4px rgba(168,80,106,.45)}
+.ts-badge>span{display:inline-block;animation:tsbob 2.8s ease-in-out infinite}
+.ts-tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.ts-tx b{font:800 15px/1.15 'Playfair Display',serif;color:rgb(var(--c-a8506a))}
+.ts-tx small{margin-top:2px;font:italic 600 11px/1.35 'Playfair Display',serif;color:rgb(var(--c-6b705c));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ts-chev{flex:none;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;border:2px solid #f0d0d8;color:rgb(var(--c-d98aa0));font-size:12px;transition:transform .25s cubic-bezier(.3,1.5,.5,1),background .15s}
+.ts-head:hover .ts-chev{background:#fdeef0}
+.ts-box.open .ts-chev{transform:rotate(180deg)}
+.ts-sp{position:absolute;font-style:normal;font-size:11px;color:rgb(var(--c-e8a0b4));opacity:.6;pointer-events:none;animation:tstw 2.8s ease-in-out infinite}.ts-sp.s1{top:7px;right:54px}.ts-sp.s2{bottom:7px;right:84px;font-size:9px;animation-delay:1.2s}
+@keyframes tsbob{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg) translateY(-2px)}}
+@keyframes tstw{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.85;transform:scale(1.15)}}
+.ts-body{display:none;padding:2px 12px 0;border-top:2px dotted #f0d6d6}
+.ts-box.open .ts-body{display:block;animation:tsin .22s ease}
+.ts-body>:first-child{margin-top:12px}
+@keyframes tsin{from{opacity:0;transform:translateY(-4px)}}
+@media(max-width:560px){.ts-sp{display:none}.ts-head{padding:9px 12px}.ts-body{padding:2px 8px 0}}
+@media (prefers-reduced-motion:reduce){.ts-badge>span,.ts-sp,.ts-box.open .ts-body{animation:none}.ts-chev{transition:none}}
+</style>
+<script type="text/plain" data-app id="ts-js">
+(function () {
+  var box = document.getElementById('ts-box'), head = document.getElementById('ts-head'), body = document.getElementById('ts-body'), sum = document.getElementById('ts-sum');
+  if (!box || !head || !body) return;
+  var K = 'enchantedRhythmOpen';
+  function set(on, keep) {
+    box.classList.toggle('open', on); head.setAttribute('aria-expanded', on ? 'true' : 'false');
+    if (!keep) try { localStorage.setItem(K, on ? '1' : '0'); } catch (e) {}
+  }
+  window.tsOpen = function (on) { set(on !== false, true); };
+  head.addEventListener('click', function () { set(!box.classList.contains('open')); });
+  var saved = null; try { saved = localStorage.getItem(K); } catch (e) {}
+  set(saved === '1', true);
+  // the collapsed header tells you what's inside: reading days, weekday minutes, finish date
+  function summary() {
+    var bits = [], rd = document.getElementById('rest-days'), wk = document.getElementById('wk-on'), pn = document.getElementById('plan-note');
+    if (rd) {
+      var all = rd.querySelectorAll('button').length, rest = rd.querySelectorAll('button[title^="Rest"]').length;
+      if (all) bits.push(all - rest === all ? 'reading every day' : (all - rest) + ' reading day' + (all - rest === 1 ? '' : 's') + ' a week');
+    }
+    if (wk && wk.checked) bits.push('minutes per weekday');
+    var m = pn && (pn.textContent || '').match(/finished by (.+?)\.?$/);
+    if (m) bits.push('done by ' + m[1]);
+    sum.textContent = bits.length ? bits.join(' · ') : 'weekday minutes, reading days & your finish line';
+  }
+  var q = 0; new MutationObserver(function () { if (q) return; q = requestAnimationFrame(function () { q = 0; summary(); }); }).observe(body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['title', 'class'] });
+  body.addEventListener('change', summary);
+  summary();
+})();
+</script>
 <style id="st-css">
 #tab-content-settings:not(.hidden){display:flex;flex-direction:column;flex:1 1 0%;min-height:0;overflow:hidden}
 div:has(>#tab-btn-backlog){flex-shrink:0}
