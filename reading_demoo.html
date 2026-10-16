@@ -774,15 +774,16 @@ html[data-theme=cocoa]{--c-322323:52 34 37;--c-3c2828:62 38 42;--c-3e4a3d:78 68 
     <div id="col-left" class="col-scroll lg:col-span-4 flex flex-col gap-4">
         
         <!-- Sprite Greeting -->
-        <div class="card flex flex-col sm:flex-row lg:flex-col items-start gap-4">
-            <div class="flex items-center gap-3 w-full">
-                <div class="text-3xl bg-[rgb(var(--c-e8c4c4))] w-14 h-14 rounded-full flex items-center justify-center shadow-md shrink-0 border border-white">🧚‍♀️</div>
-                <div>
-                    <h2 class="font-serif text-lg font-bold text-[rgb(var(--c-3e4a3d))]">Librarian Sprite</h2>
-                    <p class="text-xs text-[rgb(var(--c-6b705c))]">Your magical guide</p>
+        <div class="card spx-card flex flex-col items-start gap-3" id="spx-card">
+            <i class="spx-sp s1" aria-hidden="true">✦</i><i class="spx-sp s2" aria-hidden="true">✧</i><i class="spx-sp s3" aria-hidden="true">♡</i>
+            <div class="spx-head">
+                <div class="spx-av" aria-hidden="true"><span>🧚‍♀️</span></div>
+                <div class="spx-tx">
+                    <h2 class="font-serif font-bold">Librarian Sprite</h2>
+                    <p><span id="spx-tod">✨ your magical guide</span></p>
                 </div>
             </div>
-            <div class="speech-bubble w-full">
+            <div class="speech-bubble spx-bubble w-full">
                 "Greetings, traveler! Your wonderful book list is planted in our soil. Let's weave your daily reading magic!" 
                 <span id="dynamic-cheer" class="block mt-1"></span>
             </div>
@@ -904,8 +905,9 @@ html[data-theme=cocoa]{--c-322323:52 34 37;--c-3c2828:62 38 42;--c-3e4a3d:78 68 
 .sg-cap b{display:block;font:700 11px 'Playfair Display',serif;color:rgb(var(--c-3e4a3d))}.sg-cap i{display:block;font-size:10px;color:rgb(var(--c-6b705c))}
 </style>
 <!-- TBR Roulette -->
-        <div class="card flex flex-col gap-2 text-center">
-            <h2 class="font-serif text-sm font-bold text-[rgb(var(--c-3e4a3d))] flex items-center justify-center gap-2"><span>🎡</span> TBR Roulette</h2>
+        <div class="card rlx-card flex flex-col gap-2 text-center" id="rlx-card">
+            <i class="spx-sp s1" aria-hidden="true">✦</i><i class="spx-sp s2" aria-hidden="true">♡</i>
+            <h2 class="rlx-h font-serif font-bold"><span class="rlx-badge" aria-hidden="true"><span>🎡</span></span><span class="rlx-ht"><b>TBR Roulette</b><small>let fate pick your next read</small></span></h2>
             <div class="grid grid-cols-2 gap-1.5 text-[11px]"><select id="rf-tag" class="bg-white/60 border border-[rgb(var(--c-e8c4c4))] rounded-lg px-2 py-1.5 text-xs outline-none focus:border-[rgb(var(--c-8a9a5b))]"></select><select id="rf-vibe" class="bg-white/60 border border-[rgb(var(--c-e8c4c4))] rounded-lg px-2 py-1.5 text-xs outline-none focus:border-[rgb(var(--c-8a9a5b))]"></select><select id="rf-len" class="bg-white/60 border border-[rgb(var(--c-e8c4c4))] rounded-lg px-2 py-1.5 text-xs outline-none focus:border-[rgb(var(--c-8a9a5b))]"><option value="0">Any length</option><option value="120">Under 2h</option><option value="180">Under 3h</option><option value="300">Under 5h</option><option value="480">Under 8h</option></select><input id="rf-hide" list="list-warnings" placeholder="Hide warnings: a, b" class="bg-white/60 border border-[rgb(var(--c-e8c4c4))] rounded-lg px-2 py-1.5 text-xs outline-none focus:border-[rgb(var(--c-8a9a5b))]"></div>
             <div id="roulette-display" class="bg-white/60 border border-dashed border-[rgb(var(--c-8a9a5b)/0.6)] rounded-lg px-3 py-4 min-h-[76px] flex flex-col items-center justify-center">
                 <span id="roulette-title" class="font-serif font-bold text-sm text-[rgb(var(--c-3e4a3d))]">Can't decide? Let fate choose ✨</span>
@@ -917,10 +919,11 @@ html[data-theme=cocoa]{--c-322323:52 34 37;--c-3c2828:62 38 42;--c-3e4a3d:78 68 
             </div>
         </div>
 
-        <div class="card flex flex-col gap-2" id="res-card" style="display:none">
-        <h2 class="font-serif text-sm font-bold text-[rgb(var(--c-3e4a3d))] flex items-center gap-2"><span>🪦</span> Resurrection</h2>
+        <div class="card rsr-card flex flex-col gap-2" id="res-card" style="display:none">
+        <i class="spx-sp s1" aria-hidden="true">✦</i><i class="spx-sp s2" aria-hidden="true">☾</i>
+        <h2 class="rsr-h font-serif font-bold"><span class="rsr-badge" aria-hidden="true"><span>🪦</span></span><span class="rlx-ht"><b>Resurrection</b><small>a buried book is stirring…</small></span></h2>
         <p id="res-text" class="text-xs font-serif italic text-[rgb(var(--c-6b705c))]"></p>
-        <div class="flex gap-2"><button id="res-go" class="flex-1 bg-[rgb(var(--c-8a9a5b))] hover:bg-[rgb(var(--c-75834d))] text-white px-3 py-2 rounded-lg text-xs font-bold">Try again 📖</button><button onclick="resSnooze()" class="bg-[rgb(var(--c-e8c4c4))] hover:bg-[rgb(var(--c-dcb2b2))] text-[rgb(var(--c-3e4a3d))] px-3 py-2 rounded-lg text-xs font-bold">Not now</button></div>
+        <div class="flex gap-2"><button id="res-go" class="rsr-go">Try again 📖</button><button onclick="resSnooze()" class="rsr-no">Not now</button></div>
     </div>
 
         <!-- Fairy Whispers (Quote) -->
@@ -9937,10 +9940,10 @@ homeQuote();
 
 /* ---- 1. Next up (drag & drop) ---- */
 let nu=L('nu',[]);
-$('streak-msg').closest('.card').insertAdjacentHTML('beforebegin','<div class="card flex flex-col gap-2" id="nu-card"><h2 class="font-serif text-sm font-bold text-[rgb(var(--c-3e4a3d))] flex items-center gap-2"><span>📌</span> Next up <span class="text-[10px] font-normal text-[rgb(var(--c-6b705c))]">drag to reorder</span></h2><div id="nu-l" class="flex flex-col gap-1.5"></div><select id="nu-sel" class="w-full text-[11px] border border-[rgb(var(--c-e8c4c4))] rounded-lg p-1.5 bg-white"></select></div>');
+$('streak-msg').closest('.card').insertAdjacentHTML('beforebegin','<div class="card nux-card flex flex-col gap-2" id="nu-card"><i class="spx-sp s1" aria-hidden="true">✦</i><h2 class="nux-h font-serif font-bold"><span class="rlx-badge nux-badge" aria-hidden="true"><span>📌</span></span><span class="rlx-ht"><b>Next up</b><small>drag to reorder · up to 3</small></span><span class="nux-cnt" id="nux-cnt">0 / 3</span></h2><div id="nu-l" class="flex flex-col gap-1.5"></div><select id="nu-sel" class="w-full text-[11px] border border-[rgb(var(--c-e8c4c4))] rounded-lg p-1.5 bg-white"></select></div>');
 let dragId=null;
 function nuR(){nu=nu.filter(id=>books.some(b=>b.id===id&&!b.read&&b.status!=='abandoned'));S('nu',nu);
- $('nu-l').innerHTML=nu.map((id,i)=>{const b=books.find(x=>x.id===id);return`<div class="nuc" draggable="true" data-id="${E(id)}">${i?'':'💖 '}<span class="truncate flex-1 min-w-0">${E(b.title)}</span><button onclick="__nuMv('${E(id)}',-1)">◀</button><button onclick="__nuMv('${E(id)}',1)">▶</button><button onclick="__nuDel('${E(id)}')">✕</button></div>`}).join('')||'<span class="text-[11px] italic text-[rgb(var(--c-6b705c))]">Nothing pinned yet 🌱 pick a book above</span>';
+ $('nu-l').innerHTML=nu.map((id,i)=>{const b=books.find(x=>x.id===id);const au=authorText(b),tm=b.duration?formatTime(Math.max(0,b.duration-(b.minutesRead||0))):'';return`<div class="nuc" draggable="true" data-id="${E(id)}"><i class="nux-n">${i?i+1:'💖'}</i><span class="nux-cv" style="${coverStyle(b)}" aria-hidden="true"></span><span class="nux-t"><b>${E(b.title)}</b><small>${i?'':'<em>reading next</em> · '}${au?E(au):''}${au&&tm?' · ':''}${tm?E(tm)+' left':''}</small></span><span class="nux-acts"><button type="button" title="Move up" aria-label="Move up" ${i?'':'disabled'} onclick="__nuMv('${E(id)}',-1)">▲</button><button type="button" title="Move down" aria-label="Move down" ${i===nu.length-1?'disabled':''} onclick="__nuMv('${E(id)}',1)">▼</button><button type="button" class="x" title="Unpin" aria-label="Unpin" onclick="__nuDel('${E(id)}')">✕</button></span></div>`}).join('')||'<span class="nux-empty">Nothing pinned yet 🌱 pin up to three books you can\u2019t wait to read</span>';{const c=$('nux-cnt');if(c)c.textContent=nu.length+' / 3';}
  $('nu-sel').innerHTML='<option value="">＋ Pin a book…</option>'+(nu.length<3?books.filter(b=>!b.read&&b.status!=='abandoned'&&!nu.includes(b.id)).map(b=>`<option value="${E(b.id)}">${E(b.title)}</option>`).join(''):'');
  $('nu-l').querySelectorAll('.nuc').forEach(c=>{c.ondragstart=()=>{dragId=c.dataset.id;c.classList.add('dg')};c.ondragend=()=>c.classList.remove('dg');c.ondragover=e=>e.preventDefault();c.ondrop=e=>{e.preventDefault();const t=c.dataset.id;if(dragId&&dragId!==t){nu.splice(nu.indexOf(dragId),1);nu.splice(nu.indexOf(t),0,dragId);nuR()}}})}
 window.__nuAdd=id=>{if(id&&!nu.includes(id)&&nu.length<3){nu.push(id);const q=st(),d=day(q);d.nu++;S('qs',q);nuR()}};
@@ -15718,6 +15721,91 @@ p.wpx-title{display:flex!important;align-items:center;gap:12px;margin:0 0 12px!i
 </script>
 
 
+<style id="left-cards-css">
+/* ===== left panel: Librarian Sprite, Next up, TBR Roulette, Resurrection ===== */
+.spx-card,.nux-card,.rlx-card,.rsr-card{position:relative;overflow:hidden;border:2px solid #f0d0d8!important;border-radius:24px!important;background:radial-gradient(#f6dfe4 1px,transparent 1.4px) 0 0/16px 16px,linear-gradient(160deg,#fff 0%,#fff6f8 55%,#f6f9ee 100%)!important;box-shadow:0 10px 22px -18px rgba(168,80,106,.7)!important}
+.spx-sp{position:absolute;font-style:normal;font-size:11px;color:#e8a0b4;opacity:.6;pointer-events:none;animation:spxtw 2.8s ease-in-out infinite}.spx-sp.s1{top:12px;right:18px}.spx-sp.s2{top:40px;right:46px;font-size:9px;color:#c9a8ee;animation-delay:1s}.spx-sp.s3{bottom:14px;left:16px;font-size:9px;animation-delay:1.8s}
+@keyframes spxtw{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:.85;transform:scale(1.15)}}
+@keyframes spxbob{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-4px) rotate(6deg)}}
+.rlx-badge{flex:none;width:38px;height:38px;border-radius:50%;background:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 0 0 2px #f0c9d4,0 5px 12px -4px rgba(168,80,106,.45)}
+.rlx-badge>span{display:inline-block;animation:spxbob 2.8s ease-in-out infinite}
+.rlx-ht{display:flex;flex-direction:column;align-items:flex-start;min-width:0;text-align:left}
+.rlx-ht b{font:800 15px/1.15 'Playfair Display',serif;color:rgb(var(--c-a8506a))}
+.rlx-ht small{margin-top:2px;font:italic 600 11px/1.3 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+/* sprite */
+.spx-head{display:flex;align-items:center;gap:12px;width:100%}
+.spx-av{flex:none;position:relative;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;background:radial-gradient(circle at 35% 30%,#fff,#fde3e9 55%,#efe7fb);box-shadow:0 0 0 3px #fff,0 0 0 5px #f0c9d4,0 8px 18px -6px rgba(168,80,106,.55)}
+.spx-av::after{content:'';position:absolute;inset:-9px;border-radius:50%;border:2px dotted #f0c9d4;animation:spxspin 18s linear infinite}
+@keyframes spxspin{to{transform:rotate(360deg)}}
+.spx-av>span{display:inline-block;animation:spxbob 3.2s ease-in-out infinite}
+.spx-tx h2{margin:0;font-size:18px;line-height:1.1;color:rgb(var(--c-a8506a))}
+.spx-tx p{margin:5px 0 0}
+.spx-tx p span{display:inline-block;padding:2px 10px;border-radius:99px;background:#fff;border:1.5px solid #e0c8f7;font:800 10px Montserrat,sans-serif;color:#6b21a8}
+.spx-bubble{margin-top:4px;padding:12px 16px!important;border-radius:20px!important;border-top-left-radius:20px!important;background:#fff!important;border:2px solid #f6e3e7;box-shadow:0 6px 14px -10px rgba(168,80,106,.55)!important;color:rgb(var(--c-6b705c))!important;font-size:.9rem!important;line-height:1.5}
+.spx-bubble::before{left:22px!important;top:-11px!important;width:16px;height:16px;border:0!important;background:#fff;border-left:2px solid #f6e3e7!important;border-top:2px solid #f6e3e7!important;transform:rotate(45deg);border-radius:4px 0 0 0}
+.spx-bubble #dynamic-cheer:not(:empty){margin-top:8px;padding:4px 12px;border-radius:99px;background:#f6f9ee;border:1.5px dashed #cfdbb0;font-style:normal;font-size:11.5px}
+/* next up */
+.nux-h,.rlx-h,.rsr-h{display:flex;align-items:center;gap:10px;margin:0}
+.nux-cnt{margin-left:auto;flex:none;padding:3px 10px;border-radius:99px;background:#fff8e1;border:1.5px solid #f0d9a0;font:800 10px Montserrat,sans-serif;color:#8a5a12}
+#nu-l{gap:7px!important}
+#nu-card .nuc{position:relative;display:flex;align-items:center;gap:9px;padding:7px 8px 7px 7px!important;border:2px solid #f0dcdc!important;border-radius:16px!important;background:#fff!important;box-shadow:0 4px 10px -8px rgba(168,80,106,.6);font-size:12px;cursor:grab;transition:transform .15s,box-shadow .15s,border-color .15s}
+#nu-card .nuc:hover{transform:translateY(-1px);border-color:#e8b4c2!important}
+#nu-card .nuc:first-child{border-color:#e8a0b4!important;background:linear-gradient(135deg,#fff,#fdeef0)!important}
+#nu-card .nuc.dg{opacity:.5;transform:rotate(-1deg)}
+.nux-n{flex:none;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 10.5px Montserrat,sans-serif;font-style:normal;color:#fff;background:linear-gradient(135deg,#b5c78a,#8a9a5b)}
+.nuc:first-child .nux-n{background:#fff;font-size:13px;box-shadow:0 0 0 2px #f0c9d4}
+.nux-cv{flex:none;width:28px;height:42px;border-radius:2px 5px 5px 2px;background-size:cover;background-position:center;box-shadow:inset 3px 0 0 rgba(0,0,0,.12),0 3px 6px -2px rgba(62,74,61,.45)}
+.nux-t{flex:1;min-width:0;display:flex;flex-direction:column}
+.nux-t b{font:700 12.5px/1.25 'Playfair Display',serif;color:rgb(var(--c-3e4a3d));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nux-t small{font:600 10px Montserrat,sans-serif;color:rgb(var(--c-6b705c));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nux-t small em{font-style:normal;color:rgb(var(--c-a8506a));font-weight:800}
+.nux-acts{flex:none;display:flex;gap:3px}
+#nu-card .nux-acts button{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8.5px;color:rgb(var(--c-a8506a));background:#fdeef0;border:1.5px solid #f0d0d8;cursor:pointer;transition:transform .15s,background .15s}
+#nu-card .nux-acts button:hover:not(:disabled){transform:scale(1.12);background:#fff}
+#nu-card .nux-acts button:disabled{opacity:.35;cursor:default}
+#nu-card .nux-acts button.x{font-size:10px;color:#b25a5a;background:#fff}
+.nux-empty{display:block;padding:10px 12px;border-radius:16px;border:2px dashed #e8b4c2;background:#fffafa;font:italic 600 11.5px/1.4 'Playfair Display',serif;color:rgb(var(--c-a8506a));text-align:center}
+#nu-card #nu-sel+.cz-btn,#nu-card .cz-btn{width:100%;height:36px;padding:0 14px!important;border:2px dashed #e8b4c2!important;border-radius:99px!important;background:#fff!important;font:800 11.5px Montserrat,sans-serif!important;color:rgb(var(--c-a8506a))!important}
+#nu-card select#nu-sel{border:2px dashed #e8b4c2;border-radius:99px;height:36px;padding:0 14px;font-weight:800;color:rgb(var(--c-a8506a))}
+/* roulette */
+.rlx-card{gap:9px!important}
+.rlx-h{justify-content:flex-start}
+.rlx-card>.grid{gap:6px!important}
+.rlx-card>.grid>select,.rlx-card>.grid>input,.rlx-card>.grid>.cz-btn,.rlx-card .rf-grid .cz-btn,.rlx-card .rf-sel{height:34px;padding:0 12px!important;border:2px solid #f0d0d8!important;border-radius:99px!important;background:#fff!important;font:700 11px Montserrat,sans-serif!important;color:rgb(var(--c-3e4a3d))!important}
+.rlx-card>.grid>input::placeholder{color:#b896a2;font-style:italic;font-weight:500}
+.rlx-card>.grid>input:focus{border-color:#e8a0b4!important;box-shadow:0 0 0 3px rgba(244,201,210,.4)}
+.rlx-card .rf-bar{margin-top:1px}
+.rlx-card .rf-tog{padding:4px 12px;border:1.5px solid #cfdbb0;background:#f6f9ee;font:800 10.5px Montserrat,sans-serif;color:#4f5d2c}
+.rlx-card .rf-tog.has{background:linear-gradient(135deg,#b5c78a,#8a9a5b);color:#fff;border-color:transparent}
+.rlx-card .rf-clr{font:800 10.5px Montserrat,sans-serif;color:rgb(var(--c-a8506a))}
+.rlx-card .rf-count{display:inline-block;align-self:center;padding:2px 12px;border-radius:99px;background:#fff8e1;border:1.5px solid #f0d9a0;font:800 10px Montserrat,sans-serif;font-style:normal;color:#8a5a12}
+.rlx-card .rf-count:empty{display:none}
+.rlx-card .x-tg{border:2px solid #f0d0d8;padding:3px}
+.rlx-card .x-tg button{padding:5px 12px;font-size:10.5px;font-weight:800}
+.rlx-card .x-tg button.y.on{background:linear-gradient(135deg,#b5c78a,#8a9a5b)}
+.rlx-card .x-tg button.n.on{background:linear-gradient(135deg,#f4b6c2,#e8a0b4)}
+.rlx-card #roulette-display{position:relative;min-height:96px!important;padding:18px 14px 14px!important;border-radius:22px!important;border:3px solid transparent!important;background:radial-gradient(#fde3e9 1px,transparent 1.4px) 0 0/14px 14px padding-box,linear-gradient(#fff,#fff) padding-box,repeating-linear-gradient(45deg,#f7b6cc 0 10px,#fff 10px 14px,#cfe3b1 14px 24px,#fff 24px 28px,#d9c4f2 28px 38px,#fff 38px 42px) border-box!important;box-shadow:0 8px 16px -12px rgba(168,80,106,.7)}
+.rlx-card #roulette-display::before{content:'▼';position:absolute;top:2px;left:50%;transform:translateX(-50%);font-size:11px;color:#e8a0b4;text-shadow:0 1px 0 #fff}
+.rlx-card #roulette-title{position:relative;font:800 14px/1.3 'Playfair Display',serif!important;color:rgb(var(--c-a8506a))!important}
+.rlx-card #roulette-meta{position:relative;font:700 10.5px Montserrat,sans-serif!important}
+.rlx-card #spin-btn{position:relative;overflow:hidden;height:38px;border-radius:99px!important;border:0;background:linear-gradient(135deg,#f4b6c2,#e8a0b4)!important;font:800 12px Montserrat,sans-serif!important;text-shadow:0 1px 1px rgba(168,80,106,.45);box-shadow:0 8px 16px -8px rgba(168,80,106,.75)!important;transition:transform .15s}
+.rlx-card #spin-btn:hover:not(:disabled){transform:translateY(-1px) scale(1.02)}
+.rlx-card #spin-btn::after{content:'';position:absolute;top:0;bottom:0;left:0;width:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);animation:rlxshine 3.4s ease-in-out infinite}
+@keyframes rlxshine{0%{transform:translateX(-120%)}60%,100%{transform:translateX(420%)}}
+.rlx-card #claim-btn{height:38px;border-radius:99px!important;background:linear-gradient(135deg,#b5c78a,#8a9a5b)!important;color:#fff!important;font:800 12px Montserrat,sans-serif!important;box-shadow:0 8px 16px -8px rgba(95,110,58,.75)!important}
+/* resurrection */
+.rsr-card{background:radial-gradient(#e9dcf7 1px,transparent 1.4px) 0 0/16px 16px,linear-gradient(160deg,#fff 0%,#f6f0fd 55%,#fdeef3 100%)!important;border-color:#e0c8f7!important}
+.rsr-badge{flex:none;width:38px;height:38px;border-radius:50%;background:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:19px;box-shadow:0 0 0 2px #e0c8f7,0 5px 12px -4px rgba(122,95,176,.45)}
+.rsr-badge>span{display:inline-block;animation:spxbob 3.4s ease-in-out infinite}
+.rsr-card .rlx-ht b{color:#7a5fb0}
+#res-text{margin:0;padding:10px 12px;border-radius:16px;background:#ffffffd9;border:1.5px dashed #e0c8f7;font-size:12px!important;line-height:1.5;color:rgb(var(--c-6b705c))!important}
+.rsr-go,.rsr-no{height:36px;padding:0 14px;border-radius:99px;font:800 11.5px Montserrat,sans-serif;transition:transform .15s,box-shadow .15s}
+.rsr-go{flex:1;border:0;color:#fff;background:linear-gradient(135deg,#c9a8ee,#9a7bc4);text-shadow:0 1px 1px rgba(80,50,120,.35);box-shadow:0 8px 16px -8px rgba(122,95,176,.8)}
+.rsr-no{background:#fff;border:2px solid #e0c8f7;color:#7a5fb0}
+.rsr-go:hover,.rsr-no:hover{transform:translateY(-1px)}
+@media (prefers-reduced-motion:reduce){.spx-sp,.rlx-badge>span,.rsr-badge>span,.spx-av>span,.spx-av::after,.rlx-card #spin-btn::after{animation:none}}
+</style>
+
 <style id="hero-fix-css">
 /* ===== heroes: button sits above its shelf (no overlap), Library text runs across the whole card ===== */
 @media(min-width:641px){
@@ -15862,6 +15950,13 @@ p.wpx-title{display:flex!important;align-items:center;gap:12px;margin:0 0 12px!i
             const nb = $('tab-btn-future'); if (nb) nb.className = 'tab-btn ' + (t === 'future' ? 'active' : 'inactive') + ' pb-2 px-1 font-serif font-bold text-sm sm:text-base transition flex items-center gap-1.5 sm:gap-2 border-b-2 whitespace-nowrap';
         }
     });
+})();
+</script>
+<script type="text/plain" data-app id="spx-js">
+(function () {
+    const el = document.getElementById('spx-tod'); if (!el) return;
+    const paint = () => { const h = new Date().getHours(); el.textContent = h < 5 ? '🌙 up late · your magical guide' : h < 12 ? '☀️ good morning · your magical guide' : h < 18 ? '🌷 good afternoon · your magical guide' : '🌙 good evening · your magical guide'; };
+    paint(); setInterval(paint, 10 * 60 * 1000);
 })();
 </script>
 </body>
