@@ -5922,7 +5922,7 @@ body{padding-left:62px}
         } else if (yrSec === 'bk') {
             const grp = y === 'all' ? tally(done.map(b => (b.finishedAt || '').slice(0, 4)).filter(Boolean)).sort((a, z) => a[0] - z[0]).map(([k, v]) => [k.slice(2), v]) : MONTHS.map((m, i) => [m.slice(0, 3), done.filter(b => (b.finishedAt || '').slice(5, 7) === String(i + 1).padStart(2, '0')).length]);
             const mx = Math.max(0, ...grp.map(g => g[1])), sp = done.slice().sort((a, z) => (a.finishedAt || '') < (z.finishedAt || '') ? -1 : 1).slice(0, 150);
-            body = SEC(y === 'all' ? '📊 Books per year' : '📊 Books per month', bars(grp.map(g => [g[0], g[1], g[1] === mx && mx > 0]))) + SEC('🌈 Your rainbow shelf', sp.length ? `<div class="wr-shelf">${sp.map(b => `<button title="${esc(b.title)}" onclick="openReviewModal(${bookRef(b)})" style="background:${/^#/.test(b.coverColor || '') ? b.coverColor : 'rgb(var(--c-a3b18a))'};width:${Math.max(9, Math.min(26, 8 + (b.totalPages || 200) / 40))}px;height:${58 + hs(b.title) % 42}px"></button>`).join('')}</div><p class="text-[10px] text-[rgb(var(--c-6b705c))] mt-1.5">One spine per finished book, tap to open it.</p>` : '<p class="text-xs italic text-[rgb(var(--c-6b705c))]">No finished books yet 🌱</p>')
+            body = SEC(y === 'all' ? '📊 Books per year' : '📊 Books per month', bars(grp.map(g => [g[0], g[1], g[1] === mx && mx > 0]))) + SEC('🌈 Your rainbow shelf', sp.length ? `<div class="wr-shelf rbx">${sp.map(b => { const w = Math.max(18, Math.min(34, 14 + (b.totalPages || 200) / 30)), h = 62 + hs(b.title) % 34, c = /^#/.test(b.coverColor || '') ? b.coverColor : '#a3b18a', tip = b.title + (authorText(b) ? ' · ' + authorText(b) : '') + (b.rating ? ' · ★ ' + fmtRating(b.rating) : ''); return `<button type="button" class="rb-b" aria-label="${esc(tip)}" data-tip="${esc(tip)}" onclick="openReviewModal(${bookRef(b)})" style="--c:${c};--w:${w}px;--h:${h}px"><i class="rb-sp"><span>${esc(b.title)}</span></i></button>`; }).join('')}</div><p class="rb-cap">🌈 One spine per finished book, sorted by colour. Hover a spine to see its name, tap to open it.</p>` : '<p class="text-xs italic text-[rgb(var(--c-6b705c))]">No finished books yet 🌱</p>')
                 + SEC('🏷️ Tropes & vibes', (cloud(tags.slice(0, 20), '', TAXO.PRE.tags) || '<p class="text-xs italic text-[rgb(var(--c-6b705c))]">Add tags to your books to see them here.</p>') + (vibes.length ? `<div class="mt-2">${cloud(vibes.slice(0, 12), 'p', TAXO.PRE.vibes)}</div>` : ''))
                 + (fan.length ? SEC('🏰 Fandoms', fan.slice(0, 6).map(([k, v]) => `<div class="wr-row"><b>${esc(k)}</b><div><i style="width:${v / fan[0][1] * 100}%"></i></div><span>${v}</span></div>`).join('')) : '');
         } else if (yrSec === 'hb') {
@@ -7108,18 +7108,22 @@ renderBackupNudge(); renderRes();
         box.querySelectorAll('.tomb').forEach(t => { const ep = t.querySelector('.ep'), b = books[bookIxFrom(ep && ep.getAttribute('onclick'))]; if (!b) return;
             t.insertAdjacentHTML('beforeend', `<div class="dnf">${WHY.map((w, k) => `<span class="fc${(b.dnfReasons || []).includes(w) ? ' on' : ''}" onclick="dnfTog(${bookRef(b)},${k})">${w}</span>`).join('')}</div>`); });
         let dOpen = true; try { dOpen = localStorage.getItem('enchantedDnfOpen') !== '0'; } catch (e) {}
-        const ab = books.filter(b => b.status === 'abandoned' && (b.dnfReasons || []).length); if (!ab.length) { box.insertAdjacentHTML('afterbegin', `<details class="dnfp"${dOpen ? ' open' : ''}><summary><span class="dnf-ic">🕯</span><h4>Why do you stop?</h4><i class="dnf-chev">▾</i></summary><p class="dnf-empty">Tap reasons on a tombstone below and a little pie of your patterns will grow here.</p></details>`); box.querySelector('.dnfp').addEventListener('toggle', e => { try { localStorage.setItem('enchantedDnfOpen', e.target.open ? '1' : '0'); } catch (x) {} }); return; }
+        const ab = books.filter(b => b.status === 'abandoned' && (b.dnfReasons || []).length); if (!ab.length) { box.insertAdjacentHTML('afterbegin', `<div class="dnfp${dOpen ? ' open' : ''}"><button type="button" class="dnf-hd" aria-expanded="${dOpen}"><span class="dnf-ic">🕯</span><h4>Why do you stop?</h4><i class="dnf-chev">▾</i></button><div class="dnf-in"><p class="dnf-empty">Tap reasons on a tombstone below and a little pie of your patterns will grow here.</p></div></div>`); return; }
         const cnt = {}, yr = {}; ab.forEach(b => b.dnfReasons.forEach(r => { cnt[r] = (cnt[r] || 0) + 1; const y = (b.finishedAt || '').slice(0, 4) || '?'; (yr[y] = yr[y] || {})[r] = (yr[y][r] || 0) + 1; }));
         const rows = Object.entries(cnt).sort((a, z) => z[1] - a[1]), tot = rows.reduce((t, r) => t + r[1], 0);
         const PAL = ['#f4a6bd', '#c9a8ee', '#a9c27a', '#f3d9a4', '#8fb3d1', '#e9799f', '#9a7bc4', '#7fc4b0', '#e0b463', '#b8b2c8'];
         let acc = 0; const stops = rows.map(([r, n], k) => { const a0 = acc / tot * 100; acc += n; return `${PAL[k % PAL.length]} ${a0}% ${acc / tot * 100}%`; }).join(',');
         const top = rows[0];
-        box.insertAdjacentHTML('afterbegin', `<details class="dnfp"${dOpen ? ' open' : ''}><summary><span class="dnf-ic">🕯</span><h4>Why do you stop?</h4><small>${ab.length} of ${books.filter(b => b.status === 'abandoned').length} tagged · mostly ${top[0]}</small><i class="dnf-chev">▾</i></summary>
+        box.insertAdjacentHTML('afterbegin', `<div class="dnfp${dOpen ? ' open' : ''}"><button type="button" class="dnf-hd" aria-expanded="${dOpen}"><span class="dnf-ic">🕯</span><h4>Why do you stop?</h4><small>${ab.length} of ${books.filter(b => b.status === 'abandoned').length} tagged · mostly ${top[0]}</small><i class="dnf-chev">▾</i></button><div class="dnf-in">
             <div class="dnf-body"><div class="dnf-pie" style="background:conic-gradient(${stops})" role="img" aria-label="Reasons: ${rows.map(([r, n]) => r + ' ' + n).join(', ')}"><span><b>${tot}</b><small>reason${tot === 1 ? '' : 's'}</small></span></div>
             <ul class="dnf-leg">${rows.map(([r, n], k) => `<li><i style="background:${PAL[k % PAL.length]}"></i><span>${r}</span><em>${n} · ${Math.round(n / tot * 100)}%</em></li>`).join('')}</ul></div>
-            <div class="dnf-yrs">${Object.keys(yr).sort().reverse().map(y => { const t = Object.entries(yr[y]).sort((a, z) => z[1] - a[1])[0]; return `<div><b>${y}</b>: mostly ${t[0]} (${t[1]})</div>`; }).join('')}</div></details>`);
-        box.querySelector('.dnfp').addEventListener('toggle', e => { try { localStorage.setItem('enchantedDnfOpen', e.target.open ? '1' : '0'); } catch (x) {} });
+            <div class="dnf-yrs">${Object.keys(yr).sort().reverse().map(y => { const t = Object.entries(yr[y]).sort((a, z) => z[1] - a[1])[0]; return `<div><b>${y}</b>: mostly ${t[0]} (${t[1]})</div>`; }).join('')}</div></div></div>`);
     };
+    document.addEventListener('click', e => {
+        const h = e.target.closest && e.target.closest('#abandoned-list .dnf-hd'); if (!h) return;
+        const d = h.parentNode, on = !d.classList.contains('open'); d.classList.toggle('open', on); h.setAttribute('aria-expanded', on);
+        try { localStorage.setItem('enchantedDnfOpen', on ? '1' : '0'); } catch (x) {}
+    });
     window.dnfTog = (i, k) => { const b = books[i], w = WHY[k], a = b.dnfReasons || []; b.dnfReasons = a.includes(w) ? a.filter(x => x !== w) : [...a, w]; if (!b.dnfReasons.length) b.dnfReasons = undefined; saveBooks(); renderAbandoned(); };
 })();
 </script>
@@ -16015,14 +16019,15 @@ p.wpx-title{display:flex!important;align-items:center;gap:12px;margin:0 0 12px!i
 </style>
 
 <style id="dnf-css">
-#abandoned-list details.dnfp{padding:0!important;overflow:hidden}
-#abandoned-list .dnfp>summary{list-style:none;display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer}
-#abandoned-list .dnfp>summary::-webkit-details-marker{display:none}
+#abandoned-list .dnfp{padding:0!important;overflow:hidden}
+#abandoned-list .dnf-hd{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;text-align:left;background:none;border:0;cursor:pointer;color:inherit}
+#abandoned-list .dnf-hd:focus-visible{outline:2px solid rgba(233,220,255,.7);outline-offset:-2px;border-radius:20px}
+#abandoned-list .dnfp:not(.open)>.dnf-in{display:none}
 #abandoned-list .dnfp .dnf-ic{flex:none;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;background:rgba(255,255,255,.18);box-shadow:0 0 12px rgba(233,220,255,.4)}
 #abandoned-list .dnfp h4{margin:0!important;font:800 14px 'Playfair Display',serif!important;color:#f6e9ff}
-#abandoned-list .dnfp summary small{flex:1;min-width:0;font:700 10px Montserrat,sans-serif;color:#e2d6f5;opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#abandoned-list .dnfp .dnf-hd small{flex:1;min-width:0;font:700 10px Montserrat,sans-serif;color:#e2d6f5;opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 #abandoned-list .dnfp .dnf-chev{margin-left:auto;flex:none;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:11px;color:#f6e9ff;background:rgba(255,255,255,.15);transition:transform .25s cubic-bezier(.3,1.5,.5,1)}
-#abandoned-list .dnfp[open] .dnf-chev{transform:rotate(180deg)}
+#abandoned-list .dnfp.open .dnf-chev{transform:rotate(180deg)}
 #abandoned-list .dnf-body{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:4px 16px 10px}
 #abandoned-list .dnf-pie{position:relative;flex:none;width:118px;height:118px;border-radius:50%;box-shadow:0 0 0 4px rgba(255,255,255,.22),0 10px 24px -10px rgba(10,5,30,.8);animation:dnfspin .8s cubic-bezier(.3,1.3,.5,1)}
 #abandoned-list .dnf-pie>span{position:absolute;inset:26%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4a3f6b,#2b2850);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f6e9ff;box-shadow:inset 0 0 0 2px rgba(255,255,255,.15)}
@@ -16091,6 +16096,25 @@ p.wpx-title{display:flex!important;align-items:center;gap:12px;margin:0 0 12px!i
 #month-content .cal-c{border-radius:14px!important}
 #month-content .cal-c:hover{transform:translateY(-2px) rotate(-3deg)}
 @media (prefers-reduced-motion:reduce){.ymx-badge>span,:is(#year-content,#month-content) .wr-hero::after{animation:none}}
+</style>
+
+<style id="rbx-css">
+/* ===== 🌈 Rainbow shelf: titled spines on pink planks, with a name tag on hover ===== */
+#year-content .wr-shelf.rbx{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 3px;min-height:0;margin-top:22px;padding:0 12px;border:0;border-radius:4px 4px 18px 18px;background:repeating-linear-gradient(to bottom,transparent 0 100px,#f4c9d2 100px 103px,#e8b4c2 103px 112px) 0 0/100% 112px,linear-gradient(#fffdfb,#fff6f8);box-shadow:inset 0 0 0 2px #f6e3e7}
+#year-content .rbx .rb-b{position:relative;flex:none;width:var(--w);height:100px;margin-bottom:12px;padding:0;border:0;background:none;box-shadow:none;cursor:pointer;animation:none}
+#year-content .rbx .rb-b:hover{transform:none!important;box-shadow:none!important;z-index:5}
+#year-content .rbx .rb-sp{position:absolute;left:0;right:0;bottom:0;height:var(--h);display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:4px 4px 2px 2px;background:linear-gradient(90deg,rgba(0,0,0,.14) 0 3px,transparent 3px calc(100% - 3px),rgba(255,255,255,.25) calc(100% - 3px)),var(--c);box-shadow:inset 0 6px 0 -3px rgba(255,255,255,.35),inset 0 -8px 0 -5px rgba(0,0,0,.12),0 3px 6px -2px rgba(62,74,61,.4);transform-origin:bottom center;transition:transform .28s cubic-bezier(.3,1.5,.5,1)}
+#year-content .rbx .rb-sp::before,#year-content .rbx .rb-sp::after{content:'';position:absolute;left:3px;right:3px;height:2px;border-radius:2px;background:rgba(255,255,255,.55)}
+#year-content .rbx .rb-sp::before{top:9px}#year-content .rbx .rb-sp::after{bottom:9px}
+#year-content .rbx .rb-sp span{writing-mode:vertical-rl;transform:rotate(180deg);max-height:calc(100% - 24px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:800 8.5px/1 Montserrat,sans-serif;color:#fff;text-shadow:0 1px 1px rgba(0,0,0,.35);letter-spacing:.02em}
+#year-content .rbx .rb-b:hover .rb-sp,#year-content .rbx .rb-b:focus-visible .rb-sp{transform:translateY(-10px) rotate(-4deg)}
+#year-content .rbx .rb-b:focus-visible{outline:none}#year-content .rbx .rb-b:focus-visible .rb-sp{box-shadow:0 0 0 3px #f4c9d2}
+#year-content .rbx .rb-b::after{content:attr(data-tip);position:absolute;left:50%;bottom:calc(var(--h) + 18px);transform:translate(-50%,6px) scale(.9);width:max-content;max-width:190px;padding:5px 10px;border-radius:12px;background:#fff;border:1.5px solid #f0c9d4;box-shadow:0 8px 18px -8px rgba(168,80,106,.6);font:700 10.5px/1.3 Montserrat,sans-serif;color:rgb(var(--c-a8506a));white-space:normal;text-align:center;opacity:0;pointer-events:none;transition:opacity .15s,transform .2s cubic-bezier(.3,1.5,.5,1);z-index:6}
+#year-content .rbx .rb-b::before{content:'';position:absolute;left:50%;bottom:calc(var(--h) + 13px);width:9px;height:9px;background:#fff;border-right:1.5px solid #f0c9d4;border-bottom:1.5px solid #f0c9d4;transform:translateX(-50%) rotate(45deg);opacity:0;transition:opacity .15s;z-index:7}
+#year-content .rbx .rb-b:hover::after,#year-content .rbx .rb-b:focus-visible::after{opacity:1;transform:translate(-50%,0) scale(1)}
+#year-content .rbx .rb-b:hover::before,#year-content .rbx .rb-b:focus-visible::before{opacity:1}
+#year-content .rb-cap{margin:8px 2px 0;font:italic 600 11px 'Playfair Display',serif;color:rgb(var(--c-6b705c))}
+@media (prefers-reduced-motion:reduce){#year-content .rbx .rb-sp,#year-content .rbx .rb-b::after{transition:none}}
 </style>
 
 <style id="hero-fix-css">
